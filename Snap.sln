@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap", "Snap\Snap.csproj", "{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Tests", "Snap.Tests\Snap.Tests.csproj", "{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.StructureMap", "Snap.StructureMap\Snap.StructureMap.csproj", "{9B28439F-F207-4669-8C89-E5CD86098FCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Ninject", "Snap.Ninject\Snap.Ninject.csproj", "{C8C529ED-68D6-4877-9D1A-78E34AA1465F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B28439F-F207-4669-8C89-E5CD86098FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B28439F-F207-4669-8C89-E5CD86098FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B28439F-F207-4669-8C89-E5CD86098FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B28439F-F207-4669-8C89-E5CD86098FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C529ED-68D6-4877-9D1A-78E34AA1465F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C529ED-68D6-4877-9D1A-78E34AA1465F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C529ED-68D6-4877-9D1A-78E34AA1465F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C529ED-68D6-4877-9D1A-78E34AA1465F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
