@@ -4,7 +4,7 @@ using Ninject;
 namespace Snap.Ninject
 {
     /// <summary>
-    /// Ninject AoP container
+    /// Ninject Aspect Container for AoP interception registration.
     /// </summary>
     public class NinjectAspectContainer : IAspectContainer
     {

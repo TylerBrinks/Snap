@@ -14,24 +14,20 @@ namespace Snap
         /// <param name="configuration">The configuration action.</param>
         public static void For<T>(Action<AspectConfiguration> configuration) where T : IAspectContainer, new()
         {
-            //var config = new AspectConfiguration();
             var container = new T();
-            //container.SetConfiguration(config);
 
-            //configuration(config);
-
-            For(container, configuration);
+            For(container).Configure(configuration);
         }
         /// <summary>
         /// Specifies configuration for a configuration container.
         /// </summary>
         /// <param name="container">The AoP container.</param>
-        /// <param name="configuration">The configuration action.</param>
-        public static void For(IAspectContainer container, Action<AspectConfiguration> configuration)
+        public static SnapFluentConfiguration For(IAspectContainer container)
         {
             var config = new AspectConfiguration();
             container.SetConfiguration(config);
-            configuration(config);
+
+            return new SnapFluentConfiguration(config);
         }
     }
 }

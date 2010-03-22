@@ -14,7 +14,7 @@ namespace Snap.Tests
         {
             var ct = new NinjectAspectContainer();
 
-            SnapConfiguration.For(ct, c =>
+            SnapConfiguration.For(ct).Configure(c =>
                                           {
                                               c.IncludeNamespace("Snap.Tests");
                                               c.RegisterInterceptor<HandleErrorInterceptor>();

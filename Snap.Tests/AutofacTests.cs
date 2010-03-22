@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
-using Autofac.Core;
+﻿using Autofac;
 using NUnit.Framework;
 using Snap.Autofac;
 using Snap.Tests.Fakes;
-using Castle.Core.Interceptor;
-using Castle.DynamicProxy;
 using Snap.Tests.Interceptors;
 
 namespace Snap.Tests
@@ -20,12 +14,11 @@ namespace Snap.Tests
         {
             var builder = new ContainerBuilder();
 
-            SnapConfiguration.For(new AutofacAspectContainer(builder), 
-                c =>
-                    {
-                        c.IncludeNamespace("Snap");
-                        c.RegisterInterceptor<HandleErrorInterceptor>();
-                    });
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+                                                 {
+                                                     c.IncludeNamespace("Snap");
+                                                     c.RegisterInterceptor<HandleErrorInterceptor>();
+                                                 });
 
             builder.Register(r => new BadCode()).As<IBadCode>();
 

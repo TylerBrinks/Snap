@@ -4,7 +4,7 @@ using StructureMap;
 namespace Snap.StructureMap
 {
     /// <summary>
-    /// StructureMap AoP container.
+    /// StructureMap Aspect Container for AoP interception registration.
     /// </summary>
     public class StructureMapAspectContainer : IAspectContainer
     {
@@ -33,6 +33,7 @@ namespace Snap.StructureMap
         /// <typeparam name="T"></typeparam>
         public void RegisterInterceptor<T>() where T : IInterceptor, new()
         {
+            // Call configure, not initialize.  Initialize overwrites existing settings.
             ObjectFactory.Configure(c => c.For<IInterceptor>().Use(new T()));
         }
     }

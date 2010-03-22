@@ -31,8 +31,7 @@ namespace Snap.Ninject
                 QueryTargetType(reference.Instance.GetType());
                 var interceptors = context.Kernel.GetAll<IInterceptor>();
 
-                reference.Instance = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(
-                    _targetInterface, reference.Instance, interceptors.ToArray());
+                reference.Instance = AspectUtility.CreateProxy(_targetInterface, reference.Instance, interceptors.ToArray());
             }
 
             base.Activate(context, reference);
