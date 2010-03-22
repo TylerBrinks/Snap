@@ -1,7 +1,5 @@
-﻿using System;
-using Castle.Core.Interceptor;
+﻿using Castle.Core.Interceptor;
 using Ninject;
-using Ninject.Components;
 
 namespace Snap.Ninject
 {
@@ -10,7 +8,7 @@ namespace Snap.Ninject
     /// </summary>
     public class NinjectAspectContainer : IAspectContainer
     {
-        private readonly AspectInterceptor _interceptor = new AspectInterceptor();
+        private readonly NinjectAspectInterceptor _interceptor = new NinjectAspectInterceptor();
         private readonly StandardKernel _kernel;
 
         /// <summary>

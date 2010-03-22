@@ -8,11 +8,6 @@ using Ninject.Activation.Strategies;
 
 namespace Snap.Ninject
 {
-    public interface INinjectAspectConfiguration
-    {
-        AspectConfiguration Configuration { get; set; }
-    }
-
     /// <summary>
     /// Ninject Type creation strategy.
     /// </summary>

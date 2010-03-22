@@ -13,6 +13,7 @@ namespace Snap.Tests
         public void Ninject_Container_Supports_Aspects()
         {
             var ct = new NinjectAspectContainer();
+
             SnapConfiguration.For(ct, c =>
                                           {
                                               c.IncludeNamespace("Snap.Tests");

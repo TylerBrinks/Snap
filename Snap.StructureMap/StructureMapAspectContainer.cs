@@ -8,7 +8,7 @@ namespace Snap.StructureMap
     /// </summary>
     public class StructureMapAspectContainer : IAspectContainer
     {
-        private readonly AspectInterceptor _interceptor = new AspectInterceptor();
+        private readonly StructureMapAspectInterceptor _interceptor = new StructureMapAspectInterceptor();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapAspectContainer"/> class.

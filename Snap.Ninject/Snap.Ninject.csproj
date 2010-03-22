@@ -59,7 +59,8 @@
   <ItemGroup>
     <Compile Include="AspectConfiguration.cs" />
     <Compile Include="AspectProxyActivationStrategy.cs" />
-    <Compile Include="AspectInterceptor.cs" />
+    <Compile Include="INinjectAspectConfiguration.cs" />
+    <Compile Include="NinjectAspectInterceptor.cs" />
     <Compile Include="NinjectAspectContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -31,9 +31,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=2.1.13.813, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="AutofacContrib.DynamicProxy2, Version=2.1.13.813, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\AutofacContrib.DynamicProxy2.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -61,16 +73,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutofacTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
     <Compile Include="Fakes\IBadCode.cs" />
+    <Compile Include="Interceptors\SampleInterceptor.cs" />
     <Compile Include="Interceptors\HandleErrorAttribute.cs" />
     <Compile Include="Interceptors\HandleErrorInterceptor.cs" />
+    <Compile Include="Interceptors\SampleAttribute.cs" />
     <Compile Include="NinjectTests.cs" />
     <Compile Include="StructureMapTests.cs" />
     <Compile Include="MethodFormatterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Snap.Autofac\Snap.Autofac.csproj">
+      <Project>{47681067-0B27-4B18-819C-0A2F3D0DB2D6}</Project>
+      <Name>Snap.Autofac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Snap.Ninject\Snap.Ninject.csproj">
       <Project>{C8C529ED-68D6-4877-9D1A-78E34AA1465F}</Project>
       <Name>Snap.Ninject</Name>
