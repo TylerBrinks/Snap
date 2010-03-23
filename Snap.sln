@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Ninject", "Snap.Ninjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Autofac", "Snap.Autofac\Snap.Autofac.csproj", "{47681067-0B27-4B18-819C-0A2F3D0DB2D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.CastleWindsor", "Snap.CastleWindsor\Snap.CastleWindsor.csproj", "{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{47681067-0B27-4B18-819C-0A2F3D0DB2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47681067-0B27-4B18-819C-0A2F3D0DB2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47681067-0B27-4B18-819C-0A2F3D0DB2D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

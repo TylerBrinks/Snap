@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}</ProjectGuid>
+    <ProjectGuid>{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Snap.Tests</RootNamespace>
-    <AssemblyName>Snap.Tests</AssemblyName>
+    <RootNamespace>Snap.CastleWindsor</RootNamespace>
+    <AssemblyName>Snap.CastleWindsor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,14 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=2.1.13.813, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="AutofacContrib.DynamicProxy2, Version=2.1.13.813, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\AutofacContrib.DynamicProxy2.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Castle.Core.dll</HintPath>
@@ -55,18 +47,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap, Version=2.6.1.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\StructureMap.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -81,36 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutofacTests.cs" />
-    <Compile Include="CastleWindsorTests.cs" />
-    <Compile Include="Fakes\BadCode.cs" />
-    <Compile Include="Fakes\IBadCode.cs" />
-    <Compile Include="Interceptors\SampleInterceptor.cs" />
-    <Compile Include="Interceptors\HandleErrorAttribute.cs" />
-    <Compile Include="Interceptors\HandleErrorInterceptor.cs" />
-    <Compile Include="Interceptors\SampleAttribute.cs" />
-    <Compile Include="NinjectTests.cs" />
-    <Compile Include="StructureMapTests.cs" />
-    <Compile Include="MethodFormatterTests.cs" />
+    <Compile Include="CastleAspectFacility.cs" />
+    <Compile Include="CastleAspectContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Snap.Autofac\Snap.Autofac.csproj">
-      <Project>{47681067-0B27-4B18-819C-0A2F3D0DB2D6}</Project>
-      <Name>Snap.Autofac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Snap.CastleWindsor\Snap.CastleWindsor.csproj">
-      <Project>{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}</Project>
-      <Name>Snap.CastleWindsor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Snap.Ninject\Snap.Ninject.csproj">
-      <Project>{C8C529ED-68D6-4877-9D1A-78E34AA1465F}</Project>
-      <Name>Snap.Ninject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Snap.StructureMap\Snap.StructureMap.csproj">
-      <Project>{9B28439F-F207-4669-8C89-E5CD86098FCC}</Project>
-      <Name>Snap.StructureMap</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Snap\Snap.csproj">
       <Project>{C1B09D15-F861-48F4-8DA3-FEC0E03CA0FC}</Project>
       <Name>Snap</Name>
