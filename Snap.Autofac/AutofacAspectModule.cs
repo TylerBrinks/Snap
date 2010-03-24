@@ -32,34 +32,25 @@ namespace Snap.Autofac
             // Ignore AspectConfiguration and IInterceptor types since they're being referenced via the Autofac
             // registration context. Otherwise calling e.Context.Resolve<IInterceptor> will fail when
             // the code below executes.
-            if (e.Instance.GetType() == typeof (AspectConfiguration) || e.Instance is IInterceptor)
+            if (e.Instance.GetType() == typeof (MasterProxy) || e.Instance is IInterceptor)
             {
                 return;
             }
 
-            var components = e.Context.ComponentRegistry.Registrations
-                .Where(r => r.Target.Services.Any(s => s.Description.Contains("IInterceptor")))
-                .SelectMany(svc => svc.Services)
-                    .Where(i => i.Description != "Castle.Core.Interceptor.IInterceptor")
-                .Select(interceptor => interceptor);
+            var proxy = (MasterProxy)e.Context.Resolve(typeof(MasterProxy));
 
-            var config = e.Context.Resolve<AspectConfiguration>();
-            var type = e.Instance.GetType();
-            var interfaceTypes = type.GetInterfaces();
+            var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
+            pseudoList[0] = proxy;
 
-            var namespaces = config.Namespaces;
+            for (var i = 1; i < pseudoList.Length; i++)
+            {
+                pseudoList[i] = new PseudoInterceptor();
+            }
 
-            // Filter the interfaces by given namespaces that implement IInterceptAspect
-            var targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)) &&
-                                                                     i.FullName != "Snap.IInterceptAspect");
-
-            var interceptors = new List<IInterceptor>();
-
-            components.ToList().ForEach(i => interceptors.Add(e.Context.Resolve(i) as IInterceptor));
-
-            AspectUtility.SetTargetAttributeTypes(interceptors, config);
-
-            e.Instance = AspectUtility.CreateProxy(targetInterface, e.Instance, interceptors.ToArray());
+            var interfaceTypes = e.Instance.GetType().GetInterfaces();
+            var targetInterface = interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
+            
+            e.Instance = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, e.Instance, pseudoList);
         }
     }
 }

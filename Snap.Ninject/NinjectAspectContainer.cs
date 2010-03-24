@@ -1,12 +1,11 @@
-﻿using Castle.Core.Interceptor;
-using Ninject;
+﻿using Ninject;
 
 namespace Snap.Ninject
 {
     /// <summary>
     /// Ninject Aspect Container for AoP interception registration.
     /// </summary>
-    public class NinjectAspectContainer : IAspectContainer
+    public class NinjectAspectContainer : AspectContainer
     {
         private readonly NinjectAspectInterceptor _interceptor = new NinjectAspectInterceptor();
         private readonly StandardKernel _kernel;
@@ -16,8 +15,8 @@ namespace Snap.Ninject
         /// </summary>
         public NinjectAspectContainer()
         {
+            Proxy = new MasterProxy();
             _kernel = new StandardKernel(_interceptor);
-            
         }
 
         /// <summary>
@@ -33,20 +32,12 @@ namespace Snap.Ninject
         /// Sets the configuration.
         /// </summary>
         /// <param name="config">The config.</param>
-        public void SetConfiguration(AspectConfiguration config)
+        public override void SetConfiguration(AspectConfiguration config)
         {
-            _kernel.Bind<INinjectAspectConfiguration>()
-                .ToConstant(new NinjectAspectConfiguration { Configuration = config });
+            Proxy.Configuration = config;
+            _kernel.Bind<IMasterProxy>().ToConstant(Proxy);
 
             config.Container = this;
-        }
-        /// <summary>
-        /// Registers an interceptor.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void Bind<T>() where T : IInterceptor, new()
-        {
-            _kernel.Bind<IInterceptor>().To<T>();
         }
     }
 }

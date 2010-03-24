@@ -53,14 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspectContainer.cs" />
     <Compile Include="AspectUtility.cs" />
     <Compile Include="ConfigurationSyntax.cs" />
+    <Compile Include="PseudoInterceptor.cs" />
     <Compile Include="Interfaces\IAspectConfiguration.cs" />
     <Compile Include="Interfaces\IAspectContainer.cs" />
     <Compile Include="Interfaces\IAttributeInterceptor.cs" />
     <Compile Include="Interfaces\IConfigurationSyntax.cs" />
     <Compile Include="Interfaces\IHideBaseTypes.cs" />
     <Compile Include="Interfaces\IInterceptAttribute.cs" />
+    <Compile Include="Interfaces\IMasterProxy.cs" />
+    <Compile Include="MasterProxy.cs" />
     <Compile Include="SnapConfiguration.cs" />
     <Compile Include="AspectConfiguration.cs" />
     <Compile Include="MethodInterceptAttribute.cs" />

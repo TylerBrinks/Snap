@@ -8,6 +8,9 @@ namespace Snap
     /// </summary>
     public interface IAttributeInterceptor : IInterceptor
     {
+        void BeforeInvocation();
+        void AfterInvocation();
+        void Invoke();
         Type TargetAttribute { get; set; }
     }
 }

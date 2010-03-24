@@ -63,7 +63,6 @@
   <ItemGroup>
     <Compile Include="CastleAspectFacility.cs" />
     <Compile Include="CastleAspectContainer.cs" />
-    <Compile Include="CastleMasterProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

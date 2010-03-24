@@ -33,7 +33,7 @@ namespace Snap.CastleWindsor
             }
 
             handler.ComponentModel.Interceptors.AddIfNotInCollection(
-                new InterceptorReference(typeof(CastleMasterProxy)));
+                new InterceptorReference(typeof(MasterProxy)));
         }
     }
 }

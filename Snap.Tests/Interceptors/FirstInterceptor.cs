@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Reflection;
 using Castle.Core.Interceptor;
+using Snap.Tests.Fakes;
 
 namespace Snap.Tests.Interceptors
 {
-    public class SampleInterceptor : MethodInterceptor
+    public class FirstInterceptor : MethodInterceptor
     {
         public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
-            var start = DateTime.Now;
+            OrderedCode.Actions.Add("First");
             invocation.Proceed();
-            var end = DateTime.Now;
-
-            Console.WriteLine(end - start);
         }
-
     }
 }

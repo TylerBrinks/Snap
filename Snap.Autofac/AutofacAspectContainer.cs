@@ -1,12 +1,11 @@
 ﻿using Autofac;
-using Castle.Core.Interceptor;
 
 namespace Snap.Autofac
 {
     /// <summary>
     /// Autofac Aspect Container for AoP interception registration.
     /// </summary>
-    public class AutofacAspectContainer : IAspectContainer
+    public class AutofacAspectContainer : AspectContainer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacAspectContainer"/> class.
@@ -14,6 +13,7 @@ namespace Snap.Autofac
         /// <param name="builder">The builder.</param>
         public AutofacAspectContainer(ContainerBuilder builder)
         {
+            Proxy = new MasterProxy();
             Builder = builder;
             builder.RegisterModule<AutofacAspectModule>();
         }
@@ -28,19 +28,11 @@ namespace Snap.Autofac
         /// Sets the aspect configuration.
         /// </summary>
         /// <param name="config">The config.</param>
-        public void SetConfiguration(AspectConfiguration config)
+        public override void SetConfiguration(AspectConfiguration config)
         {
-            Builder.RegisterInstance(config);
+            Proxy.Configuration = config;
+            Builder.RegisterInstance((MasterProxy)Proxy);
             config.Container = this;
-        }
-        /// <summary>
-        /// Registers a method interceptor.
-        /// </summary>
-        /// <typeparam name="T">Interceptor type</typeparam>
-        public void Bind<T>() where T : IInterceptor, new()
-        {
-            var type = typeof (T);
-            Builder.RegisterType<T>().As<IInterceptor>().Named(type.FullName, typeof(IInterceptor));
         }
     }
 }

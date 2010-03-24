@@ -12,14 +12,6 @@ namespace Snap.Ninject
     /// </summary>
     public class AspectProxyActivationStrategy : ActivationStrategy
     {
-        private Type _targetInterface;
-
-        /// <summary>
-        /// Gets or sets the configuration.
-        /// </summary>
-        /// <value>The configuration.</value>
-        internal AspectConfiguration Configuration { get;set; }
-        
         /// <summary>
         /// Creates and wraps the reference type in a Castle proxy
         /// </summary>
@@ -27,37 +19,22 @@ namespace Snap.Ninject
         /// <param name="reference">The instance reference.</param>
         public override void Activate(IContext context, InstanceReference reference)
         {
-            // Don't try to IInterceptor or INinjectAspectConfiguration instances.
-            if (reference.Instance as IInterceptor == null && reference.Instance as INinjectAspectConfiguration == null)
+            // Don't try to IInterceptor or MasterProxy instances.
+            if (reference.Instance as IInterceptor == null && reference.Instance.GetType() != typeof(MasterProxy)) // as INinjectAspectConfiguration == null)
             {
-                Configuration = context.Kernel.Get<INinjectAspectConfiguration>().Configuration;
+                //Configuration = context.Kernel.Get<INinjectAspectConfiguration>().Configuration;
+                var proxy = context.Kernel.Get<IMasterProxy>();
 
-                QueryTargetType(reference.Instance.GetType());
-                var interceptors = context.Kernel.GetAll<IInterceptor>().ToList();
+                var type = reference.Instance.GetType();
 
-                AspectUtility.SetTargetAttributeTypes(interceptors, Configuration);
+                // Filter the interfaces by given namespaces that implement IInterceptAspect
+                var targetInterface = type.GetInterfaces()
+                    .FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
 
-                reference.Instance = AspectUtility.CreateProxy(_targetInterface, reference.Instance, interceptors.ToArray());
+                reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
             }
 
             base.Activate(context, reference);
-        }
-        /// <summary>
-        /// Queries the target type for implementation of a given interface
-        /// </summary>
-        /// <param name="type">The type to query.</param>
-        /// <returns>List of implemented interfaces.</returns>
-        public Type[] QueryTargetType(Type type)
-        {
-            var interfaceTypes = type.GetInterfaces();
-
-            var namespaces = Configuration.Namespaces;
-
-            // Filter the interfaces by given namespaces that implement IInterceptAspect
-            _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)) &&
-                i.FullName != "Snap.IInterceptAspect");
-
-            return interfaceTypes;
         }
     }
 }

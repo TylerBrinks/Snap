@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
@@ -21,20 +20,23 @@ namespace Snap
         }
 
         /// <summary>
-        /// Sets the configured attribute type bindings on a list of interceptors.
+        /// Creates a proxy around an instance with pseudo (empty) interceptors.
         /// </summary>
-        /// <param name="interceptors">The interceptors.</param>
-        /// <param name="configuration">The configuration.</param>
-        public static void SetTargetAttributeTypes(IList<IInterceptor> interceptors, AspectConfiguration configuration)
+        /// <param name="proxy">The proxy.</param>
+        /// <param name="interfaceType">Type of the interface.</param>
+        /// <param name="instanceToWrap">The instance to wrap.</param>
+        /// <returns></returns>
+        public static object CreatePseudoProxy(IMasterProxy proxy, Type interfaceType, object instanceToWrap)
         {
-            foreach (var interceptor in interceptors)
+            var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
+            pseudoList[0] = proxy;
+
+            for (var i = 1; i < pseudoList.Length; i++)
             {
-                var type = interceptor.GetType();
-                if (configuration.Bindings[type] != null && interceptor is IAttributeInterceptor)
-                {
-                    (interceptor as IAttributeInterceptor).TargetAttribute = configuration.Bindings[type];
-                }
+                pseudoList[i] = new PseudoInterceptor();
             }
+
+            return CreateProxy(interfaceType, instanceToWrap, pseudoList);
         }
     }
 }

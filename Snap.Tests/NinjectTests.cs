@@ -12,16 +12,16 @@ namespace Snap.Tests
         [Test]
         public void Ninject_Container_Supports_Aspects()
         {
-            var ct = new NinjectAspectContainer();
+            var container = new NinjectAspectContainer();
 
-            SnapConfiguration.For(ct).Configure(c =>
-                                          {
-                                              c.IncludeNamespace("Snap.Tests");
-                                              c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-                                          });
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespace("Snap.Tests");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
 
-            ct.Kernel.Bind<IBadCode>().To<BadCode>();
-            var badCode = ct.Kernel.Get<IBadCode>();
+            container.Kernel.Bind<IBadCode>().To<BadCode>();
+            var badCode = container.Kernel.Get<IBadCode>();
             Assert.DoesNotThrow(badCode.GiddyUp);
         }
     }

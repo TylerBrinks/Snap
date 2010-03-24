@@ -1,5 +1,4 @@
-﻿using Castle.Core.Interceptor;
-
+﻿
 namespace Snap
 {
     /// <summary>
@@ -12,7 +11,7 @@ namespace Snap
         /// </summary>
         /// <typeparam name="T">Type of interceptor</typeparam>
         /// <returns>IConfigurationSyntax instance</returns>
-        IConfigurationSyntax Bind<T>() where T : IInterceptor, new();
+        IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new();
         /// <summary>
         /// Includes a namespace root for type interception.
         /// </summary>

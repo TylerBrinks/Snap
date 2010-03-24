@@ -57,9 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NinjectAspectConfiguration.cs" />
     <Compile Include="AspectProxyActivationStrategy.cs" />
-    <Compile Include="INinjectAspectConfiguration.cs" />
     <Compile Include="NinjectAspectInterceptor.cs" />
     <Compile Include="NinjectAspectContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

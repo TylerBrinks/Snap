@@ -28,13 +28,11 @@ namespace Snap.StructureMap
         /// <returns></returns>
         public object Process(object target, IContext context)
         {
-            var interceptors = context.GetAllInstances<IInterceptor>();
-
-            AspectUtility.SetTargetAttributeTypes(interceptors.ToList(), Configuration);
+            var proxy = (MasterProxy)ObjectFactory.GetInstance<IMasterProxy>();
 
             QueryTargetType(target.GetType());
 
-            return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(_targetInterface, target, interceptors.ToArray());
+            return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
         }
         /// <summary>
         /// Matcheses types in the a namespace that implement IInterceptAspect.
@@ -43,11 +41,9 @@ namespace Snap.StructureMap
         /// <returns></returns>
         public bool MatchesType(Type type)
         {
-            // Get all the type's interfaces
-            /*var interfaceTypes =*/ QueryTargetType(type);
+            QueryTargetType(type);
             
-            // Ignore all external types (i.e. System.Web...)
-            return _targetInterface != null;// && interfaceTypes.Any(i => i.Name == "IInterceptAspect");
+            return _targetInterface != null;
         }
         /// <summary>
         /// Queries the target type for implementation of a given interface
@@ -61,8 +57,7 @@ namespace Snap.StructureMap
             var namespaces = Configuration.Namespaces;
 
              // Filter the interfaces by given namespaces that implement IInterceptAspect
-             _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)) &&
-                 i.FullName != "Snap.IInterceptAspect");
+             _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)));
 
             return interfaceTypes;
         }

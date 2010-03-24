@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Castle.Core.Interceptor;
 
@@ -10,15 +11,15 @@ namespace Snap
     public class AspectConfiguration : IAspectConfiguration
     {
         private readonly List<string> _namespaces = new List<string>();
-        private readonly Dictionary<Type, Type> _bindings = new Dictionary<Type, Type>();
+        private readonly List<IAttributeInterceptor> _interceptors = new List<IAttributeInterceptor>();
 
         /// <summary>
         /// Registers a method interceptor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public IConfigurationSyntax Bind<T>() where T : IInterceptor, new()
+        public IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new()
         {
-            Container.Bind<T>();
+            _interceptors.Add(new T());
             return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
@@ -41,18 +42,19 @@ namespace Snap
             get { return _namespaces; }
         }
         /// <summary>
-        /// Gets the bindings.
+        /// Gets the interceptors.
         /// </summary>
-        /// <value>The bindings.</value>
-        public Dictionary<Type, Type> Bindings
+        /// <value>The interceptors.</value>
+        public List<IAttributeInterceptor> Interceptors
         {
-            get { return _bindings; }
+            get { return _interceptors; }
         }
         /// <summary>
         /// Gets or sets the container.
         /// </summary>
         /// <value>The container.</value>
         public IAspectContainer Container { get; set; }
+
         /// <summary>
         /// Binds an interceptor to an attribute.
         /// </summary>
@@ -60,7 +62,7 @@ namespace Snap
         /// <typeparam name="TAttribute">The type of attribute.</typeparam>
         internal void BindInterceptor<T, TAttribute>()
         {
-            _bindings.Add(typeof (T), typeof (TAttribute));
+            _interceptors.Where(i => i.GetType() == typeof (T)).First().TargetAttribute = typeof (TAttribute);
         }
     }
 }

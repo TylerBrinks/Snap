@@ -1,5 +1,4 @@
-﻿using Castle.Core.Interceptor;
-
+﻿
 namespace Snap
 {
     /// <summary>
@@ -13,9 +12,9 @@ namespace Snap
         /// <param name="config">The config.</param>
         void SetConfiguration(AspectConfiguration config);
         /// <summary>
-        /// Registers an interceptor.
+        /// Gets or sets the master proxy.
         /// </summary>
-        /// <typeparam name="T">Type of interceptor</typeparam>
-        void Bind<T>() where T : IInterceptor, new();
+        /// <value>The master proxy.</value>
+        IMasterProxy Proxy { get; set; }
     }
 }

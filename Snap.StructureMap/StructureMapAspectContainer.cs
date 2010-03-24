@@ -1,12 +1,11 @@
-﻿using Castle.Core.Interceptor;
-using StructureMap;
+﻿using StructureMap;
 
 namespace Snap.StructureMap
 {
     /// <summary>
     /// StructureMap Aspect Container for AoP interception registration.
     /// </summary>
-    public class StructureMapAspectContainer : IAspectContainer
+    public class StructureMapAspectContainer : AspectContainer
     {
         private readonly StructureMapAspectInterceptor _interceptor = new StructureMapAspectInterceptor();
 
@@ -15,26 +14,25 @@ namespace Snap.StructureMap
         /// </summary>
         public StructureMapAspectContainer()
         {
-            ObjectFactory.Configure(c => c.RegisterInterceptor(_interceptor));
+            Proxy = new MasterProxy();
+
+            // Call configure, not initialize.  Initialize overwrites existing settings.
+            ObjectFactory.Configure(c =>
+                                        {
+                                            c.RegisterInterceptor(_interceptor);
+                                            c.For<IMasterProxy>().Use(this.Proxy);
+                                        });
         }
 
         /// <summary>
         /// Sets the configuration.
         /// </summary>
         /// <param name="config">The config.</param>
-        public void SetConfiguration(AspectConfiguration config)
+        public override void SetConfiguration(AspectConfiguration config)
         {
             _interceptor.Configuration = config;
+            Proxy.Configuration = config;
             config.Container = this;
-        }
-        /// <summary>
-        /// Registers the interceptor.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void Bind<T>() where T : IInterceptor, new()
-        {
-            // Call configure, not initialize.  Initialize overwrites existing settings.
-            ObjectFactory.Configure(c => c.For<IInterceptor>().Use(new T()));
         }
     }
 }

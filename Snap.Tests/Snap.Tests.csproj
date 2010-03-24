@@ -84,11 +84,15 @@
     <Compile Include="AutofacTests.cs" />
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
-    <Compile Include="Fakes\IBadCode.cs" />
+    <Compile Include="Fakes\OrderedCode.cs" />
+    <Compile Include="Interceptors\FirstAttribute.cs" />
+    <Compile Include="Interceptors\FirstInterceptor.cs" />
     <Compile Include="Interceptors\SampleInterceptor.cs" />
     <Compile Include="Interceptors\HandleErrorAttribute.cs" />
     <Compile Include="Interceptors\HandleErrorInterceptor.cs" />
     <Compile Include="Interceptors\SampleAttribute.cs" />
+    <Compile Include="Interceptors\SecondAttribute.cs" />
+    <Compile Include="Interceptors\SecondInterceptor.cs" />
     <Compile Include="NinjectTests.cs" />
     <Compile Include="StructureMapTests.cs" />
     <Compile Include="MethodFormatterTests.cs" />
