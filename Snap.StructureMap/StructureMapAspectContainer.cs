@@ -31,7 +31,7 @@ namespace Snap.StructureMap
         /// Registers the interceptor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void RegisterInterceptor<T>() where T : IInterceptor, new()
+        public void Bind<T>() where T : IInterceptor, new()
         {
             // Call configure, not initialize.  Initialize overwrites existing settings.
             ObjectFactory.Configure(c => c.For<IInterceptor>().Use(new T()));

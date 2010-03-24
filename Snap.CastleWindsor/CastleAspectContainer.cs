@@ -11,30 +11,55 @@ namespace Snap.CastleWindsor
     public class CastleAspectContainer : IAspectContainer
     {
         private readonly IKernel _kernel;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CastleAspectContainer"/> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
         public CastleAspectContainer(IKernel container)
         {
-            Handlers = new List<Type>();
-
+            InterceptorTypes = new List<Type>();
+            Proxy = new CastleMasterProxy();
             _kernel = container;
-            _kernel.AddComponentInstance("CastleWindsorAspectContainer", this);
+            _kernel.AddComponentInstance("CastleAspectContainer", this);
             _kernel.AddFacility<CastleAspectFacility>();
+            _kernel.AddComponentInstance("cw", Proxy);
         }
 
-        internal List<Type> Handlers { get; set; }
-
+        /// <summary>
+        /// Gets or sets the interceptor types.
+        /// </summary>
+        /// <value>The interceptor types.</value>
+        internal List<Type> InterceptorTypes { get; set; }
+        /// <summary>
+        /// Gets or sets the master proxy used for intercepting Castle-based instances.
+        /// </summary>
+        /// <value>The proxy.</value>
+        internal CastleMasterProxy Proxy { get; set; }
+        /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
         internal AspectConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// Sets the container's configuration.
+        /// </summary>
+        /// <param name="config">The config.</param>
         public void SetConfiguration(AspectConfiguration config)
         {
             config.Container = this;
             Configuration = config;
+            Proxy.Configuration = config;
         }
-
-        public void RegisterInterceptor<T>() where T : IInterceptor, new()
+        /// <summary>
+        /// Binds an interceptor.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Bind<T>() where T : IInterceptor, new()
         {
-            Handlers.Add(typeof(T));
-            _kernel.AddComponent<T>();
+            InterceptorTypes.Add(typeof (T));
+            Proxy.AddInterceptor(new T());
         }
     }
 }

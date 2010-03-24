@@ -4,12 +4,6 @@ using Castle.Core.Interceptor;
 
 namespace Snap
 {
-    public interface IAspectConfiguration : IHideBaseTypes
-    {
-        IConfigurationSyntax<T> Bind<T>() where T : IInterceptor, new();
-        void IncludeNamespace(string name);
-    }
-
     /// <summary>
     /// Provider-agnostic Aspect-Oriented configuration
     /// </summary>
@@ -22,9 +16,9 @@ namespace Snap
         /// Registers a method interceptor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public IConfigurationSyntax<T> Bind<T>() where T : IInterceptor, new()
+        public IConfigurationSyntax Bind<T>() where T : IInterceptor, new()
         {
-            Container.RegisterInterceptor<T>();
+            Container.Bind<T>();
             return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
@@ -67,26 +61,6 @@ namespace Snap
         internal void BindInterceptor<T, TAttribute>()
         {
             _bindings.Add(typeof (T), typeof (TAttribute));
-        }
-    }
-
-    public interface IConfigurationSyntax<T>
-    {
-        void To<TAttribute>();
-    }
-
-    public class ConfigurationSyntax<T> : IConfigurationSyntax<T>
-    {
-        private readonly AspectConfiguration _configuration;
-
-        public ConfigurationSyntax(AspectConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        public void To<TAttribute>()
-        {
-            _configuration.BindInterceptor<T, TAttribute>();
         }
     }
 }

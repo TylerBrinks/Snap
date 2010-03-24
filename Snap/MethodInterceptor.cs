@@ -6,11 +6,6 @@ using Castle.Core.Interceptor;
 
 namespace Snap
 {
-    public interface IAttributeInterceptor : IInterceptor
-    {
-        Type TargetAttribute { get; set; }
-    }
-
     /// <summary>
     /// Intercepts method calls for configured types
     /// </summary>

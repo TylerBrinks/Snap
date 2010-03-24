@@ -37,7 +37,7 @@ namespace Snap.Autofac
         /// Registers a method interceptor.
         /// </summary>
         /// <typeparam name="T">Interceptor type</typeparam>
-        public void RegisterInterceptor<T>() where T : IInterceptor, new()
+        public void Bind<T>() where T : IInterceptor, new()
         {
             var type = typeof (T);
             Builder.RegisterType<T>().As<IInterceptor>().Named(type.FullName, typeof(IInterceptor));

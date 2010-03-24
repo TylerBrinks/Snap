@@ -44,7 +44,7 @@ namespace Snap.Ninject
         /// Registers an interceptor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void RegisterInterceptor<T>() where T : IInterceptor, new()
+        public void Bind<T>() where T : IInterceptor, new()
         {
             _kernel.Bind<IInterceptor>().To<T>();
         }

@@ -10,29 +10,30 @@ namespace Snap.CastleWindsor
     /// </summary>
     public class CastleAspectFacility : AbstractFacility
     {
-        private CastleAspectContainer _container;
-
         /// <summary>
         /// Initializes the facility.
         /// </summary>
         protected override void Init()
         {
-            _container = (CastleAspectContainer)Kernel["CastleWindsorAspectContainer"];
-            Kernel.ComponentRegistered += Kernel_ComponentRegistered;
+            //_container = (CastleAspectContainer)Kernel["CastleAspectContainer"];
+            Kernel.ComponentRegistered += KernelComponentRegistered;
         }
         /// <summary>
         /// Registers interceptors with the target type.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="handler">The handler.</param>
-        private void Kernel_ComponentRegistered(string key, IHandler handler)
+        private static void KernelComponentRegistered(string key, IHandler handler)
         {
-            if(handler.Service.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")))
+            // Ignore any types implementing IAttributeInterceptor or IInterceptor
+            if(handler.Service.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")
+                || i.FullName.Contains("IInterceptor")))
             {
                 return;
             }
 
-            _container.Handlers.ForEach(h => handler.ComponentModel.Interceptors.AddIfNotInCollection(new InterceptorReference(h)));
+            handler.ComponentModel.Interceptors.AddIfNotInCollection(
+                new InterceptorReference(typeof(CastleMasterProxy)));
         }
     }
 }

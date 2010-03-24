@@ -30,7 +30,7 @@ namespace Snap.StructureMap
         {
             var interceptors = context.GetAllInstances<IInterceptor>();
 
-            AspectUtility.SetTargetAttributeTypes(interceptors, Configuration);
+            AspectUtility.SetTargetAttributeTypes(interceptors.ToList(), Configuration);
 
             QueryTargetType(target.GetType());
 

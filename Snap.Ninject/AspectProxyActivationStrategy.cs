@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Castle.Core.Interceptor;
-using Castle.DynamicProxy;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Activation.Strategies;
@@ -15,15 +14,20 @@ namespace Snap.Ninject
     {
         private Type _targetInterface;
 
+        /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
         internal AspectConfiguration Configuration { get;set; }
         
         /// <summary>
         /// Creates and wraps the reference type in a Castle proxy
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="reference">The reference.</param>
+        /// <param name="reference">The instance reference.</param>
         public override void Activate(IContext context, InstanceReference reference)
         {
+            // Don't try to IInterceptor or INinjectAspectConfiguration instances.
             if (reference.Instance as IInterceptor == null && reference.Instance as INinjectAspectConfiguration == null)
             {
                 Configuration = context.Kernel.Get<INinjectAspectConfiguration>().Configuration;
