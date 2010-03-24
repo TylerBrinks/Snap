@@ -1,22 +1,31 @@
+using System;
 using System.Collections.Generic;
 using Castle.Core.Interceptor;
 
 namespace Snap
 {
+    public interface IAspectConfiguration : IHideBaseTypes
+    {
+        IConfigurationSyntax<T> Bind<T>() where T : IInterceptor, new();
+        void IncludeNamespace(string name);
+    }
+
     /// <summary>
     /// Provider-agnostic Aspect-Oriented configuration
     /// </summary>
-    public class AspectConfiguration
+    public class AspectConfiguration : IAspectConfiguration
     {
         private readonly List<string> _namespaces = new List<string>();
+        private readonly Dictionary<Type, Type> _bindings = new Dictionary<Type, Type>();
 
         /// <summary>
         /// Registers a method interceptor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void RegisterInterceptor<T>() where T : IInterceptor, new()
+        public IConfigurationSyntax<T> Bind<T>() where T : IInterceptor, new()
         {
             Container.RegisterInterceptor<T>();
+            return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
         /// Includes a namespace for AOP method interception type lookups.
@@ -38,9 +47,46 @@ namespace Snap
             get { return _namespaces; }
         }
         /// <summary>
+        /// Gets the bindings.
+        /// </summary>
+        /// <value>The bindings.</value>
+        public Dictionary<Type, Type> Bindings
+        {
+            get { return _bindings; }
+        }
+        /// <summary>
         /// Gets or sets the container.
         /// </summary>
         /// <value>The container.</value>
         public IAspectContainer Container { get; set; }
+        /// <summary>
+        /// Binds an interceptor to an attribute.
+        /// </summary>
+        /// <typeparam name="T">Interceptor type.</typeparam>
+        /// <typeparam name="TAttribute">The type of attribute.</typeparam>
+        internal void BindInterceptor<T, TAttribute>()
+        {
+            _bindings.Add(typeof (T), typeof (TAttribute));
+        }
+    }
+
+    public interface IConfigurationSyntax<T>
+    {
+        void To<TAttribute>();
+    }
+
+    public class ConfigurationSyntax<T> : IConfigurationSyntax<T>
+    {
+        private readonly AspectConfiguration _configuration;
+
+        public ConfigurationSyntax(AspectConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public void To<TAttribute>()
+        {
+            _configuration.BindInterceptor<T, TAttribute>();
+        }
     }
 }

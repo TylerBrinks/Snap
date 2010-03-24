@@ -1,4 +1,5 @@
-﻿using Castle.Core;
+﻿using System.Linq;
+using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 
@@ -20,12 +21,17 @@ namespace Snap.CastleWindsor
             Kernel.ComponentRegistered += Kernel_ComponentRegistered;
         }
         /// <summary>
-        /// Kernel_s the component registered.
+        /// Registers interceptors with the target type.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="handler">The handler.</param>
         private void Kernel_ComponentRegistered(string key, IHandler handler)
         {
+            if(handler.Service.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")))
+            {
+                return;
+            }
+
             _container.Handlers.ForEach(h => handler.ComponentModel.Interceptors.AddIfNotInCollection(new InterceptorReference(h)));
         }
     }

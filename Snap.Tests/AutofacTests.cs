@@ -17,7 +17,7 @@ namespace Snap.Tests
             SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
                                                  {
                                                      c.IncludeNamespace("Snap");
-                                                     c.RegisterInterceptor<HandleErrorInterceptor>();
+                                                     c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
                                                  });
 
             builder.Register(r => new BadCode()).As<IBadCode>();

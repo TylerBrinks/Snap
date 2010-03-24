@@ -4,13 +4,8 @@ using Castle.Core.Interceptor;
 
 namespace Snap.Tests.Interceptors
 {
-    public class HandleErrorInterceptor : MethodInterceptor
+    public class HandleErrorInterceptor : MethodInterceptor //where T : IInterceptAttribute
     {
-        public HandleErrorInterceptor()
-            : base(typeof(HandleErrorAttribute))
-        {
-        }
-
         public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
             try

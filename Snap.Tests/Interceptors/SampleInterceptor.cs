@@ -6,10 +6,6 @@ namespace Snap.Tests.Interceptors
 {
     public class SampleInterceptor : MethodInterceptor
     {
-        public SampleInterceptor() : base(typeof(SampleAttribute))
-        {
-        }
-
         public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
             var start = DateTime.Now;

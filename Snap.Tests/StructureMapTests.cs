@@ -15,7 +15,7 @@ namespace Snap.Tests
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
                                                       {
                                                           c.IncludeNamespace("Snap.Tests");
-                                                          c.RegisterInterceptor<HandleErrorInterceptor>();
+                                                          c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
                                                       });
 
             ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());

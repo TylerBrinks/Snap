@@ -28,9 +28,12 @@ namespace Snap.StructureMap
         /// <returns></returns>
         public object Process(object target, IContext context)
         {
-            QueryTargetType(target.GetType());
             var interceptors = context.GetAllInstances<IInterceptor>();
-          
+
+            AspectUtility.SetTargetAttributeTypes(interceptors, Configuration);
+
+            QueryTargetType(target.GetType());
+
             return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(_targetInterface, target, interceptors.ToArray());
         }
         /// <summary>

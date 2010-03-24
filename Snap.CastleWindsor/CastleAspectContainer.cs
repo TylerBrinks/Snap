@@ -33,8 +33,8 @@ namespace Snap.CastleWindsor
 
         public void RegisterInterceptor<T>() where T : IInterceptor, new()
         {
-            _kernel.AddComponent<T>();
             Handlers.Add(typeof(T));
+            _kernel.AddComponent<T>();
         }
     }
 }

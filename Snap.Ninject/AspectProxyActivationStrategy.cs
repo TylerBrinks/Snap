@@ -29,7 +29,9 @@ namespace Snap.Ninject
                 Configuration = context.Kernel.Get<INinjectAspectConfiguration>().Configuration;
 
                 QueryTargetType(reference.Instance.GetType());
-                var interceptors = context.Kernel.GetAll<IInterceptor>();
+                var interceptors = context.Kernel.GetAll<IInterceptor>().ToList();
+
+                AspectUtility.SetTargetAttributeTypes(interceptors, Configuration);
 
                 reference.Instance = AspectUtility.CreateProxy(_targetInterface, reference.Instance, interceptors.ToArray());
             }

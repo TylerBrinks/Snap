@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="AspectUtility.cs" />
     <Compile Include="IAspectContainer.cs" />
+    <Compile Include="IHideBaseTypes.cs" />
+    <Compile Include="IInterceptAttribute.cs" />
     <Compile Include="SnapConfiguration.cs" />
     <Compile Include="AspectConfiguration.cs" />
     <Compile Include="MethodInterceptAttribute.cs" />

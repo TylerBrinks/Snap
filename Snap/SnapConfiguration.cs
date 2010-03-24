@@ -12,7 +12,7 @@ namespace Snap
         /// </summary>
         /// <typeparam name="T">Type of configuration container.</typeparam>
         /// <param name="configuration">The configuration action.</param>
-        public static void For<T>(Action<AspectConfiguration> configuration) where T : IAspectContainer, new()
+        public static void For<T>(Action<IAspectConfiguration> configuration) where T : IAspectContainer, new()
         {
             var container = new T();
 

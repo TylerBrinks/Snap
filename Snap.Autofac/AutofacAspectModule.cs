@@ -57,6 +57,8 @@ namespace Snap.Autofac
 
             components.ToList().ForEach(i => interceptors.Add(e.Context.Resolve(i) as IInterceptor));
 
+            AspectUtility.SetTargetAttributeTypes(interceptors, config);
+
             e.Instance = AspectUtility.CreateProxy(targetInterface, e.Instance, interceptors.ToArray());
         }
     }

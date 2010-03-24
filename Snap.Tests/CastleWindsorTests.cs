@@ -13,12 +13,12 @@ namespace Snap.Tests
         public void StructureMap_Container_Supports_Aspects()
         {
             var container = new WindsorContainer();
-           
+
             SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
-            {
-                c.IncludeNamespace("Snap.Tests");
-                c.RegisterInterceptor<HandleErrorInterceptor>();
-            });
+                                {
+                                    c.IncludeNamespace("Snap.Tests");
+                                    c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+                                });
 
             container.AddComponent("BadCode", typeof (IBadCode), typeof (BadCode));
 

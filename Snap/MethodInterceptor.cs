@@ -6,22 +6,19 @@ using Castle.Core.Interceptor;
 
 namespace Snap
 {
+    public interface IAttributeInterceptor : IInterceptor
+    {
+        Type TargetAttribute { get; set; }
+    }
+
     /// <summary>
     /// Intercepts method calls for configured types
     /// </summary>
-    public abstract class MethodInterceptor : IInterceptor
+    public abstract class MethodInterceptor : IAttributeInterceptor
     {
         private static readonly Dictionary<string, Attribute> SignatureCache = new Dictionary<string, Attribute>();
-        private readonly Type _attributeType;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MethodInterceptor"/> class.
-        /// </summary>
-        /// <param name="attributeType">Type of the attribute.</param>
-        protected MethodInterceptor(Type attributeType)
-        {
-            _attributeType = attributeType;
-        }
+        public virtual Type TargetAttribute { get; set; }
 
         /// <summary>
         /// Intercepts the specified invocation.
@@ -74,7 +71,7 @@ namespace Snap
             }
 
             var attributes = from attr in method.GetCustomAttributes(false)
-                             where attr.GetType().Equals(_attributeType)
+                             where attr.GetType().Equals(TargetAttribute)
                              select attr;
 
             if (attributes.Any())
@@ -96,7 +93,7 @@ namespace Snap
             var parameters = from m in method.GetParameters()
                              select m.ParameterType.ToString();
 
-            return string.Format("{0}+{1}",_attributeType.FullName, MethodSignatureFormatter.Create(method, parameters.ToArray()));
+            return string.Format("{0}+{1}", TargetAttribute.FullName, MethodSignatureFormatter.Create(method, parameters.ToArray()));
         }
     }
 }

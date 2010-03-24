@@ -17,7 +17,7 @@ namespace Snap.Tests
             SnapConfiguration.For(ct).Configure(c =>
                                           {
                                               c.IncludeNamespace("Snap.Tests");
-                                              c.RegisterInterceptor<HandleErrorInterceptor>();
+                                              c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
                                           });
 
             ct.Kernel.Bind<IBadCode>().To<BadCode>();
