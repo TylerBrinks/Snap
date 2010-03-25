@@ -15,12 +15,12 @@ namespace Snap.CastleWindsor
         /// <param name="container">The container.</param>
         public CastleAspectContainer(IKernel container)
         {
-            //InterceptorTypes = new List<Type>();
             Proxy = new MasterProxy();
             _kernel = container;
             _kernel.AddComponentInstance("CastleAspectContainer", this);
             _kernel.AddFacility<CastleAspectFacility>();
-            _kernel.AddComponentInstance("Proxy", Proxy);
+            _kernel.AddComponentInstance("MasterProxy", Proxy);
+            _kernel.AddComponent<PseudoInterceptor>();
         }
 
         /// <summary>

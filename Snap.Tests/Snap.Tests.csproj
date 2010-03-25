@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspectTests.cs" />
     <Compile Include="AutofacTests.cs" />
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
@@ -93,10 +94,13 @@
     <Compile Include="Interceptors\SampleAttribute.cs" />
     <Compile Include="Interceptors\SecondAttribute.cs" />
     <Compile Include="Interceptors\SecondInterceptor.cs" />
+    <Compile Include="Interceptors\ThirdAttribute.cs" />
+    <Compile Include="Interceptors\ThirdInterceptor.cs" />
     <Compile Include="NinjectTests.cs" />
     <Compile Include="StructureMapTests.cs" />
     <Compile Include="MethodFormatterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Snap.Autofac\Snap.Autofac.csproj">

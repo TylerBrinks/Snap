@@ -4,7 +4,7 @@ namespace Snap
     /// <summary>
     /// Defines an AoP container
     /// </summary>
-    public interface IAspectContainer
+    public interface IAspectContainer : IHideBaseTypes
     {
         /// <summary>
         /// Sets the container's configuration.

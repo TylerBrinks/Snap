@@ -23,9 +23,11 @@ namespace Snap
         {
             var interceptors = Configuration.Interceptors.ToList();
 
-            // TODO: Reorder the list here based on config - default to 
+            var sortOrder = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors);
 
-            foreach (var interceptor in interceptors)
+            var orderedInterceptors = sortOrder.Sort();
+
+            foreach (var interceptor in orderedInterceptors)
             {
                 interceptor.BeforeInvocation();
                 interceptor.Intercept(invocation);

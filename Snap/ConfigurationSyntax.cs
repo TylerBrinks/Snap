@@ -1,11 +1,13 @@
 ﻿
+using System;
+
 namespace Snap
 {
     /// <summary>
     /// Syntax for fluent configuration
     /// </summary>
     /// <typeparam name="T">Type of interceptor being configured</typeparam>
-    public class ConfigurationSyntax<T> : IConfigurationSyntax
+    public class ConfigurationSyntax<T> : IConfigurationSyntax, IOrderSyntax
     {
         private readonly AspectConfiguration _configuration;
 
@@ -22,9 +24,15 @@ namespace Snap
         /// Binds an attribute to an interceptor.
         /// </summary>
         /// <typeparam name="TAttribute">The type of the attribute.</typeparam>
-        public void To<TAttribute>()
+        public IOrderSyntax To<TAttribute>()
         {
             _configuration.BindInterceptor<T, TAttribute>();
+            return this;
+        }
+
+        public void Order(int index)
+        {
+            _configuration.AddBindingOrder(index);
         }
     }
 }

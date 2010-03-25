@@ -6,7 +6,8 @@ namespace Snap.Tests.Fakes
     public interface IOrderedCode
     {
         void RunInOrder();
-        void RunInDecoratedOrder();
+        void RunInExplicitOrder();
+        void RunInAttributedOrder();
     }
 
     public class OrderedCode : IOrderedCode
@@ -20,9 +21,17 @@ namespace Snap.Tests.Fakes
 
         }
 
-        [Second]
         [First]
-        public void RunInDecoratedOrder()
+        [Second]
+        [Third]
+        public void RunInExplicitOrder()
+        {
+        }
+
+        [First(Order = 1)]
+        [Second(Order = 2)]
+        [Third(Order = 0)]
+        public void RunInAttributedOrder()
         {
         }
     }

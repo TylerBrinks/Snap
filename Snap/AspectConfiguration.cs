@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using Castle.Core.Interceptor;
 
 namespace Snap
 {
@@ -63,6 +61,11 @@ namespace Snap
         internal void BindInterceptor<T, TAttribute>()
         {
             _interceptors.Where(i => i.GetType() == typeof (T)).First().TargetAttribute = typeof (TAttribute);
+        }
+        
+        internal void AddBindingOrder(int index)
+        {
+            _interceptors.Last().Order = index;
         }
     }
 }

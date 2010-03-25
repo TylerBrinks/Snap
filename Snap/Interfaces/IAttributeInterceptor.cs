@@ -6,11 +6,11 @@ namespace Snap
     /// <summary>
     /// Defines a mapping between an interceptor and the attribute the interceptor responds to.
     /// </summary>
-    public interface IAttributeInterceptor : IInterceptor
+    public interface IAttributeInterceptor : IInterceptor, IHideBaseTypes
     {
         void BeforeInvocation();
         void AfterInvocation();
-        void Invoke();
         Type TargetAttribute { get; set; }
+        int Order { get; set; }
     }
 }

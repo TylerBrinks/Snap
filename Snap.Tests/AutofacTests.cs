@@ -7,7 +7,7 @@ using Snap.Tests.Interceptors;
 namespace Snap.Tests
 {
     [TestFixture]
-    public class AutofacTests
+    public class AutofacTests : TestBase
     {
         [Test]
         public void Autofac_Container_Supports_Method_Aspects()

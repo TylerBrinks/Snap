@@ -6,5 +6,6 @@ namespace Snap
     /// </summary>
     public interface IInterceptAttribute
     {
+        int Order { get; set; }
     }
 }

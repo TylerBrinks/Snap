@@ -5,6 +5,9 @@ using Castle.DynamicProxy;
 
 namespace Snap
 {
+    /// <summary>
+    /// Utility methods
+    /// </summary>
     public static class AspectUtility
     {
         /// <summary>

@@ -13,24 +13,29 @@ namespace Snap
     {
         private static readonly Dictionary<string, Attribute> SignatureCache = new Dictionary<string, Attribute>();
 
-        public virtual void BeforeInvocation()
-        {
-        }
-
-        public virtual void AfterInvocation()
-        {
-        }
-
-        public virtual void Invoke()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the target attribute.
         /// </summary>
         /// <value>The target attribute.</value>
-        public virtual Type TargetAttribute { get; set; }
+        public Type TargetAttribute { get; set; }
+        /// <summary>
+        /// Gets or sets the invocation order.
+        /// </summary>
+        /// <value>The order.</value>
+        public int Order{ get; set; }
 
+        /// <summary>
+        /// Called immediately before interceptor invocation.
+        /// </summary>
+        public virtual void BeforeInvocation()
+        {
+        }
+        /// <summary>
+        /// Called immediately after interceptor invocation.
+        /// </summary>
+        public virtual void AfterInvocation()
+        {
+        }
         /// <summary>
         /// Intercepts the specified invocation.
         /// </summary>

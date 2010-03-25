@@ -56,6 +56,8 @@
     <Compile Include="AspectContainer.cs" />
     <Compile Include="AspectUtility.cs" />
     <Compile Include="ConfigurationSyntax.cs" />
+    <Compile Include="Interfaces\ISortOrderStrategy.cs" />
+    <Compile Include="Interfaces\IOrderSyntax.cs" />
     <Compile Include="PseudoInterceptor.cs" />
     <Compile Include="Interfaces\IAspectConfiguration.cs" />
     <Compile Include="Interfaces\IAspectContainer.cs" />
@@ -73,6 +75,10 @@
     <Compile Include="MethodSignatureFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapFluentConfiguration.cs" />
+    <Compile Include="Strategies\AttributedSortOrderStrategy.cs" />
+    <Compile Include="Strategies\DefaultSortOrderStrategy.cs" />
+    <Compile Include="Strategies\IndexSortOrderStrategy.cs" />
+    <Compile Include="Strategies\SortOrderFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

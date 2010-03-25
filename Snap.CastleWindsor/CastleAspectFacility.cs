@@ -23,7 +23,7 @@ namespace Snap.CastleWindsor
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="handler">The handler.</param>
-        private static void KernelComponentRegistered(string key, IHandler handler)
+        private void KernelComponentRegistered(string key, IHandler handler)
         {
             // Ignore any types implementing IAttributeInterceptor or IInterceptor
             if(handler.Service.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")
@@ -32,8 +32,14 @@ namespace Snap.CastleWindsor
                 return;
             }
 
-            handler.ComponentModel.Interceptors.AddIfNotInCollection(
-                new InterceptorReference(typeof(MasterProxy)));
+            var proxy = (MasterProxy)Kernel[typeof (MasterProxy)];
+
+            handler.ComponentModel.Interceptors.AddIfNotInCollection(new InterceptorReference(typeof(MasterProxy)));
+
+            for (var i = 1; i < proxy.Configuration.Interceptors.Count; i++)
+            {
+                handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(PseudoInterceptor)));
+            }
         }
     }
 }

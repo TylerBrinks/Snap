@@ -2,7 +2,7 @@
 
 namespace Snap
 {
-    public interface IMasterProxy : IInterceptor
+    public interface IMasterProxy : IInterceptor, IHideBaseTypes
     {
         AspectConfiguration Configuration { get; set; }
     }

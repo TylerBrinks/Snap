@@ -2,6 +2,9 @@
 
 namespace Snap
 {
+    /// <summary>
+    /// Defines methods for fluent configuration syntax.
+    /// </summary>
     public class SnapFluentConfiguration : IHideBaseTypes
     {
         private readonly IAspectConfiguration _configuration;
