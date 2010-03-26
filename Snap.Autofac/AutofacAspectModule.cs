@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Core;
 using Castle.Core.Interceptor;
@@ -39,6 +38,11 @@ namespace Snap.Autofac
 
             var proxy = (MasterProxy)e.Context.Resolve(typeof(MasterProxy));
 
+            if (!e.Instance.IsDecorated(proxy.Configuration))
+            {
+                return;
+            }
+
             var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
             pseudoList[0] = proxy;
 
@@ -48,8 +52,9 @@ namespace Snap.Autofac
             }
 
             var interfaceTypes = e.Instance.GetType().GetInterfaces();
-            var targetInterface = interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
-            
+            var targetInterface =
+                interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
+
             e.Instance = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, e.Instance, pseudoList);
         }
     }

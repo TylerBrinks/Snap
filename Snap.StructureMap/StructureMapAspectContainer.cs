@@ -16,7 +16,7 @@ namespace Snap.StructureMap
         {
             Proxy = new MasterProxy();
 
-            // Call configure, not initialize.  Initialize overwrites existing settings.
+            // Use "Configure", not "Initialize."  Initialize overwrites existing settings.
             ObjectFactory.Configure(c =>
                                         {
                                             c.RegisterInterceptor(_interceptor);

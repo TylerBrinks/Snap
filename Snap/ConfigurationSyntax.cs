@@ -28,6 +28,10 @@ namespace Snap
             return this;
         }
 
+        /// <summary>
+        /// Orders the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
         public void Order(int index)
         {
             _configuration.AddBindingOrder(index);

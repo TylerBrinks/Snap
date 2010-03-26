@@ -7,6 +7,10 @@ namespace Snap
     /// </summary>
     public interface ISortOrderStrategy
     {
+        /// <summary>
+        /// Sorts the instance.
+        /// </summary>
+        /// <returns>Sorted list.</returns>
         List<IAttributeInterceptor> Sort();
     }
 }

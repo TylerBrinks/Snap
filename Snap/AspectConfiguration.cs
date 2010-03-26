@@ -62,7 +62,10 @@ namespace Snap
         {
             _interceptors.Where(i => i.GetType() == typeof (T)).First().TargetAttribute = typeof (TAttribute);
         }
-        
+        /// <summary>
+        /// Adds the binding order for an interceptor.
+        /// </summary>
+        /// <param name="index">The order index.</param>
         internal void AddBindingOrder(int index)
         {
             _interceptors.Last().Order = index;

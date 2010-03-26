@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Castle.Core.Interceptor;
 using Ninject;
 using Ninject.Activation;
@@ -22,16 +21,19 @@ namespace Snap.Ninject
             // Don't try to IInterceptor or MasterProxy instances.
             if (reference.Instance as IInterceptor == null && reference.Instance.GetType() != typeof(MasterProxy)) // as INinjectAspectConfiguration == null)
             {
-                //Configuration = context.Kernel.Get<INinjectAspectConfiguration>().Configuration;
                 var proxy = context.Kernel.Get<IMasterProxy>();
 
-                var type = reference.Instance.GetType();
+                // Only build a proxy for decorated types
+                if (reference.Instance.IsDecorated(proxy.Configuration))
+                {
+                    var type = reference.Instance.GetType();
 
-                // Filter the interfaces by given namespaces that implement IInterceptAspect
-                var targetInterface = type.GetInterfaces()
-                    .FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
+                    // Filter the interfaces by given namespaces that implement IInterceptAspect
+                    var targetInterface = type.GetInterfaces()
+                        .FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
 
-                reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
+                    reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
+                }
             }
 
             base.Activate(context, reference);

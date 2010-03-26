@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.Core.Interceptor;
+using Fasterflect;
 
 namespace Snap
 {
@@ -24,6 +25,13 @@ namespace Snap
         /// <value>The order.</value>
         public int Order{ get; set; }
 
+        /// <summary>
+        /// Intercepts the method.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="attribute">The attribute.</param>
+        public abstract void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute);
         /// <summary>
         /// Called immediately before interceptor invocation.
         /// </summary>
@@ -48,8 +56,8 @@ namespace Snap
             // Gets the concrete type's method by name and argument type
             var method = invocation
                 .InvocationTarget
-                .GetType()
-                .GetMethod(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
+                .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
+                //.GetMethod(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
 
             // Searches for decoration on the method for a given interceptor
             var attribute = GetAttribute(method);
@@ -61,17 +69,10 @@ namespace Snap
             }
             else
             {
-                // No attribute - continue to process the method (or next interceptor).
+                // No attribute - proceed to the method or the next interceptor.
                 invocation.Proceed();
             }
         }
-        /// <summary>
-        /// Intercepts the method.
-        /// </summary>
-        /// <param name="invocation">The invocation.</param>
-        /// <param name="method">The method.</param>
-        /// <param name="attribute">The attribute.</param>
-        public abstract void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute);
         /// <summary>
         /// Gets a methods attribute.
         /// </summary>
@@ -106,7 +107,7 @@ namespace Snap
         /// <returns></returns>
         private string GetMethodSignature(MethodBase method)
         {
-            var parameters = from m in method.GetParameters()
+            var parameters = from m in method.Parameters()
                              select m.ParameterType.ToString();
 
             return string.Format("{0}+{1}", TargetAttribute.FullName, MethodSignatureFormatter.Create(method, parameters.ToArray()));

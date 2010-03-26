@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using Fasterflect;
 
 namespace Snap
 {
@@ -55,10 +56,10 @@ namespace Snap
 
             // Build the format string for parameters.
             stringBuilder.Length = 0;
-            var parameters = method.GetParameters();
+            var parameters = method.Parameters();
             stringBuilder.Append("(");
 
-            for (var i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Count; i++)
             {
                 if (i > 0)
                 {

@@ -27,6 +27,7 @@ namespace Snap.Tests
                 var badCode = container.Resolve<IBadCode>();
 
                 Assert.DoesNotThrow(badCode.GiddyUp);
+                Assert.IsTrue(badCode.GetType().Name.Equals("IBadCodeProxy"));
             }
         }
         [Test]
@@ -50,6 +51,26 @@ namespace Snap.Tests
 
                 Assert.AreEqual("First", OrderedCode.Actions[0]);
                 Assert.AreEqual("Second", OrderedCode.Actions[1]);
+            }
+        }
+        [Test]
+        public void Autofac_Container_Ignores_Types_Without_Decoration()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("Snap");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new NotInterceptable()).As<INotInterceptable>();
+
+            using (var container = builder.Build())
+            {
+                var code = container.Resolve<INotInterceptable>();
+
+                Assert.IsFalse(code.GetType().Name.Equals("IBadCodeProxy"));
             }
         }
     }

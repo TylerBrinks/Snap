@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Castle.Core.Interceptor;
-using Castle.DynamicProxy;
 using StructureMap;
 using StructureMap.Interceptors;
 
@@ -32,7 +30,19 @@ namespace Snap.StructureMap
 
             QueryTargetType(target.GetType());
 
-            return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
+            if (target.IsDecorated(proxy.Configuration))
+            {
+                return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
+            }
+
+            var name = target.GetType().FullName;
+            // Don't build up any wrapped proxy types.
+            if (!(name.StartsWith("Castle.Proxies.") && name.EndsWith("Proxy")))
+            {
+                context.BuildUp(target);
+            }
+
+            return target;
         }
         /// <summary>
         /// Matcheses types in the a namespace that implement IInterceptAspect.
@@ -42,7 +52,7 @@ namespace Snap.StructureMap
         public bool MatchesType(Type type)
         {
             QueryTargetType(type);
-            
+
             return _targetInterface != null;
         }
         /// <summary>
@@ -56,8 +66,8 @@ namespace Snap.StructureMap
 
             var namespaces = Configuration.Namespaces;
 
-             // Filter the interfaces by given namespaces that implement IInterceptAspect
-             _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)));
+            // Filter the interfaces by given namespaces that implement IInterceptAspect
+            _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)));
 
             return interfaceTypes;
         }
