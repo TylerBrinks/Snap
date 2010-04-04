@@ -15,7 +15,6 @@ namespace Snap.CastleWindsor
         /// </summary>
         protected override void Init()
         {
-            //_container = (CastleAspectContainer)Kernel["CastleAspectContainer"];
             Kernel.ComponentRegistered += KernelComponentRegistered;
         }
         /// <summary>

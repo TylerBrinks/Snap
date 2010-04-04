@@ -10,7 +10,7 @@ namespace Snap.Tests
     public class CastleWindsorTests : TestBase
     {
         [Test]
-        public void StructureMap_Container_Supports_Method_Aspects()
+        public void CastleWindsor_Container_Supports_Method_Aspects()
         {
             var container = new WindsorContainer();
 
@@ -27,7 +27,7 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void StructureMap_Container_Supports_Multiple_Method_Aspects()
+        public void CastleWindsor_Container_Supports_Multiple_Method_Aspects()
         {
             var container = new WindsorContainer();
 

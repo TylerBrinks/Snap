@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LinFu.IoC.Configuration;
 using Snap.Tests.Interceptors;
 
 namespace Snap.Tests.Fakes
@@ -10,6 +11,7 @@ namespace Snap.Tests.Fakes
         void RunInAttributedOrder();
     }
 
+    [Implements(typeof(IOrderedCode))]  // Attribute for LinFu configuration
     public class OrderedCode : IOrderedCode
     {
         public static List<string> Actions = new List<string>();

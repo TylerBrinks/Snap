@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.Core, Version=2.0.3.22803, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\LinFu.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.0.315.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Microsoft.Practices.Unity.dll</HintPath>
@@ -97,6 +101,7 @@
     <Compile Include="Interceptors\SecondInterceptor.cs" />
     <Compile Include="Interceptors\ThirdAttribute.cs" />
     <Compile Include="Interceptors\ThirdInterceptor.cs" />
+    <Compile Include="LinFuTests.cs" />
     <Compile Include="NinjectTests.cs" />
     <Compile Include="StructureMapTests.cs" />
     <Compile Include="MethodFormatterTests.cs" />
@@ -111,6 +116,10 @@
     <ProjectReference Include="..\Snap.CastleWindsor\Snap.CastleWindsor.csproj">
       <Project>{D1102CFD-63B5-4587-AB70-AF59B7FB28E1}</Project>
       <Name>Snap.CastleWindsor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Snap.LinFu\Snap.LinFu.csproj">
+      <Project>{B6C02C50-E493-408C-9649-2872CB591FA0}</Project>
+      <Name>Snap.LinFu</Name>
     </ProjectReference>
     <ProjectReference Include="..\Snap.Ninject\Snap.Ninject.csproj">
       <Project>{C8C529ED-68D6-4877-9D1A-78E34AA1465F}</Project>

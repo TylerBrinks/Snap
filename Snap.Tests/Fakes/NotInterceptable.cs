@@ -1,5 +1,4 @@
-﻿
-using Snap.Tests.Interceptors;
+﻿using LinFu.IoC.Configuration;
 
 namespace Snap.Tests.Fakes
 {
@@ -8,6 +7,7 @@ namespace Snap.Tests.Fakes
         void DontIntercept();
     }
 
+    [Implements(typeof(INotInterceptable))]  // Attribute for LinFu configuration
     public class NotInterceptable : INotInterceptable
     {
         public void DontIntercept()
