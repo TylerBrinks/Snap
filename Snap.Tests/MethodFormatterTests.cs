@@ -15,6 +15,7 @@ namespace Snap.Tests
             var signature = MethodSignatureFormatter.Create(methodInfo, new[]{"1"});
             Assert.AreEqual("Snap.Tests.MethodFormatTestClass::GetDateTime({1})", signature);
         }
+
         [Test]
         public void Method_Formatter_Supports_Zero_Parameters()
         {
@@ -24,6 +25,7 @@ namespace Snap.Tests
             var signature = MethodSignatureFormatter.Create(methodInfo, new object[]{});
             Assert.AreEqual("Snap.Tests.MethodFormatTestClass::GetDateTime()", signature);
         }
+
         [Test]
         public void Method_Formatter_Supports_Multiple_Parameters()
         {
@@ -33,6 +35,7 @@ namespace Snap.Tests
             var signature = MethodSignatureFormatter.Create(methodInfo, new[] { "1", "3" });
             Assert.AreEqual("Snap.Tests.MethodFormatTestClass::GetDateTime({1}, {3})", signature);
         }
+
         [Test]
         public void Method_Formatter_Supports_Multiple_Generic_Parameters()
         {
@@ -42,6 +45,7 @@ namespace Snap.Tests
             var signature = MethodSignatureFormatter.Create(methodInfo, new[] { "1", "3" });
             Assert.AreEqual("Snap.Tests.MethodFormatTestClass::GetGenericMultiple<T, TK>({1}, {3})", signature);
         }
+
         [Test]
         public void Method_Formatter_Supports_Generic_Methods()
         {
@@ -51,6 +55,7 @@ namespace Snap.Tests
 
             Assert.AreEqual("Snap.Tests.MethodFormatTestClass::GetGeneric<T>({test})", format);
         }
+
         [Test]
         public void Method_Formatter_Supports_Generic_Classes()
         {

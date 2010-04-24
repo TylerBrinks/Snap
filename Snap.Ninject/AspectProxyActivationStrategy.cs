@@ -30,7 +30,8 @@ namespace Snap.Ninject
 
                     // Filter the interfaces by given namespaces that implement IInterceptAspect
                     var targetInterface = type.GetInterfaces()
-                        .FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
+                        .FirstMatch(proxy.Configuration.Namespaces);
+                        //.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.IsMatch(n)));
 
                     reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
                 }

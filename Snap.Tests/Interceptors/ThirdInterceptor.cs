@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Castle.Core.Interceptor;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 
 namespace Snap.Tests.Interceptors
 {

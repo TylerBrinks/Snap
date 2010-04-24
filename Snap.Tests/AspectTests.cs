@@ -1,6 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System;
+using Ninject;
+using NUnit.Framework;
+using Snap.Ninject;
 using Snap.StructureMap;
 using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 using StructureMap;
 
@@ -14,7 +18,7 @@ namespace Snap.Tests
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests.Fakes*");
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
             });
@@ -32,7 +36,7 @@ namespace Snap.Tests
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests.Fakes*");
                 c.Bind<SecondInterceptor>().To<SecondAttribute>().Order(2);
                 c.Bind<FirstInterceptor>().To<FirstAttribute>().Order(3);
                 c.Bind<ThirdInterceptor>().To<ThirdAttribute>().Order(1);
@@ -51,7 +55,7 @@ namespace Snap.Tests
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests.Fakes*");
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<ThirdInterceptor>().To<ThirdAttribute>();
@@ -64,6 +68,30 @@ namespace Snap.Tests
             Assert.AreEqual("First", OrderedCode.Actions[1]);
             Assert.AreEqual("Second", OrderedCode.Actions[2]);
             Assert.AreEqual("Third", OrderedCode.Actions[0]);
+        }
+        [Test]
+        public void Namespace_Inclusion_Adds_Wildcards()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespaceRoot("SnapTests");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Kernel.Bind<IBadCode>().To<BadCode>();
+            Assert.DoesNotThrow(() => container.Kernel.Get<IBadCode>());
+        }
+        [Test]
+        public void Namespace_Inclusion_Checks_For_Wildcards()
+        {
+            var container = new MockAspectContainer();
+            
+            SnapConfiguration.For(container).Configure(c => c.IncludeNamespaceRoot("SnapTests*"));
+
+            var config = container.AspectConfiguration;
+            Assert.IsTrue(config.Namespaces[0].Equals("SnapTests*"));
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Snap
         /// Includes a namespace for AOP method interception type lookups.
         /// </summary>
         /// <param name="name">The namespace to include.</param>
+        /// <example>My.Type.Name</example>
         public void IncludeNamespace(string name)
         {
             if (!_namespaces.Contains(name))
@@ -31,6 +32,19 @@ namespace Snap
                 _namespaces.Add(name);
             }
         }
+
+        /// <summary>
+        /// Includes a namespace root for AOP method interception type lookups.
+        /// </summary>
+        /// <param name="namePrefix">The name previx.</param>
+        /// <example>My.Type.*</example>
+        public void IncludeNamespaceRoot(string namePrefix)
+        {
+            var name = namePrefix.EndsWith("*") ? namePrefix : namePrefix + "*";
+
+            IncludeNamespace(name);
+        }
+
         /// <summary>
         /// Gets the list of configured namespaces.
         /// </summary>

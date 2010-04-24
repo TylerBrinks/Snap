@@ -1,7 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using NUnit.Framework;
 using Snap.Autofac;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 
 namespace Snap.Tests
@@ -16,7 +17,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
             {
-                 c.IncludeNamespace("Snap");
+                 c.IncludeNamespace("SnapTests.*");
                  c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
@@ -30,6 +31,7 @@ namespace Snap.Tests
                 Assert.IsTrue(badCode.GetType().Name.Equals("IBadCodeProxy"));
             }
         }
+
         [Test]
         public void Autofac_Container_Supports_Multiple_Method_Aspects()
         {
@@ -37,7 +39,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
             {
-                c.IncludeNamespace("Snap");
+                c.IncludeNamespace("SnapTests.*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
@@ -53,6 +55,7 @@ namespace Snap.Tests
                 Assert.AreEqual("Second", OrderedCode.Actions[1]);
             }
         }
+
         [Test]
         public void Autofac_Container_Ignores_Types_Without_Decoration()
         {
@@ -60,7 +63,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
             {
-                c.IncludeNamespace("Snap");
+                c.IncludeNamespace("SnapTests.*");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
@@ -71,6 +74,63 @@ namespace Snap.Tests
                 var code = container.Resolve<INotInterceptable>();
 
                 Assert.IsFalse(code.GetType().Name.Equals("IBadCodeProxy"));
+            }
+        }
+
+        [Test]
+        public void Autofac_Container_Allow_Wildcard_Matching()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new BadCode()).As<IBadCode>();
+
+            using (var container = builder.Build())
+            {
+                Assert.DoesNotThrow(() => container.Resolve<IBadCode>());
+            }
+        }
+
+        [Test]
+        public void Autofac_Container_Allow_Strict_Matching()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes.IBadCode");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new BadCode()).As<IBadCode>();
+
+            using (var container = builder.Build())
+            {
+                Assert.DoesNotThrow(() => container.Resolve<IBadCode>());
+            }
+        }
+
+        [Test]
+        public void Autofac_Container_Fails_Without_Match()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("Does.Not.Work");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new BadCode()).As<IBadCode>();
+
+            using (var container = builder.Build())
+            {
+                Assert.Throws<NullReferenceException>(() => container.Resolve<IBadCode>());
             }
         }
     }

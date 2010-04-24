@@ -1,6 +1,6 @@
 ﻿using LinFu.IoC.Configuration;
 
-namespace Snap.Tests.Fakes
+namespace SnapTests.Fakes
 {
     public interface INotInterceptable
     {

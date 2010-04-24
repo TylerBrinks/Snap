@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 
 namespace Snap.Tests
 {
@@ -10,6 +10,8 @@ namespace Snap.Tests
         [SetUp]
         public void Reset_Ordered_Code()
         {
+            // The actions are static for convenience.  Reset the list
+            // after each test run.
             OrderedCode.Actions = new List<string>();
         }
     }

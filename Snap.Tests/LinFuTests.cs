@@ -2,7 +2,7 @@
 using LinFu.IoC;
 using NUnit.Framework;
 using Snap.LinFu;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 
 namespace Snap.Tests
@@ -18,7 +18,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
             {
-                c.IncludeNamespace("Snap");
+                c.IncludeNamespace("SnapTests.*");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
@@ -34,7 +34,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
@@ -47,20 +47,66 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void Structuremap_Container_Ignores_Types_Without_Decoration()
+        public void LinFu_Container_Ignores_Types_Without_Decoration()
         {
             var container = new ServiceContainer();
             container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
 
             SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
             });
 
             var code = container.GetService<INotInterceptable>();
           
             Assert.IsFalse(code.GetType().Name.Equals("INotInterceptableProxy"));
+        }
+
+        [Test]
+        public void LinFu_Container_Allow_Wildcard_Matching()
+        {
+            var container = new ServiceContainer();
+            container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            Assert.DoesNotThrow(() => container.GetService<IBadCode>());
+        }
+
+        [Test]
+        public void LinFu_Container_Allow_Strict_Matching()
+        {
+            var container = new ServiceContainer();
+            container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            Assert.DoesNotThrow(() => container.GetService<IBadCode>());
+
+        }
+
+        [Test]
+        public void LinFu_Container_Fails_Without_Match()
+        {
+            var container = new ServiceContainer();
+            container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("Does.Not.Work");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            Assert.Throws<NullReferenceException>(() => container.GetService<IBadCode>());
         }
     }
 }

@@ -38,7 +38,8 @@ namespace Snap.LinFu
 
             var interfaceTypes = instance.GetType().GetInterfaces();
             var targetInterface =
-                interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.Contains(n)));
+                interfaceTypes.FirstMatch(proxy.Configuration.Namespaces);
+                //interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.IsMatch(n)));
 
             result.ActualResult = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, instance, pseudoList);
         }

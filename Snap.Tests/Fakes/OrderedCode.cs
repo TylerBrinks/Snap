@@ -2,7 +2,7 @@
 using LinFu.IoC.Configuration;
 using Snap.Tests.Interceptors;
 
-namespace Snap.Tests.Fakes
+namespace SnapTests.Fakes
 {
     public interface IOrderedCode
     {

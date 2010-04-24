@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
@@ -56,6 +57,30 @@ namespace Snap
             var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute));
 
             return isDecorated;
+        }
+        /// <summary>
+        /// Gets the first type that matches the target namespace.
+        /// </summary>
+        /// <param name="typeList">The type list.</param>
+        /// <param name="namespaces">The namespaces.</param>
+        /// <returns></returns>
+        public static Type FirstMatch(this Type[] typeList, List<string> namespaces)
+        {
+            return typeList.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
+        }
+        /// <summary>
+        /// Determines whether the specified value matche.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="test">The test.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified value is a match; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsMatch(this string value, string test)
+        {
+            return test.Contains("*") 
+                ? value.StartsWith(test.Replace("*", "")) // Wildcard. Check that the string starts with.
+                : value.Equals(test); // Not a wild card. Must be an exact match.
         }
     }
 }

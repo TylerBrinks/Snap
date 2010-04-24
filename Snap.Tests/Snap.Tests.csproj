@@ -95,6 +95,7 @@
     <Compile Include="AutofacTests.cs" />
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
+    <Compile Include="Fakes\MockAspectContainer.cs" />
     <Compile Include="Fakes\NotInterceptable.cs" />
     <Compile Include="Fakes\OrderedCode.cs" />
     <Compile Include="Interceptors\FirstAttribute.cs" />

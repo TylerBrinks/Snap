@@ -1,7 +1,7 @@
 ﻿using Castle.Windsor;
 using NUnit.Framework;
 using Snap.CastleWindsor;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 
 namespace Snap.Tests
@@ -16,7 +16,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
                                 {
-                                    c.IncludeNamespace("Snap.Tests");
+                                    c.IncludeNamespace("SnapTests*");
                                     c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
                                 });
 
@@ -33,7 +33,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });

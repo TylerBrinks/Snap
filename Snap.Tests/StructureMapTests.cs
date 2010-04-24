@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Snap.StructureMap;
-using Snap.Tests.Fakes;
+using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 using StructureMap;
 
@@ -24,6 +25,7 @@ namespace Snap.Tests
             Assert.DoesNotThrow(badCode.GiddyUp);
             Assert.IsTrue(badCode.GetType().Name.Equals("IBadCodeProxy"));
         }
+
         [Test]
         public void StructureMap_Container_Supports_Multiple_Method_Aspects()
         {
@@ -41,12 +43,13 @@ namespace Snap.Tests
             Assert.AreEqual("First", OrderedCode.Actions[0]);
             Assert.AreEqual("Second", OrderedCode.Actions[1]);
         }
+
         [Test]
         public void Structuremap_Container_Ignores_Types_Without_Decoration()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("Snap.Tests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
             });
 
@@ -54,6 +57,45 @@ namespace Snap.Tests
             var code = ObjectFactory.GetInstance<INotInterceptable>();
 
             Assert.IsFalse(code.GetType().Name.Equals("INotInterceptableProxy"));
+        }
+
+        [Test]
+        public void Structuremap_Container_Allow_Wildcard_Matching()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
+            Assert.DoesNotThrow(() => ObjectFactory.GetInstance<IBadCode>());
+        }
+
+        [Test]
+        public void Structuremap_Container_Allow_Strict_Matching()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
+            Assert.DoesNotThrow(() => ObjectFactory.GetInstance<IBadCode>());
+        }
+
+        [Test]
+        public void Structuremap_Container_Succeeds_Without_Match()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("Does.Not.Work");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
+            Assert.DoesNotThrow(() => ObjectFactory.GetInstance<IBadCode>());
         }
     }
 }

@@ -67,7 +67,8 @@ namespace Snap.StructureMap
             var namespaces = Configuration.Namespaces;
 
             // Filter the interfaces by given namespaces that implement IInterceptAspect
-            _targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.Contains(n)));
+            //_targetInterface = interfaceTypes.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
+            _targetInterface = interfaceTypes.FirstMatch(namespaces);
 
             return interfaceTypes;
         }
