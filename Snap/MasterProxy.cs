@@ -50,7 +50,19 @@ namespace Snap
 
             var orderedInterceptors = sortOrder.Sort();
 
-            foreach (var interceptor in orderedInterceptors)
+            var validInterceptors = orderedInterceptors.Where(i => i.ShouldIntercept(invocation));
+
+            var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
+
+            for(var i = 0; i < falseInvocations; i++)
+            {
+                // Not all interceptors run for each type, but all interceptors are interrogated.
+                // If there are 5 interceptors, but only 1 attribute, this handles the other 4
+                // necessary invocations.
+                invocation.Proceed();
+            }
+
+            foreach (var interceptor in validInterceptors)
             {
                 interceptor.BeforeInvocation();
                 interceptor.Intercept(invocation);

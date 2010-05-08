@@ -55,6 +55,25 @@ namespace Snap
         /// <param name="method">The method.</param>
         /// <param name="attribute">The attribute.</param>
         public abstract void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute);
+
+        /// <summary>
+        /// Determines whether a type shoulds be intercepted by this interceptor.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        /// <returns></returns>
+        public bool ShouldIntercept(IInvocation invocation)
+        {
+            // Gets the method's parameters (argument types).
+            var parameters = invocation.MethodInvocationTarget.GetParameters();
+
+            // Gets the concrete type's method by name and argument type.
+            var method = invocation
+                .InvocationTarget
+                .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
+
+            // Searches for decoration on the method for a given interceptor.
+            return GetAttribute(method) != null;
+        }
         /// <summary>
         /// Called immediately before interceptor invocation.
         /// </summary>
@@ -80,21 +99,13 @@ namespace Snap
             var method = invocation
                 .InvocationTarget
                 .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
-                //.GetMethod(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
 
             // Searches for decoration on the method for a given interceptor
             var attribute = GetAttribute(method);
 
-            if (attribute != null)
-            {
-                // Intercept the method
-                InterceptMethod(invocation, method, attribute);
-            }
-            else
-            {
-                // No attribute - proceed to the method or the next interceptor.
-                invocation.Proceed();
-            }
+            // Intercept the method.  It's safe to avoid checking the attribute for null
+            // since the ShouldIntercept method always preceeds this method call.
+            InterceptMethod(invocation, method, attribute);
         }
         /// <summary>
         /// Gets a methods attribute.

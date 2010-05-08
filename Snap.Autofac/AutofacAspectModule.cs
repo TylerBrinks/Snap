@@ -77,7 +77,6 @@ namespace Snap.Autofac
             var interfaceTypes = e.Instance.GetType().GetInterfaces();
             var targetInterface =
                 interfaceTypes.FirstMatch(proxy.Configuration.Namespaces);
-                //interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.IsMatch(n)));
 
             e.Instance = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, e.Instance, pseudoList);
         }

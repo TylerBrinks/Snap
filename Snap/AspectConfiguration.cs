@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -55,7 +56,6 @@ namespace Snap
                 _namespaces.Add(name);
             }
         }
-
         /// <summary>
         /// Includes a namespace root for AOP method interception type lookups.
         /// </summary>
@@ -67,7 +67,6 @@ namespace Snap
 
             IncludeNamespace(name);
         }
-
         /// <summary>
         /// Gets the list of configured namespaces.
         /// </summary>
@@ -89,6 +88,15 @@ namespace Snap
         /// </summary>
         /// <value>The container.</value>
         public IAspectContainer Container { get; set; }
+        /// <summary>
+        /// Scans assemblies for type registration.
+        /// </summary>
+        /// <param name="scanAction">The scanning action.</param>
+        /// <returns></returns>
+        public void Scan(Action<ITypeScanner> scanAction)
+        {
+            scanAction(new TypeScanner(this));
+        }
 
         /// <summary>
         /// Binds an interceptor to an attribute.
@@ -97,7 +105,23 @@ namespace Snap
         /// <typeparam name="TAttribute">The type of attribute.</typeparam>
         internal void BindInterceptor<T, TAttribute>()
         {
-            _interceptors.Where(i => i.GetType() == typeof (T)).First().TargetAttribute = typeof (TAttribute);
+            BindInterceptor(_interceptors.Where(i => i.GetType() == typeof(T)).First(), typeof(TAttribute));
+        }
+        /// <summary>
+        /// Adds a binding pair.
+        /// </summary>
+        /// <param name="interceptor">The interceptor.</param>
+        /// <param name="attributeType">Type of the attribute.</param>
+        internal void BindInterceptor(IAttributeInterceptor interceptor, Type attributeType)
+        {
+            interceptor.TargetAttribute = attributeType;
+
+            if (_interceptors.Contains(interceptor))
+            {
+                return;
+            }
+            
+            _interceptors.Add(interceptor);
         }
         /// <summary>
         /// Adds the binding order for an interceptor.

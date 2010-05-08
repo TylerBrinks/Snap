@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System.Linq;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using LinFu.IoC;
@@ -29,7 +28,6 @@ using LinFu.IoC.Interfaces;
 
 namespace Snap.LinFu
 {
-
     public class AspectPostProcessor : IPostProcessor
     {
         public void PostProcess(IServiceRequestResult result)
@@ -62,7 +60,6 @@ namespace Snap.LinFu
             var interfaceTypes = instance.GetType().GetInterfaces();
             var targetInterface =
                 interfaceTypes.FirstMatch(proxy.Configuration.Namespaces);
-                //interfaceTypes.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.IsMatch(n)));
 
             result.ActualResult = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, instance, pseudoList);
         }

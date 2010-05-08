@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System.Linq;
 using Castle.Core.Interceptor;
 using Ninject;
 using Ninject.Activation;
@@ -54,7 +53,6 @@ namespace Snap.Ninject
                     // Filter the interfaces by given namespaces that implement IInterceptAspect
                     var targetInterface = type.GetInterfaces()
                         .FirstMatch(proxy.Configuration.Namespaces);
-                        //.FirstOrDefault(i => proxy.Configuration.Namespaces.Any(n => i.FullName.IsMatch(n)));
 
                     reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
                 }

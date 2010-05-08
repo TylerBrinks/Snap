@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using System;
+
 namespace Snap
 {
     /// <summary>
@@ -34,6 +36,7 @@ namespace Snap
         /// <typeparam name="T">Type of interceptor</typeparam>
         /// <returns>IConfigurationSyntax instance</returns>
         IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new();
+
         /// <summary>
         /// Includes a namespace for type interception.
         /// </summary>
@@ -45,5 +48,11 @@ namespace Snap
         /// </summary>
         /// <param name="namePrefix">The name prefix.</param>
         void IncludeNamespaceRoot(string namePrefix);
+
+        /// <summary>
+        /// Scans assemblies for type registration.
+        /// </summary>
+        /// <param name="scanAction">The scanning action.</param>
+        void Scan(Action<ITypeScanner> scanAction);
     }
 }

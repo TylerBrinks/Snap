@@ -22,34 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-using System;
-using Castle.Core.Interceptor;
+
+using System.Reflection;
 
 namespace Snap
 {
-    /// <summary>
-    /// Defines a mapping between an interceptor and the attribute the interceptor responds to.
-    /// </summary>
-    public interface IAttributeInterceptor : IInterceptor, IHideBaseTypes
+    public interface ITypeScanner : IHideBaseTypes
     {
-        bool ShouldIntercept(IInvocation invocation);
-        /// <summary>
-        /// Fired before the interceptor invocation.
-        /// </summary>
-        void BeforeInvocation();
-        /// <summary>
-        /// Fired after the interceptor invocation.
-        /// </summary>
-        void AfterInvocation();
-        /// <summary>
-        /// Gets or sets the target attribute.
-        /// </summary>
-        /// <value>The target attribute.</value>
-        Type TargetAttribute { get; set; }
-        /// <summary>
-        /// Gets or sets the execution order.
-        /// </summary>
-        /// <value>The execution order.</value>
-        int Order { get; set; }
+        ITypeScanningStrategy ThisAssembly();
+        ITypeScanningStrategy Assembly(Assembly assembly);
     }
 }
