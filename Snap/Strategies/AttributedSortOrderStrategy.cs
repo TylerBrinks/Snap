@@ -51,15 +51,10 @@ namespace Snap
         /// <returns>Sorted interceptors</returns>
         public List<IAttributeInterceptor> Sort()
         {
-            var orderedInterceptors = new List<IAttributeInterceptor>();
-
-            foreach (var attribute in _attributes.OrderBy(a => a.Order).ThenBy(a => a.GetType().Name))
-            {
-                var type = attribute.GetType();
-                orderedInterceptors.Add(_interceptors.Where(i => i.TargetAttribute == type).First());
-            }
-
-            return orderedInterceptors;
+            return _attributes
+                .OrderBy(a => a.Order)
+                .ThenBy(a => a.GetType().Name).Select(attribute => attribute.GetType())
+                .Select(type => _interceptors.Where(i => i.TargetAttribute == type).First()).ToList();
         }
     }
 }

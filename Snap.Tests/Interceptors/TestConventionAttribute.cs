@@ -21,21 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System.Collections.Generic;
-using NUnit.Framework;
-using SnapTests.Fakes;
 
-namespace Snap.Tests
+namespace Snap.Tests.Interceptors
 {
-    [TestFixture]
-    public class TestBase
-    {
-        [SetUp]
-        public void Reset_Ordered_Code()
-        {
-            // "OrderedCode.Actions" is static for convenience.  Reset the list
-            // after each test run.
-            OrderedCode.Actions = new List<string>();
-        }
-    }
+    public class TestConventionAttribute : MethodInterceptAttribute 
+    {}
 }

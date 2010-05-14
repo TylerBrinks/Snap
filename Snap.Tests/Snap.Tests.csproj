@@ -95,6 +95,7 @@
     <Compile Include="AutofacTests.cs" />
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
+    <Compile Include="Fakes\CustomPrefixScanner.cs" />
     <Compile Include="Fakes\MockAspectContainer.cs" />
     <Compile Include="Fakes\NotInterceptable.cs" />
     <Compile Include="Fakes\OrderedCode.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="Interceptors\SampleAttribute.cs" />
     <Compile Include="Interceptors\SecondAttribute.cs" />
     <Compile Include="Interceptors\SecondInterceptor.cs" />
+    <Compile Include="Interceptors\TestConventionAttribute.cs" />
+    <Compile Include="Interceptors\TestConventionInterceptor.cs" />
     <Compile Include="Interceptors\ThirdAttribute.cs" />
     <Compile Include="Interceptors\ThirdInterceptor.cs" />
     <Compile Include="LinFuTests.cs" />

@@ -21,15 +21,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
-
 using System.Reflection;
 
 namespace Snap
 {
     public interface ITypeScanner : IHideBaseTypes
     {
+        /// <summary>
+        /// Scans the current assembly.
+        /// </summary>
+        /// <returns></returns>
         ITypeScanningStrategy ThisAssembly();
+        /// <summary>
+        /// Scans a specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns></returns>
         ITypeScanningStrategy Assembly(Assembly assembly);
     }
 }

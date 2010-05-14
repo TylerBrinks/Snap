@@ -22,20 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System.Collections.Generic;
-using NUnit.Framework;
-using SnapTests.Fakes;
+using System.Reflection;
 
-namespace Snap.Tests
+namespace Snap.Interfaces
 {
-    [TestFixture]
-    public class TestBase
+    public interface IScanningConvention
     {
-        [SetUp]
-        public void Reset_Ordered_Code()
-        {
-            // "OrderedCode.Actions" is static for convenience.  Reset the list
-            // after each test run.
-            OrderedCode.Actions = new List<string>();
-        }
+        /// <summary>
+        /// Scans for interceptor/attribute pairs based on a custom convention.
+        /// </summary>
+        /// <param name="assemblyToScan">The assembly to scan.</param>
+        /// <returns></returns>
+        List<BindingPair> Scan(Assembly assemblyToScan);
     }
 }

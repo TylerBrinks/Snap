@@ -22,11 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+using Snap.Interfaces;
+
 namespace Snap
 {
     public interface ITypeScanningStrategy : IHideBaseTypes
     {
+        /// <summary>
+        /// Scan with default conventions.  Default conventions remove the 
+        /// "Interceptor" and "Attribute" suffix and then attempt to match
+        /// type names.  
+        /// <example>
+        /// ExampleInterceptor and ExampleAttribute resolve to a binding pair
+        /// becuase they share the same "Example" prefix.
+        /// </example>
+        /// </summary>
         void WithDefaults();
-        //void With();
+        void With(IScanningConvention scanner);
     }
 }

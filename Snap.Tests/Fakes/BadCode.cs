@@ -36,6 +36,7 @@ namespace SnapTests.Fakes
     public class BadCode : IBadCode
     {
         [HandleError]
+        [TestConvention]
         public void GiddyUp()
         {
             throw new Exception("Giddy Up!");

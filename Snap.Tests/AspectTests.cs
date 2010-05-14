@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System.Reflection;
 using Ninject;
 using NUnit.Framework;
 using Snap.Ninject;
@@ -123,6 +122,22 @@ namespace Snap.Tests
             {
                 c.IncludeNamespace("SnapTest*");
                 c.Scan(s => s.ThisAssembly().WithDefaults());
+            });
+
+            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
+            var code = ObjectFactory.GetInstance<IBadCode>();
+
+            Assert.DoesNotThrow(code.GiddyUp);
+        }
+        [Test]
+        public void Snap_Allows_Custom_Scanning_Conventions()
+        {
+            var scanner = new CustomPrefixScanner();
+
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTest*");
+                c.Scan(s => s.ThisAssembly().With(scanner));
             });
 
             ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());

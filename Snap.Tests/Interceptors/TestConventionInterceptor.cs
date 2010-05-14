@@ -21,21 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System.Collections.Generic;
-using NUnit.Framework;
-using SnapTests.Fakes;
 
-namespace Snap.Tests
+using System;
+using System.Reflection;
+using Castle.Core.Interceptor;
+
+namespace Snap.Tests.Interceptors
 {
-    [TestFixture]
-    public class TestBase
+    public class TestConventionInterceptor: MethodInterceptor
     {
-        [SetUp]
-        public void Reset_Ordered_Code()
+        /// <summary>
+        /// Intercepts the method.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="attribute">The attribute.</param>
+        public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
-            // "OrderedCode.Actions" is static for convenience.  Reset the list
-            // after each test run.
-            OrderedCode.Actions = new List<string>();
+            try
+            {
+                invocation.Proceed();
+            }
+            catch
+            {
+            }
         }
     }
 }

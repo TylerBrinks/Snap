@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Interceptor;
-using Castle.DynamicProxy;
-using Fasterflect;
-
 /*
 Snap v1.0
 
@@ -28,6 +24,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+using Fasterflect;
+
 namespace Snap
 {
     /// <summary>
