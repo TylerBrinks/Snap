@@ -15,6 +15,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.StructureMap", "Snap.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snap.Tests", "Snap.Tests\Snap.Tests.csproj", "{3F3A6A53-D90C-41B6-88FF-D211DE0857D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuPack", "NuPack", "{558C50A4-F5C9-4B52-8414-69E08CA86994}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{CF658F2A-8ACD-4328-85B4-122C9429D535}"
+	ProjectSection(SolutionItems) = preProject
+		NuPack\snap.autofac.nuspec = NuPack\snap.autofac.nuspec
+		NuPack\snap.castlewindsor.nuspec = NuPack\snap.castlewindsor.nuspec
+		NuPack\snap.linfu.nuspec = NuPack\snap.linfu.nuspec
+		NuPack\snap.ninject.nuspec = NuPack\snap.ninject.nuspec
+		NuPack\snap.nuspec = NuPack\snap.nuspec
+		NuPack\snap.structuremap.nuspec = NuPack\snap.structuremap.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5EBFCC82-B3AE-4B51-AFC0-0BFFDD262DF7}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\AutofacSample.pp = Samples\AutofacSample.pp
+		Samples\CastleSample.pp = Samples\CastleSample.pp
+		Samples\LinFuSample.pp = Samples\LinFuSample.pp
+		Samples\NinjectSample.pp = Samples\NinjectSample.pp
+		Samples\StructureMapSample.pp = Samples\StructureMapSample.pp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,5 +73,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF658F2A-8ACD-4328-85B4-122C9429D535} = {558C50A4-F5C9-4B52-8414-69E08CA86994}
+		{5EBFCC82-B3AE-4B51-AFC0-0BFFDD262DF7} = {558C50A4-F5C9-4B52-8414-69E08CA86994}
 	EndGlobalSection
 EndGlobal

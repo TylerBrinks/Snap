@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using System;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using LinFu.IoC;
@@ -34,7 +35,7 @@ namespace Snap.LinFu
         {
             var instance = result.ActualResult;
             var instanceTypeName = instance.GetType().FullName;
-
+           
             // Ignore any LinFu factories or Snap-specific instances.
             if (instanceTypeName.Contains("LinFu.") || instanceTypeName == "Snap.AspectConfiguration"
                 || instanceTypeName == "Snap.IMasterProxy" || instanceTypeName == "Snap.MasterProxy")

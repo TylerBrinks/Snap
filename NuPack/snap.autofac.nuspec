@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>SNAP.Autofac</id>
+    <version>1.0</version>
+    <authors>
+      <author>Tyler Brinks</author>
+    </authors>
+    <description>
+      Autofac provider for SNAP.  SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .
+      It uses your IoC container to create runtime-callable wrappers to intercept your method calls.  Source code for SNAP is hosted at http://github.com/Acoustic/Snap
+    </description>
+    <language>en-US</language>
+    <keywords>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, Autofac</keywords>
+    <homepage>http://www.simpleaspects.com</homepage>
+  </metadata>
+  <dependencies>
+    <dependency id="SNAP" version="1.0" />
+    <dependency id="Autofac" version="2.2.4.900" />
+  </dependencies>
+  <!--<files src="Autofac" target="lib" />
+  <files src="Snap.Autofac.dll" target="lib" />-->
+</package>
+
