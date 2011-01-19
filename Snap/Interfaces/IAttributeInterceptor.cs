@@ -23,15 +23,13 @@ THE SOFTWARE.
 */
 
 using System;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 
-namespace Snap
-{
+namespace Snap {
     /// <summary>
     /// Defines a mapping between an interceptor and the attribute the interceptor responds to.
     /// </summary>
-    public interface IAttributeInterceptor : IInterceptor, IHideBaseTypes
-    {
+    public interface IAttributeInterceptor: IInterceptor, IHideBaseTypes {
         bool ShouldIntercept(IInvocation invocation);
         /// <summary>
         /// Fired before the interceptor invocation.

@@ -1,4 +1,5 @@
-﻿/*
+﻿using System.Collections.Generic;
+/*
 Snap v1.0
 
 Copyright (c) 2010 Tyler Brinks
@@ -22,37 +23,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System.Linq;
-using System.Collections.Generic;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 
-namespace Snap
-{
+namespace Snap {
     /// <summary>
     /// Creates sorting strategies.
     /// </summary>
-    public static class SortOrderFactory
-    {
+    public static class SortOrderFactory {
         /// <summary>
         /// Gets the sort order strategy.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>Sort order strategy.</returns>
-        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<IAttributeInterceptor> interceptors)
-        {
+        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<IAttributeInterceptor> interceptors) {
             var attributes = invocation.MethodInvocationTarget.GetCustomAttributes(false)
                 .Where(a => a is IInterceptAttribute).Select(at => (IInterceptAttribute)at).ToList();
 
             var attributesAreIndexed = attributes.Any(a => a.Order > 0);
             var interceptorsAreIndexed = interceptors.Any(a => a.Order > 0);
-        
-            if(attributesAreIndexed)
-            {
+
+            if(attributesAreIndexed) {
                 return new AttributedSortOrderStrategy(attributes, interceptors);
             }
-            
-            if(interceptorsAreIndexed)
-            {
+
+            if(interceptorsAreIndexed) {
                 return new IndexSortOrderStrategy(interceptors);
             }
 

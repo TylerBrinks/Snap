@@ -22,18 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System.Linq;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 
-namespace Snap
-{
-    public class MasterProxy : IMasterProxy
-    {
+namespace Snap {
+    public class MasterProxy: IMasterProxy {
         /// <summary>
         /// Gets or sets the configuration.
         /// </summary>
         /// <value>The configuration.</value>
-        public AspectConfiguration Configuration
-        {
+        public AspectConfiguration Configuration {
             get;
             set;
         }
@@ -42,8 +39,7 @@ namespace Snap
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public void Intercept(IInvocation invocation)
-        {
+        public void Intercept(IInvocation invocation) {
             var interceptors = Configuration.Interceptors.ToList();
 
             var sortOrder = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors);
@@ -54,16 +50,14 @@ namespace Snap
 
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
-            for(var i = 0; i < falseInvocations; i++)
-            {
+            for(var i = 0; i < falseInvocations; i++) {
                 // Not all interceptors run for each type, but all interceptors are interrogated.
                 // If there are 5 interceptors, but only 1 attribute, this handles the other 4
                 // necessary invocations.
                 invocation.Proceed();
             }
 
-            foreach (var interceptor in validInterceptors)
-            {
+            foreach(var interceptor in validInterceptors) {
                 interceptor.BeforeInvocation();
                 interceptor.Intercept(invocation);
                 interceptor.AfterInvocation();

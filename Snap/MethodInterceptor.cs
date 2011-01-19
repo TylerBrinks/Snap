@@ -25,16 +25,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 using Fasterflect;
 
-namespace Snap
-{
+namespace Snap {
     /// <summary>
     /// Intercepts method calls for configured types
     /// </summary>
-    public abstract class MethodInterceptor : IAttributeInterceptor
-    {
+    public abstract class MethodInterceptor: IAttributeInterceptor {
         private static readonly Dictionary<string, Attribute> SignatureCache = new Dictionary<string, Attribute>();
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace Snap
         /// Gets or sets the invocation order.
         /// </summary>
         /// <value>The order.</value>
-        public int Order{ get; set; }
+        public int Order { get; set; }
 
         /// <summary>
         /// Intercepts the method.
@@ -61,8 +59,7 @@ namespace Snap
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <returns></returns>
-        public bool ShouldIntercept(IInvocation invocation)
-        {
+        public bool ShouldIntercept(IInvocation invocation) {
             // Gets the method's parameters (argument types).
             var parameters = invocation.MethodInvocationTarget.GetParameters();
 
@@ -77,21 +74,18 @@ namespace Snap
         /// <summary>
         /// Called immediately before interceptor invocation.
         /// </summary>
-        public virtual void BeforeInvocation()
-        {
+        public virtual void BeforeInvocation() {
         }
         /// <summary>
         /// Called immediately after interceptor invocation.
         /// </summary>
-        public virtual void AfterInvocation()
-        {
+        public virtual void AfterInvocation() {
         }
         /// <summary>
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public void Intercept(IInvocation invocation)
-        {
+        public void Intercept(IInvocation invocation) {
             // Gets the method's parameters (argument types)
             var parameters = invocation.MethodInvocationTarget.GetParameters();
 
@@ -112,12 +106,10 @@ namespace Snap
         /// </summary>
         /// <param name="method">The method.</param>
         /// <returns></returns>
-        private Attribute GetAttribute(MethodBase method)
-        {
+        private Attribute GetAttribute(MethodBase method) {
             var key = GetMethodSignature(method);
 
-            if (SignatureCache.ContainsKey(key))
-            {
+            if(SignatureCache.ContainsKey(key)) {
                 return SignatureCache[key];
             }
 
@@ -125,8 +117,7 @@ namespace Snap
                              where attr.GetType().Equals(TargetAttribute)
                              select attr;
 
-            if (attributes.Any())
-            {
+            if(attributes.Any()) {
                 var attribute = (Attribute)attributes.First();
                 SignatureCache.Add(key, attribute);
                 return attribute;
@@ -139,8 +130,7 @@ namespace Snap
         /// </summary>
         /// <param name="method">The method signature.</param>
         /// <returns></returns>
-        private string GetMethodSignature(MethodBase method)
-        {
+        private string GetMethodSignature(MethodBase method) {
             var parameters = from m in method.Parameters()
                              select m.ParameterType.ToString();
 
