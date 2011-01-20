@@ -68,6 +68,20 @@ namespace Snap {
                 .InvocationTarget
                 .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
 
+            // If the method is generic, I need to check each parameter to find the correct method
+            if(method == null) {
+                foreach(var m in invocation.InvocationTarget.GetType().GetMethods().Where(x => x.Name == invocation.MethodInvocationTarget.Name)) {
+                    var exists = true;
+                    foreach(var p in parameters) {
+                        if(!m.Parameters().Any(x => x.Name == p.Name))
+                            exists = false;
+                    }
+
+                    if(exists)
+                        method = m;
+                }
+            }
+
             // Searches for decoration on the method for a given interceptor.
             return GetAttribute(method) != null;
         }
@@ -93,6 +107,20 @@ namespace Snap {
             var method = invocation
                 .InvocationTarget
                 .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
+
+            // If the method is generic, I need to check each parameter to find the correct method
+            if(method == null) {
+                foreach(var m in invocation.InvocationTarget.GetType().GetMethods().Where(x => x.Name == invocation.MethodInvocationTarget.Name)) {
+                    var exists = true;
+                    foreach(var p in parameters) {
+                        if(!m.Parameters().Any(x => x.Name == p.Name))
+                            exists = false;
+                    }
+
+                    if(exists)
+                        method = m;
+                }
+            }
 
             // Searches for decoration on the method for a given interceptor
             var attribute = GetAttribute(method);
