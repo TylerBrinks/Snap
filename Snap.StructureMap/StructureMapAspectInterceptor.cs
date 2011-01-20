@@ -25,14 +25,17 @@ using System;
 using StructureMap;
 using StructureMap.Interceptors;
 
-namespace Snap.StructureMap
-{
+namespace Snap.StructureMap {
     /// <summary>
     /// StructureMap type interceptor
     /// </summary>
-    public class StructureMapAspectInterceptor : TypeInterceptor
-    {
+    public class StructureMapAspectInterceptor: TypeInterceptor {
+        public IContainer Container { get; set; }
         private Type _targetInterface;
+
+        public StructureMapAspectInterceptor() {
+            Container = ObjectFactory.Container;
+        }
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -46,21 +49,18 @@ namespace Snap.StructureMap
         /// <param name="target">The target.</param>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public object Process(object target, IContext context)
-        {
-            var proxy = (MasterProxy)ObjectFactory.GetInstance<IMasterProxy>();
+        public object Process(object target, IContext context) {
+            var proxy = (MasterProxy)Container.GetInstance<IMasterProxy>();
 
             QueryTargetType(target.GetType());
 
-            if (target.IsDecorated(proxy.Configuration))
-            {
+            if(target.IsDecorated(proxy.Configuration)) {
                 return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
             }
 
             var name = target.GetType().FullName;
             // Don't build up any wrapped proxy types.
-            if (!(name.StartsWith("Castle.Proxies.") && name.EndsWith("Proxy")))
-            {
+            if(!(name.StartsWith("Castle.Proxies.") && name.EndsWith("Proxy"))) {
                 context.BuildUp(target);
             }
 
@@ -71,8 +71,7 @@ namespace Snap.StructureMap
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public bool MatchesType(Type type)
-        {
+        public bool MatchesType(Type type) {
             QueryTargetType(type);
 
             return _targetInterface != null;
@@ -82,8 +81,7 @@ namespace Snap.StructureMap
         /// </summary>
         /// <param name="type">The type to query.</param>
         /// <returns>List of implemented interfaces.</returns>
-        public Type[] QueryTargetType(Type type)
-        {
+        public Type[] QueryTargetType(Type type) {
             var interfaceTypes = type.GetInterfaces();
 
             var namespaces = Configuration.Namespaces;
