@@ -26,6 +26,7 @@ using Snap.StructureMap;
 using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 using StructureMap;
+using StructureMap.Configuration.DSL;
 
 namespace Snap.Tests
 {

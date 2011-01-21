@@ -29,11 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{CF658F2A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5EBFCC82-B3AE-4B51-AFC0-0BFFDD262DF7}"
 	ProjectSection(SolutionItems) = preProject
-		Samples\AutofacSample.pp = Samples\AutofacSample.pp
-		Samples\CastleSample.pp = Samples\CastleSample.pp
-		Samples\LinFuSample.pp = Samples\LinFuSample.pp
-		Samples\NinjectSample.pp = Samples\NinjectSample.pp
-		Samples\StructureMapSample.pp = Samples\StructureMapSample.pp
+		Samples\AutofacAopSample.pp = Samples\AutofacAopSample.pp
+		Samples\CastleAopSample.pp = Samples\CastleAopSample.pp
+		Samples\LinFuAopSample.pp = Samples\LinFuAopSample.pp
+		Samples\NinjectAopSample.pp = Samples\NinjectAopSample.pp
+		Samples\StructureMapAopSample.pp = Samples\StructureMapAopSample.pp
 	EndProjectSection
 EndProject
 Global

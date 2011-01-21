@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 using System;
 using System.Reflection;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 
 namespace Snap.Tests.Interceptors
 {

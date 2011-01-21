@@ -30,7 +30,9 @@ namespace Snap.StructureMap
     /// </summary>
     public class StructureMapAspectContainer : AspectContainer
     {
-        private readonly StructureMapAspectInterceptor _interceptor = new StructureMapAspectInterceptor();
+        private readonly StructureMapDefinedAspectInterceptor _interceptor;
+
+       //private IContainer _container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapAspectContainer"/> class.
@@ -39,12 +41,31 @@ namespace Snap.StructureMap
         {
             Proxy = new MasterProxy();
 
+            _interceptor = new StructureMapDefinedAspectInterceptor(ObjectFactory.Container);
             // Use "Configure", not "Initialize."  Initialize overwrites existing settings.
             ObjectFactory.Configure(c =>
-                                        {
-                                            c.RegisterInterceptor(_interceptor);
-                                            c.For<IMasterProxy>().Use(this.Proxy);
-                                        });
+            {
+                c.RegisterInterceptor(_interceptor);
+                c.For<IMasterProxy>().Use(Proxy);
+            });
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StructureMapAspectContainer"/> class.
+        /// </summary>
+        public StructureMapAspectContainer(IContainer container)
+        {
+            //_container = container;
+
+            Proxy = new MasterProxy();
+
+            _interceptor = new StructureMapDefinedAspectInterceptor(container);
+            // Use "Configure", not "Initialize."  Initialize overwrites existing settings
+            container.Configure(c =>
+            {
+                c.RegisterInterceptor(_interceptor);
+                c.For<IMasterProxy>().Use(Proxy);
+            });
         }
 
         /// <summary>

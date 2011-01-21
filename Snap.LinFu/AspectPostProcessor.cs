@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using LinFu.IoC;
 using LinFu.IoC.Interfaces;

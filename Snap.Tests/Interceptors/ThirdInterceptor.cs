@@ -23,7 +23,7 @@ THE SOFTWARE.
 */
 using System;
 using System.Reflection;
-using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
 using SnapTests.Fakes;
 
 namespace Snap.Tests.Interceptors
