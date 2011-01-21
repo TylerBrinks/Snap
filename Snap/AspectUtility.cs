@@ -24,9 +24,8 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fasterflect;
 using Castle.DynamicProxy;
-
+using Fasterflect;
 
 namespace Snap {
     /// <summary>
