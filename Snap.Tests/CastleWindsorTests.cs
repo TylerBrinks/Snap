@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using NUnit.Framework;
 using Snap.CastleWindsor;
@@ -43,9 +44,8 @@ namespace Snap.Tests
                                     c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
                                 });
 
-            container.AddComponent("BadCode", typeof (IBadCode), typeof (BadCode));
-
-            var badCode = (IBadCode)container.Kernel[typeof(IBadCode)];
+            container.Register(Component.For(typeof (IBadCode)).ImplementedBy(typeof (BadCode)).Named("BadCode"));
+            var badCode = container.Resolve<IBadCode>();
             Assert.DoesNotThrow(badCode.GiddyUp);
         }
 
@@ -61,9 +61,9 @@ namespace Snap.Tests
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
 
-            container.AddComponent("OrderedCode", typeof(IOrderedCode), typeof(OrderedCode));
-
-            var orderedCode = (IOrderedCode)container.Kernel[typeof(IOrderedCode)];
+            container.Register(
+                Component.For(typeof (IOrderedCode)).ImplementedBy(typeof (OrderedCode)).Named("OrderedCode"));
+            var orderedCode = container.Resolve<IOrderedCode>();
             orderedCode.RunInOrder();
             Assert.AreEqual("First", OrderedCode.Actions[0]);
             Assert.AreEqual("Second", OrderedCode.Actions[1]);

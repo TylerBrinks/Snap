@@ -43,11 +43,8 @@ namespace Snap.CastleWindsor
             _kernel = container;
             _kernel.Register(Component.For(this.GetType()).Named("CastleAspectContainer").Instance(this));
             _kernel.Register(Component.For(Proxy.GetType()).Named("MasterProxy").Instance(Proxy));
-//            _kernel.AddComponentInstance("CastleAspectContainer", this);
             _kernel.AddFacility<CastleAspectFacility>();
-  //          _kernel.AddComponentInstance("MasterProxy", Proxy);
             _kernel.Register(Component.For<PseudoInterceptor>());
-            //_kernel.AddComponent<PseudoInterceptor>();
         }
 
         /// <summary>
