@@ -3,21 +3,20 @@
   <metadata>
     <id>SNAP.StructureMap</id>
     <version>1.0</version>
-    <authors>
-      <author>Tyler Brinks</author>
-    </authors>
+    <authors>Tyler Brinks</authors>
     <description>
       StructureMap provider for SNAP. SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .
       It uses your IoC container to create runtime-callable wrappers to intercept your method calls.  Source code for SNAP is hosted at http://github.com/Acoustic/Snap
     </description>
     <language>en-US</language>
-    <keywords>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, StructureMap</keywords>
-    <homepage>http://www.simpleaspects.com</homepage>
+    <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, StructureMap</tags>
+    <projectUrl>http://www.simpleaspects.com</projectUrl>
+    <dependencies>
+      <dependency id="SNAP" version="1.0" />
+      <dependency id="structuremap" version="2.6.1.0" />
+    </dependencies>
   </metadata>
-  <dependencies>
-    <dependency id="SNAP" version="1.0" />
-    <dependency id="structuremap" version="2.6.1.0" />
-  </dependencies>
+  
   <!--<files src="StructureMap.dll" target="lib" />
   <files src="Snap.StructureMap.dll" target="lib" />-->
 </package>

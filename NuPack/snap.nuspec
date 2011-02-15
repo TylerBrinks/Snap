@@ -3,19 +3,18 @@
   <metadata>
     <id>SNAP</id>
     <version>1.0</version>
-    <authors>
-      <author>Tyler Brinks</author>
-    </authors>
+    <authors>Tyler Brinks</authors>
     <description>SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .  
     It uses your IoC container to create runtime-callable wrappers to intercept your method calls.  Source code for SNAP is hosted at http://github.com/Acoustic/Snap </description>
     <language>en-US</language>
-    <keywords>SNAP, Simple Aspects, AOP, Aspect Oriented Programming</keywords>
-    <homepage>http://www.simpleaspects.com</homepage>
-  </metadata>
-  <dependencies>
-    <dependency id="Castle.Core" version="1.2.0" />
-    <dependency id="Castle.DynamicProxy" version="2.2.0" />
-  </dependencies>
+    <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming</tags>
+    <projectUrl>http://www.simpleaspects.com</projectUrl>
+    <dependencies>
+      <dependency id="Castle.Core" version="1.2.0" />
+      <dependency id="Castle.DynamicProxy" version="2.2.0" />
+    </dependencies>
+</metadata>
+ 
   <!--<files src="*.dll" target="lib" />-->
 </package>
 

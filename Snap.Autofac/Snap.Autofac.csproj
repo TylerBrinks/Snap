@@ -87,7 +87,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)nupack\snap.autofac.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuPack\NuPack.exe" "$(TargetDir)snap.autofac.nuspec"
+"$(SolutionDir)NuPack\NuGet.exe" pack "$(TargetDir)snap.autofac.nuspec"
 copy "$(TargetDir)snap.autofac.1.0.nupkg" "$(SolutionDir)NuPack\Packages\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
