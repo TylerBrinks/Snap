@@ -16,7 +16,7 @@
   </metadata>
   <dependencies>
     <dependency id="SNAP" version="1.0" />
-    <dependency id="Castle.Windsor" version="2.1.1" />
+    <dependency id="Castle.Windsor" version="2.5.2" />
   </dependencies>
   <!--<files src="Castle.MicroKernel.dll" target="lib" />
   <files src="Castle.Windsor.dll" target="lib" />

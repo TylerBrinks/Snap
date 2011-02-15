@@ -54,8 +54,8 @@ namespace Snap.CastleWindsor
                 return;
             }
 
-            var proxy = (MasterProxy)Kernel[typeof (MasterProxy)];
-
+            //var proxy = (MasterProxy)Kernel[typeof (MasterProxy)];
+            var proxy = Kernel.Resolve<MasterProxy>();
             handler.ComponentModel.Interceptors.AddIfNotInCollection(new InterceptorReference(typeof(MasterProxy)));
 
             for (var i = 1; i < proxy.Configuration.Interceptors.Count; i++)
