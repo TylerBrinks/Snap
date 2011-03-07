@@ -19,12 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{558C50A4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{CF658F2A-8ACD-4328-85B4-122C9429D535}"
 	ProjectSection(SolutionItems) = preProject
-		NuPack\snap.autofac.nuspec = NuPack\snap.autofac.nuspec
-		NuPack\snap.castlewindsor.nuspec = NuPack\snap.castlewindsor.nuspec
-		NuPack\snap.linfu.nuspec = NuPack\snap.linfu.nuspec
-		NuPack\snap.ninject.nuspec = NuPack\snap.ninject.nuspec
-		NuPack\snap.nuspec = NuPack\snap.nuspec
-		NuPack\snap.structuremap.nuspec = NuPack\snap.structuremap.nuspec
+		NuGet\snap.autofac.nuspec = NuGet\snap.autofac.nuspec
+		NuGet\snap.castlewindsor.nuspec = NuGet\snap.castlewindsor.nuspec
+		NuGet\snap.linfu.nuspec = NuGet\snap.linfu.nuspec
+		NuGet\snap.ninject.nuspec = NuGet\snap.ninject.nuspec
+		NuGet\snap.nuspec = NuGet\snap.nuspec
+		NuGet\snap.structuremap.nuspec = NuGet\snap.structuremap.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5EBFCC82-B3AE-4B51-AFC0-0BFFDD262DF7}"

@@ -74,9 +74,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)nupack\snap.castlewindsor.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuPack\NuGet.exe" pack "$(TargetDir)snap.castlewindsor.nuspec"
-copy "$(TargetDir)snap.castlewindsor.1.0.nupkg" "$(SolutionDir)NuPack\Packages"</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)NuGet\snap.castlewindsor.nuspec" "$(TargetDir)"
+"$(SolutionDir)NuGet\NuGet.exe" pack "$(TargetDir)snap.castlewindsor.nuspec"
+copy "$(TargetDir)snap.castlewindsor.1.4.nupkg" "$(SolutionDir)NuGet\Packages"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

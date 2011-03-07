@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>SNAP.LinFu</id>
-    <version>1.0</version>
+    <version>1.4</version>
     <authors>Tyler Brinks</authors>
     <description>
       LinFu provider for SNAP. SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .
@@ -12,10 +12,7 @@
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, LinFu</tags>
     <projectUrl>http://www.simpleaspects.com</projectUrl>
     <dependencies>
-      <dependency id="SNAP" version="1.0" />
+      <dependency id="SNAP" version="1.4" />
     </dependencies>
   </metadata>
-
-  <!--<files src="LinFu.Core.dll" target="lib" />
-  <files src="Snap.LinFu.dll" target="lib" />-->
 </package>

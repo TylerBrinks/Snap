@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>SNAP.Autofac</id>
-    <version>1.0</version>
+    <version>1.4</version>
     <authors>Tyler Brinks</authors>
     <description>
       Autofac provider for SNAP.  SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .
@@ -12,12 +12,9 @@
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, Autofac</tags>
     <projectUrl>http://www.simpleaspects.com</projectUrl>
     <dependencies>
-      <dependency id="SNAP" version="1.0" />
-      <dependency id="Autofac" version="2.2.4.900" />
+      <dependency id="SNAP" version="1.4" />
+      <dependency id="Autofac" version="2.4.4.705" />
     </dependencies>
   </metadata>
-  
-  <!--<files src="Autofac" target="lib" />
-  <files src="Snap.Autofac.dll" target="lib" />-->
 </package>
 

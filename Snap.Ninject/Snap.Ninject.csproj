@@ -42,8 +42,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Core.2.5.2\lib\NET35\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.2.1.0.76\lib\40\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -76,9 +77,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)nupack\snap.ninject.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuPack\NuGet.exe" pack "$(TargetDir)snap.ninject.nuspec"
-copy "$(TargetDir)snap.ninject.1.0.nupkg" "$(SolutionDir)NuPack\Packages"</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)NuGet\snap.ninject.nuspec" "$(TargetDir)"
+"$(SolutionDir)NuGet\NuGet.exe" pack "$(TargetDir)snap.ninject.nuspec"
+copy "$(TargetDir)snap.ninject.1.4.nupkg" "$(SolutionDir)NuGet\Packages"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
