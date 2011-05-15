@@ -26,35 +26,46 @@ using Snap.StructureMap;
 using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 using StructureMap;
-using StructureMap.Configuration.DSL;
 
 namespace Snap.Tests
 {
     [TestFixture]
     public class StructureMapTests : TestBase
     {
+
         [Test]
         public void StructureMap_Container_Supports_Method_Aspects()
         {
+
+            ObjectFactory.EjectAllInstancesOf<IBadCode>();
+            ObjectFactory.Initialize(i => { });
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests.Fakes*");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
             ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
             var badCode = ObjectFactory.GetInstance<IBadCode>();
-            
+
+
+            Assert.AreEqual("IBadCodeProxy", badCode.GetType().Name, "Not being intercepted");
             Assert.DoesNotThrow(badCode.GiddyUp);
-            Assert.IsTrue(badCode.GetType().Name.Equals("IBadCodeProxy"));
+            
         }
 
         [Test]
         public void StructureMap_Container_Supports_Multiple_Method_Aspects()
         {
+
+            ObjectFactory.EjectAllInstancesOf<IOrderedCode>();
+            ObjectFactory.Initialize(i => { });
+
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
@@ -70,6 +81,9 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Ignores_Types_Without_Decoration()
         {
+            ObjectFactory.EjectAllInstancesOf<INotInterceptable>();
+            ObjectFactory.Initialize(i => { });
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
                 c.IncludeNamespace("Snap.Tests*");
@@ -85,6 +99,9 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Allow_Wildcard_Matching()
         {
+            ObjectFactory.EjectAllInstancesOf<IBadCode>();
+            ObjectFactory.Initialize(i => { });
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
                 c.IncludeNamespace("SnapTests*");
@@ -98,6 +115,9 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Allow_Strict_Matching()
         {
+            ObjectFactory.EjectAllInstancesOf<IBadCode>();
+            ObjectFactory.Initialize(i => { });
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
                 c.IncludeNamespace("SnapTests*");
@@ -111,6 +131,9 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Succeeds_Without_Match()
         {
+            ObjectFactory.EjectAllInstancesOf<HandleErrorInterceptor>();
+            ObjectFactory.Initialize(i => { });
+
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
                 c.IncludeNamespace("Does.Not.Work");
