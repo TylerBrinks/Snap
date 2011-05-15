@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Snap.StructureMap;
 using Snap.Tests.Interceptors;
-using SnapTests.Fakes;
 using StructureMap;
 
 namespace Snap.Tests
@@ -13,34 +12,20 @@ namespace Snap.Tests
         [Test]
         public void Namespaces_are_included_with_wildcards()
         {
-            //ObjectFactory.Initialize(i => { });
-
-            //SnapConfiguration.For<StructureMapAspectContainer>(c =>
-            //{
-            //    c.IncludeNamespace("SnapTests.Nested*");
-            //    c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            //});
-
-            //ObjectFactory.Configure(c => c.For<Nested.Deeper.IAmNested>().Use<Nested.Deeper.Nested>());
-            //var nested = ObjectFactory.GetInstance<Nested.Deeper.IAmNested>();
-
-            //Assert.AreEqual("IBadCodeProxy", nested.GetType().Name, "Not being intercepted");
-            //Assert.DoesNotThrow(nested.Foo);
-
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("SnapTests.Fakes*");
+                c.IncludeNamespace("Snap.Tests*");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
-            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
-            var badCode = ObjectFactory.GetInstance<IBadCode>();
+            ObjectFactory.Configure(c => c.For<Nested.Deeper.IAmNested>().Use<Nested.Deeper.Nested>());
+            var badCode = ObjectFactory.GetInstance<Nested.Deeper.IAmNested>();
 
 
-            Assert.AreEqual("IBadCodeProxy", badCode.GetType().Name, "Not being intercepted");
-            Assert.DoesNotThrow(badCode.GiddyUp);
+            Assert.AreEqual("IAmNestedProxy", badCode.GetType().Name, "Not being intercepted");
+            Assert.DoesNotThrow(badCode.Foo);
             
         }
 
@@ -52,16 +37,16 @@ namespace Snap.Tests
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("SnapTests.Fakes");
+                c.IncludeNamespace("Snap.Tests.Nested.Deeper");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
-            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
-            var badCode = ObjectFactory.GetInstance<IBadCode>();
+            ObjectFactory.Configure(c => c.For<Nested.Deeper.IAmNested>().Use<Nested.Deeper.Nested>());
+            var badCode = ObjectFactory.GetInstance<Nested.Deeper.IAmNested>();
 
 
-            Assert.AreEqual("IBadCodeProxy", badCode.GetType().Name, "Not being intercepted");
-            Assert.DoesNotThrow(badCode.GiddyUp);
+            Assert.AreEqual("IAmNestedProxy", badCode.GetType().Name, "Not being intercepted");
+            Assert.DoesNotThrow(badCode.Foo);
         }
     }
 
