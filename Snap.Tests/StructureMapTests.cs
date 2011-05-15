@@ -113,7 +113,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("SnapTests*");
+                c.IncludeNamespace("SnapTests.Fakes");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 

@@ -112,7 +112,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(container).Configure(c =>
             {
-                c.IncludeNamespace("SnapTests.Fakes.IBadCode");
+                c.IncludeNamespace("SnapTests.Fakes");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
