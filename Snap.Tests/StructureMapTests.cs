@@ -36,8 +36,6 @@ namespace Snap.Tests
         [Test]
         public void StructureMap_Container_Supports_Method_Aspects()
         {
-
-            ObjectFactory.EjectAllInstancesOf<IBadCode>();
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
@@ -58,10 +56,8 @@ namespace Snap.Tests
         [Test]
         public void StructureMap_Container_Supports_Multiple_Method_Aspects()
         {
-
-            ObjectFactory.EjectAllInstancesOf<IOrderedCode>();
+            
             ObjectFactory.Initialize(i => { });
-
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
@@ -81,7 +77,6 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Ignores_Types_Without_Decoration()
         {
-            ObjectFactory.EjectAllInstancesOf<INotInterceptable>();
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
@@ -99,7 +94,6 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Allow_Wildcard_Matching()
         {
-            ObjectFactory.EjectAllInstancesOf<IBadCode>();
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
@@ -115,7 +109,6 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Allow_Strict_Matching()
         {
-            ObjectFactory.EjectAllInstancesOf<IBadCode>();
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
@@ -131,7 +124,6 @@ namespace Snap.Tests
         [Test]
         public void Structuremap_Container_Succeeds_Without_Match()
         {
-            ObjectFactory.EjectAllInstancesOf<HandleErrorInterceptor>();
             ObjectFactory.Initialize(i => { });
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
