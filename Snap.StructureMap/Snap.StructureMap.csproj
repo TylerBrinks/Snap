@@ -84,9 +84,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)NuGet\snap.structuremap.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuGet\NuGet.exe" pack "$(TargetDir)snap.structuremap.nuspec"
-copy "$(TargetDir)snap.structuremap.1.4.nupkg" "$(SolutionDir)NuGet\Packages"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

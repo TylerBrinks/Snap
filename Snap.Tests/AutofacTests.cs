@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 using System;
 using Autofac;
+using Autofac.Core;
 using NUnit.Framework;
 using Snap.Autofac;
 using SnapTests.Fakes;
@@ -153,7 +154,7 @@ namespace Snap.Tests
 
             using (var container = builder.Build())
             {
-                Assert.Throws<NullReferenceException>(() => container.Resolve<IBadCode>());
+                Assert.Throws<DependencyResolutionException>(() => container.Resolve<IBadCode>());
             }
         }
     }

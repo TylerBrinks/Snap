@@ -75,9 +75,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)NuGet\snap.linfu.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuGet\NuGet.exe" pack "$(TargetDir)snap.linfu.nuspec"
-copy "$(TargetDir)snap.linfu.1.4.nupkg" "$(SolutionDir)NuGet\Packages"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

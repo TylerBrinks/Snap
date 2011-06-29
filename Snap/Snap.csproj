@@ -112,9 +112,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)NuGet\snap.nuspec" "$(TargetDir)"
-"$(SolutionDir)NuGet\NuGet.exe" pack "$(TargetDir)snap.nuspec"
-copy "$(TargetDir)snap.1.4.nupkg" "$(SolutionDir)NuGet\Packages"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
