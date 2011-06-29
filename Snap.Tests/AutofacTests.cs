@@ -127,7 +127,7 @@ namespace Snap.Tests
 
             SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
             {
-                c.IncludeNamespace("SnapTests.Fakes.IBadCode");
+                c.IncludeNamespace("SnapTests.Fakes");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 

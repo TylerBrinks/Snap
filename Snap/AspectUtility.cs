@@ -81,7 +81,7 @@ namespace Snap {
         /// <param name="namespaces">The namespaces.</param>
         /// <returns></returns>
         public static Type FirstMatch(this Type[] typeList, List<string> namespaces) {
-            return typeList.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
+            return typeList.FirstOrDefault(i => namespaces.Any(n => i.Namespace.IsMatch(n)));
         }
         /// <summary>
         /// Determines whether the specified value matche.
