@@ -27,11 +27,13 @@ using System.Linq;
 using Castle.DynamicProxy;
 using Fasterflect;
 
-namespace Snap {
+namespace Snap
+{
     /// <summary>
     /// Utility methods
     /// </summary>
-    public static class AspectUtility {
+    public static class AspectUtility
+    {
         /// <summary>
         /// Creates a proxy around an instance with type interceptors.
         /// </summary>
@@ -39,7 +41,8 @@ namespace Snap {
         /// <param name="instanceToWrap">The instance to wrap.</param>
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>Wrapped instance</returns>
-        public static object CreateProxy(Type interfaceType, object instanceToWrap, params IInterceptor[] interceptors) {
+        public static object CreateProxy(Type interfaceType, object instanceToWrap, params IInterceptor[] interceptors)
+        {
             return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
         }
         /// <summary>
@@ -49,11 +52,13 @@ namespace Snap {
         /// <param name="interfaceType">Type of the interface.</param>
         /// <param name="instanceToWrap">The instance to wrap.</param>
         /// <returns></returns>
-        public static object CreatePseudoProxy(IMasterProxy proxy, Type interfaceType, object instanceToWrap) {
+        public static object CreatePseudoProxy(IMasterProxy proxy, Type interfaceType, object instanceToWrap)
+        {
             var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
             pseudoList[0] = proxy;
 
-            for(var i = 1; i < pseudoList.Length; i++) {
+            for (var i = 1; i < pseudoList.Length; i++)
+            {
                 pseudoList[i] = new PseudoInterceptor();
             }
 
@@ -67,7 +72,8 @@ namespace Snap {
         /// <returns>
         /// 	<c>true</c> if the specified target is decorated; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsDecorated(this object target, AspectConfiguration configuration) {
+        public static bool IsDecorated(this object target, AspectConfiguration configuration)
+        {
             var methods = target.GetType().Methods();
 
             var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute));
@@ -80,7 +86,8 @@ namespace Snap {
         /// <param name="typeList">The type list.</param>
         /// <param name="namespaces">The namespaces.</param>
         /// <returns></returns>
-        public static Type FirstMatch(this Type[] typeList, List<string> namespaces) {
+        public static Type FirstMatch(this Type[] typeList, List<string> namespaces)
+        {
             return typeList.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
         }
         /// <summary>
@@ -91,7 +98,8 @@ namespace Snap {
         /// <returns>
         /// 	<c>true</c> if the specified value is a match; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsMatch(this string value, string test) {
+        public static bool IsMatch(this string value, string test)
+        {
             return test.Contains("*")
                 ? value.StartsWith(test.Replace("*", "")) // Wildcard. Check that the string starts with.
                 : value.Equals(test); // Not a wild card. Must be an exact match.

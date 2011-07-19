@@ -45,27 +45,43 @@ namespace Snap
             return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
+        /// Includes a type for interception
+        /// </summary>
+        /// <param name="fullyQualifiedTypeName">Fully qualified type to intercept</param>
+        public void IncludeType(string fullyQualifiedTypeName)
+        {
+            if (!_namespaces.Contains(fullyQualifiedTypeName))
+            {
+                _namespaces.Add(fullyQualifiedTypeName);
+            }
+        }
+        /// <summary>
+        /// Includes a type for interception
+        /// </summary>
+        /// <param name="type">Type to intercept</param>
+        public void IncludeType(Type type)
+        {
+            IncludeType(type.FullName);
+        }
+        /// <summary>
+        /// Includes a type of type T for interception
+        /// </summary>
+        public void IncludeType<T>()
+        {
+            IncludeType(typeof (T).FullName);
+        }
+        /// <summary>
         /// Includes a namespace for AOP method interception type lookups.
         /// </summary>
-        /// <param name="name">The namespace to include.</param>
+        /// <param name="namePrefix">The namespace to include.</param>
         /// <example>My.Type.Name</example>
-        public void IncludeNamespace(string name)
+        public void IncludeNamespace(string namePrefix)
         {
+            var name = namePrefix.EndsWith("*") ? namePrefix : namePrefix + "*";
             if (!_namespaces.Contains(name))
             {
                 _namespaces.Add(name);
             }
-        }
-        /// <summary>
-        /// Includes a namespace root for AOP method interception type lookups.
-        /// </summary>
-        /// <param name="namePrefix">The name previx.</param>
-        /// <example>My.Type.*</example>
-        public void IncludeNamespaceRoot(string namePrefix)
-        {
-            var name = namePrefix.EndsWith("*") ? namePrefix : namePrefix + "*";
-
-            IncludeNamespace(name);
         }
         /// <summary>
         /// Gets the list of configured namespaces.
@@ -97,7 +113,6 @@ namespace Snap
         {
             scanAction(new TypeScanner(this));
         }
-
         /// <summary>
         /// Binds an interceptor to an attribute.
         /// </summary>

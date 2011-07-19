@@ -51,8 +51,6 @@ namespace Snap.StructureMap {
         /// </summary>
         public StructureMapAspectContainer(IContainer container)
         {
-            //_container = container;
-
             Proxy = new MasterProxy();
 
             _interceptor = new StructureMapDefinedAspectInterceptor(container);

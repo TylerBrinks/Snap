@@ -38,16 +38,33 @@ namespace Snap
         IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new();
 
         /// <summary>
-        /// Includes a namespace for type interception.
+        /// Includes a type for interception
+        /// </summary>
+        /// <param name="fullyQualifiedTypeName">Fully qualified type to intercept</param>
+        void IncludeType(string fullyQualifiedTypeName);
+
+        /// <summary>
+        /// Includes a type for interception
+        /// </summary>
+        /// <param name="type">Type to intercept</param>
+        void IncludeType(Type type);
+
+        /// <summary>
+        /// Includes a type of type T for interception
+        /// </summary>
+        void IncludeType<T>();
+
+        /// <summary>
+        /// Includes a namespace for type interception.  All types starting with this namespace will be matched.
         /// </summary>
         /// <param name="name">The namespace.</param>
         void IncludeNamespace(string name);
 
-        /// <summary>
-        /// Includes a namespace root for type interception.
-        /// </summary>
-        /// <param name="namePrefix">The name prefix.</param>
-        void IncludeNamespaceRoot(string namePrefix);
+        ///// <summary>
+        ///// Includes a namespace root for type interception.
+        ///// </summary>
+        ///// <param name="namePrefix">The name prefix.</param>
+        //void IncludeNamespaceRoot(string namePrefix);
 
         /// <summary>
         /// Scans assemblies for type registration.

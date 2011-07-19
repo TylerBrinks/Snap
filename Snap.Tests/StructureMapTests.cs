@@ -26,19 +26,24 @@ using Snap.StructureMap;
 using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
 using StructureMap;
-using StructureMap.Configuration.DSL;
 
 namespace Snap.Tests
 {
     [TestFixture]
     public class StructureMapTests : TestBase
     {
+        [SetUp]
+        public void Initialize_Container()
+        {
+            ObjectFactory.Initialize(x => { });
+        }
+
         [Test]
         public void StructureMap_Container_Supports_Method_Aspects()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests.Fakes*");
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
@@ -54,7 +59,7 @@ namespace Snap.Tests
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("Snap.Tests");
+                c.IncludeNamespace("SnapTests*");
                 c.Bind<FirstInterceptor>().To<FirstAttribute>();
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
