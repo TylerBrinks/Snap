@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using StructureMap;
 using StructureMap.Interceptors;
 
@@ -121,10 +123,15 @@ namespace Snap.StructureMap
         {
             var interfaceTypes = type.GetInterfaces();
 
-            var namespaces = Configuration.Namespaces;
+            if (interfaceTypes.Count() == 0)
+            {
+                var types = new[] {type}; 
+                _targetInterface = types.FirstMatch(Configuration.Namespaces);
+                return types;
+            }
 
             // Filter the interfaces by given namespaces that implement IInterceptAspect
-            _targetInterface = interfaceTypes.FirstMatch(namespaces);
+            _targetInterface = interfaceTypes.FirstMatch(Configuration.Namespaces);
 
             return interfaceTypes;
         }

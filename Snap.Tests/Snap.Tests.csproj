@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
-	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -29,7 +29,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
-	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\NET40-Release\</OutputPath>
@@ -50,7 +50,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\NET35-Release\</OutputPath>
@@ -60,13 +60,13 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-	<FrameworkPackageDir Condition="'$(TargetFrameworkVersion)' == 'v4.0'">NET40</FrameworkPackageDir>
-	<FrameworkPackageDir Condition="'$(TargetFrameworkVersion)' == 'v3.5'">NET35</FrameworkPackageDir>
-	<FrameworkPackageDirNinject Condition="'$(TargetFrameworkVersion)' == 'v4.0'">net40-Full</FrameworkPackageDirNinject>
-	<FrameworkPackageDirNinject Condition="'$(TargetFrameworkVersion)' == 'v3.5'">net35-Full</FrameworkPackageDirNinject>
+    <FrameworkPackageDir Condition="'$(TargetFrameworkVersion)' == 'v4.0'">NET40</FrameworkPackageDir>
+    <FrameworkPackageDir Condition="'$(TargetFrameworkVersion)' == 'v3.5'">NET35</FrameworkPackageDir>
+    <FrameworkPackageDirNinject Condition="'$(TargetFrameworkVersion)' == 'v4.0'">net40-Full</FrameworkPackageDirNinject>
+    <FrameworkPackageDirNinject Condition="'$(TargetFrameworkVersion)' == 'v3.5'">net35-Full</FrameworkPackageDirNinject>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\$(FrameworkPackageDirNinject)\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Autofac, Version=2.4.5.724, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -77,7 +77,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.2.4.5.724\lib\$(FrameworkPackageDir)\Autofac.Configuration.dll</HintPath>
     </Reference>
-	<Reference Include="Castle.Windsor, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Windsor, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Windsor.2.5.3\lib\$(FrameworkPackageDir)\Castle.Windsor.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -129,6 +129,7 @@
     <Compile Include="Fakes\MockAspectContainer.cs" />
     <Compile Include="Fakes\NotInterceptable.cs" />
     <Compile Include="Fakes\OrderedCode.cs" />
+    <Compile Include="Fakes\TypeWithoutInterface.cs" />
     <Compile Include="Interceptors\FirstAttribute.cs" />
     <Compile Include="Interceptors\FirstInterceptor.cs" />
     <Compile Include="Interceptors\SampleInterceptor.cs" />

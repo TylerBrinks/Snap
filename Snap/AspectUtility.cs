@@ -43,7 +43,10 @@ namespace Snap
         /// <returns>Wrapped instance</returns>
         public static object CreateProxy(Type interfaceType, object instanceToWrap, params IInterceptor[] interceptors)
         {
-            return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
+            if (interfaceType.IsInterface)
+                return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
+
+            return new ProxyGenerator().CreateClassProxy(interfaceType, interceptors);
         }
         /// <summary>
         /// Creates a proxy around an instance with pseudo (empty) interceptors.
