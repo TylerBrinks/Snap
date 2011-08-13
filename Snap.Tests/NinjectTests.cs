@@ -134,5 +134,29 @@ namespace Snap.Tests
             container.Kernel.Bind<IBadCode>().To<BadCode>();
             Assert.Throws<NullReferenceException>(() => container.Kernel.Get<IBadCode>());
         }
+
+        [Test]
+        public void Ninject_Supports_Types_Without_Interfaces()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Kernel.Bind<TypeWithoutInterface>().To<TypeWithoutInterface>();
+            var typeWithoutInterface = container.Kernel.Get<TypeWithoutInterface>();
+
+            Assert.DoesNotThrow(typeWithoutInterface.Foo);
+            Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+            container.Kernel.Bind<TypeWithInterfaceInBaseClass>().To<TypeWithInterfaceInBaseClass>();
+            var typeWithInterfaceInBaseClass = container.Kernel.Get<TypeWithInterfaceInBaseClass>();
+
+            Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+            Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+        }
     }
 }

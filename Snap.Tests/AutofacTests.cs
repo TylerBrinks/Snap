@@ -157,5 +157,31 @@ namespace Snap.Tests
                 Assert.Throws<DependencyResolutionException>(() => container.Resolve<IBadCode>());
             }
         }
+
+        [Test]
+        public void Autofac_Supports_Types_Without_Interfaces()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new TypeWithoutInterface()).As<TypeWithoutInterface>();
+            builder.Register(r => new TypeWithInterfaceInBaseClass()).As<TypeWithInterfaceInBaseClass>();
+
+            using (var container = builder.Build())
+            {
+                var typeWithoutInterface = container.Resolve<TypeWithoutInterface>();
+                Assert.DoesNotThrow(typeWithoutInterface.Foo);
+                Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+                var typeWithInterfaceInBaseClass = container.Resolve<TypeWithInterfaceInBaseClass>();
+                Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+                Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+            }
+        }
     }
 }

@@ -68,5 +68,30 @@ namespace Snap.Tests
             Assert.AreEqual("First", OrderedCode.Actions[0]);
             Assert.AreEqual("Second", OrderedCode.Actions[1]);
         }
+
+        [Test]
+        public void CastleWindsor_Supports_Types_Without_Interfaces()
+        {
+            var container = new WindsorContainer();
+
+            SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Register(Component.For<TypeWithoutInterface>().ImplementedBy<TypeWithoutInterface>());
+            container.Register(Component.For<TypeWithInterfaceInBaseClass>().ImplementedBy<TypeWithInterfaceInBaseClass>());
+
+            var typeWithoutInterface = container.Resolve<TypeWithoutInterface>();
+            Assert.DoesNotThrow(typeWithoutInterface.Foo);
+            Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+            var typeWithInterfaceInBaseClass = container.Resolve<TypeWithInterfaceInBaseClass>();
+            Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+            Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+        }
     }
+
+
 }

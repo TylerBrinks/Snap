@@ -132,5 +132,28 @@ namespace Snap.Tests
 
             Assert.Throws<NullReferenceException>(() => container.GetService<IBadCode>());
         }
+
+        [Test]
+        public void LinFu_Supports_Types_Without_Interfaces()
+        {
+            var container = new ServiceContainer();
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.AddService(typeof(TypeWithoutInterface));
+            container.AddService(typeof(TypeWithInterfaceInBaseClass));
+
+            var typeWithoutInterface = container.GetService<TypeWithoutInterface>();
+            Assert.DoesNotThrow(typeWithoutInterface.Foo);
+            Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+            var typeWithInterfaceInBaseClass = container.GetService<TypeWithInterfaceInBaseClass>();
+            Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+            Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+        }
     }
 }

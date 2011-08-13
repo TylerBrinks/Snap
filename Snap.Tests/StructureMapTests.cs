@@ -129,7 +129,7 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void StructureMap_Container_Supports_Types_Without_Interfaces()
+        public void StructureMap_Supports_Types_Without_Interfaces()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
@@ -138,10 +138,16 @@ namespace Snap.Tests
             });
 
             ObjectFactory.Configure(c => c.For<TypeWithoutInterface>().Use<TypeWithoutInterface>());
-            var instance = ObjectFactory.GetInstance<TypeWithoutInterface>();
+            var typeWithoutInterface = ObjectFactory.GetInstance<TypeWithoutInterface>();
 
-            Assert.DoesNotThrow(instance.Foo);
-            Assert.IsTrue(instance.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+            Assert.DoesNotThrow(typeWithoutInterface.Foo);
+            Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+            ObjectFactory.Configure(c => c.For<TypeWithInterfaceInBaseClass>().Use<TypeWithInterfaceInBaseClass>());
+            var typeWithInterfaceInBaseClass = ObjectFactory.GetInstance<TypeWithInterfaceInBaseClass>();
+
+            Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+            Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
         }
 
     }

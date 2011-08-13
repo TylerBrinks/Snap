@@ -46,7 +46,7 @@ namespace Snap
             if (interfaceType.IsInterface)
                 return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
 
-            return new ProxyGenerator().CreateClassProxy(interfaceType, interceptors);
+            return new ProxyGenerator().CreateClassProxyWithTarget(interfaceType, instanceToWrap, interceptors);
         }
         /// <summary>
         /// Creates a proxy around an instance with pseudo (empty) interceptors.
@@ -89,7 +89,7 @@ namespace Snap
         /// <param name="typeList">The type list.</param>
         /// <param name="namespaces">The namespaces.</param>
         /// <returns></returns>
-        public static Type FirstMatch(this Type[] typeList, List<string> namespaces)
+        public static Type FirstMatch(this Type[] typeList, IList<string> namespaces)
         {
             return typeList.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
         }
@@ -106,6 +106,28 @@ namespace Snap
             return test.Contains("*")
                 ? value.StartsWith(test.Replace("*", "")) // Wildcard. Check that the string starts with.
                 : value.Equals(test); // Not a wild card. Must be an exact match.
+        }
+
+        /// <summary>
+        /// Determines the type of DynamicProxy that will be created over the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="namespaces"></param>
+        /// <returns></returns>
+        public static Type GetTypeToDynamicProxy(this Type type, IList<string> namespaces )
+        {
+            var allInterfaces = type.GetInterfaces();
+
+            IEnumerable<Type> baseClassInterfaces = type.BaseType != null ? type.BaseType.GetInterfaces() : new Type[0];
+            IEnumerable<Type> topLevelInterfaces = allInterfaces.Except(baseClassInterfaces);
+
+            if (topLevelInterfaces.Count() == 0)
+            {
+                var types = new[] { type };
+                return types.FirstMatch(namespaces);
+            }
+
+            return allInterfaces.FirstMatch(namespaces);
         }
     }
 }

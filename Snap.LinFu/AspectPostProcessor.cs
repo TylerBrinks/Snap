@@ -57,11 +57,9 @@ namespace Snap.LinFu
                 pseudoList[i] = new PseudoInterceptor();
             }
 
-            var interfaceTypes = instance.GetType().GetInterfaces();
-            var targetInterface =
-                interfaceTypes.FirstMatch(proxy.Configuration.Namespaces);
+            var targetInterface = instance.GetType().GetTypeToDynamicProxy(proxy.Configuration.Namespaces);
 
-            result.ActualResult = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, instance, pseudoList);
+            result.ActualResult = AspectUtility.CreateProxy(targetInterface, instance, pseudoList);
         }
     }
 }
