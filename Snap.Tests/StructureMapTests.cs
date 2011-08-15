@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+using System;
 using NUnit.Framework;
 using Snap.StructureMap;
 using SnapTests.Fakes;
@@ -125,5 +127,30 @@ namespace Snap.Tests
             ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
             Assert.DoesNotThrow(() => ObjectFactory.GetInstance<IBadCode>());
         }
+
+        [Test]
+        public void StructureMap_Supports_Types_Without_Interfaces()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            ObjectFactory.Configure( c => c.For<IDependency>().Use<DummyDependency>());
+
+            ObjectFactory.Configure(c => c.For<TypeWithoutInterface>().Use<TypeWithoutInterface>());
+            var typeWithoutInterface = ObjectFactory.GetInstance<TypeWithoutInterface>();
+
+            Assert.DoesNotThrow(typeWithoutInterface.Foo);
+            Assert.IsTrue(typeWithoutInterface.GetType().Name.Equals("TypeWithoutInterfaceProxy"));
+
+            ObjectFactory.Configure(c => c.For<TypeWithInterfaceInBaseClass>().Use<TypeWithInterfaceInBaseClass>());
+            var typeWithInterfaceInBaseClass = ObjectFactory.GetInstance<TypeWithInterfaceInBaseClass>();
+
+            Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
+            Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+        }
+
     }
 }
