@@ -80,6 +80,7 @@ namespace Snap.Tests
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
+            container.Register(Component.For<IDependency>().ImplementedBy<DummyDependency>());
             container.Register(Component.For<TypeWithoutInterface>().ImplementedBy<TypeWithoutInterface>());
             container.Register(Component.For<TypeWithInterfaceInBaseClass>().ImplementedBy<TypeWithInterfaceInBaseClass>());
 

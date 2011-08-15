@@ -146,6 +146,8 @@ namespace Snap.Tests
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
+            container.Kernel.Bind<IDependency>().To<DummyDependency>();
+
             container.Kernel.Bind<TypeWithoutInterface>().To<TypeWithoutInterface>();
             var typeWithoutInterface = container.Kernel.Get<TypeWithoutInterface>();
 

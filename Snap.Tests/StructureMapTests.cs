@@ -137,6 +137,8 @@ namespace Snap.Tests
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
+            ObjectFactory.Configure( c => c.For<IDependency>().Use<DummyDependency>());
+
             ObjectFactory.Configure(c => c.For<TypeWithoutInterface>().Use<TypeWithoutInterface>());
             var typeWithoutInterface = ObjectFactory.GetInstance<TypeWithoutInterface>();
 

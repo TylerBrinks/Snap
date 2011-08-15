@@ -14,6 +14,13 @@ namespace SnapTests.Fakes
 
     public class TypeWithInterfaceInBaseClass : BaseClassWithInterface
     {
+        private readonly IDependency _dependency;
+
+        public TypeWithInterfaceInBaseClass(IDependency dependency)
+        {
+            _dependency = dependency;
+        }
+
         [HandleError]
         public virtual void Foo()
         {

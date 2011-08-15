@@ -169,8 +169,9 @@ namespace Snap.Tests
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
-            builder.Register(r => new TypeWithoutInterface()).As<TypeWithoutInterface>();
-            builder.Register(r => new TypeWithInterfaceInBaseClass()).As<TypeWithInterfaceInBaseClass>();
+            builder.Register(r => new DummyDependency()).As<IDependency>();
+            builder.RegisterType(typeof (TypeWithoutInterface));
+            builder.RegisterType(typeof (TypeWithInterfaceInBaseClass));
 
             using (var container = builder.Build())
             {

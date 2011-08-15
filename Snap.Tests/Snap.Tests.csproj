@@ -126,6 +126,7 @@
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
     <Compile Include="Fakes\CustomPrefixScanner.cs" />
+    <Compile Include="Fakes\DummyDependency.cs" />
     <Compile Include="Fakes\MockAspectContainer.cs" />
     <Compile Include="Fakes\NotInterceptable.cs" />
     <Compile Include="Fakes\OrderedCode.cs" />

@@ -46,8 +46,23 @@ namespace Snap
             if (interfaceType.IsInterface)
                 return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
 
-            return new ProxyGenerator().CreateClassProxyWithTarget(interfaceType, instanceToWrap, interceptors);
+            return CreateProxyForConcrete(interfaceType, instanceToWrap, interceptors);
         }
+
+        private static object CreateProxyForConcrete(Type interfaceType, object instanceToWrap, IInterceptor[] interceptors)
+        {
+            object[] ctorArgs = GetDummyConstructorArgs(interfaceType);
+
+            return new ProxyGenerator().CreateClassProxyWithTarget(interfaceType, instanceToWrap, ctorArgs, interceptors);
+        }
+
+        private static object[] GetDummyConstructorArgs(Type type)
+        {
+            var greediestCtor = type.GetConstructors().OrderBy(x => x.Parameters().Count).LastOrDefault();
+
+            return greediestCtor == null ? new object[0] : new object[greediestCtor.Parameters().Count];
+        }
+
         /// <summary>
         /// Creates a proxy around an instance with pseudo (empty) interceptors.
         /// </summary>

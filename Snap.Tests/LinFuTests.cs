@@ -144,6 +144,7 @@ namespace Snap.Tests
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
+            container.AddService(typeof(IDependency), typeof(DummyDependency));
             container.AddService(typeof(TypeWithoutInterface));
             container.AddService(typeof(TypeWithInterfaceInBaseClass));
 
