@@ -117,16 +117,9 @@ namespace Snap.StructureMap
         /// </summary>
         /// <param name="type">The type to query.</param>
         /// <returns>List of implemented interfaces.</returns>
-        public Type[] QueryTargetType(Type type)
+        private void QueryTargetType(Type type)
         {
-            var interfaceTypes = type.GetInterfaces();
-
-            var namespaces = Configuration.Namespaces;
-
-            // Filter the interfaces by given namespaces that implement IInterceptAspect
-            _targetInterface = interfaceTypes.FirstMatch(namespaces);
-
-            return interfaceTypes;
+            _targetInterface = type.GetTypeToDynamicProxy(Configuration.Namespaces);
         }
     }
 }

@@ -73,11 +73,9 @@ namespace Snap.Autofac
                 pseudoList[i] = new PseudoInterceptor();
             }
 
-            var interfaceTypes = e.Instance.GetType().GetInterfaces();
-            var targetInterface =
-                interfaceTypes.FirstMatch(proxy.Configuration.Namespaces);
+            var targetInterface = e.Instance.GetType().GetTypeToDynamicProxy(proxy.Configuration.Namespaces);
 
-            e.Instance = new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(targetInterface, e.Instance, pseudoList);
+            e.Instance = AspectUtility.CreateProxy(targetInterface, e.Instance, pseudoList);
         }
     }
 }

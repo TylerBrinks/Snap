@@ -83,7 +83,7 @@ namespace Snap {
             }
 
             // Searches for decoration on the method for a given interceptor.
-            return GetAttribute(method) != null;
+            return GetAttribute(invocation.TargetType, method) != null;
         }
         /// <summary>
         /// Called immediately before interceptor invocation.
@@ -123,7 +123,7 @@ namespace Snap {
             }
 
             // Searches for decoration on the method for a given interceptor
-            var attribute = GetAttribute(method);
+            var attribute = GetAttribute(invocation.TargetType,method);
 
             // Intercept the method.  It's safe to avoid checking the attribute for null
             // since the ShouldIntercept method always preceeds this method call.
@@ -134,14 +134,14 @@ namespace Snap {
         /// </summary>
         /// <param name="method">The method.</param>
         /// <returns></returns>
-        private Attribute GetAttribute(MethodBase method) {
+        private Attribute GetAttribute(Type type, MethodBase method) {
             var key = GetMethodSignature(method);
 
             if(SignatureCache.ContainsKey(key)) {
                 return SignatureCache[key];
             }
 
-            var attributes = from attr in method.GetCustomAttributes(false)
+            var attributes = from attr in method.GetCustomAttributes(!type.IsInterface)
                              where attr.GetType().Equals(TargetAttribute)
                              select attr;
 
