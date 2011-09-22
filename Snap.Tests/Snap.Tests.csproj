@@ -123,7 +123,6 @@
   <ItemGroup>
     <Compile Include="AspectTests.cs" />
     <Compile Include="AutofacTests.cs" />
-    <Compile Include="Bug\IncludeNamespaceBug.cs" />
     <Compile Include="CastleWindsorTests.cs" />
     <Compile Include="Fakes\BadCode.cs" />
     <Compile Include="Fakes\CustomPrefixScanner.cs" />
