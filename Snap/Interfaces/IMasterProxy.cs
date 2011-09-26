@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using Castle.DynamicProxy;
+using Microsoft.Practices.ServiceLocation;
 
 namespace Snap {
     public interface IMasterProxy: IInterceptor, IHideBaseTypes {
@@ -30,5 +31,10 @@ namespace Snap {
         /// </summary>
         /// <value>The configuration.</value>
         AspectConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the container.
+        /// </summary>
+        IServiceLocator Container { get; set; }
     }
 }

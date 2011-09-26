@@ -21,8 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Snap.CastleWindsor;
 using SnapTests.Fakes;
@@ -94,24 +96,75 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void CastleWindsor_Container_Does_Not_Support_Resolving_Aspects_From_Container()
+        public void CastleWindsor_Supports_Resolving_All_Aspects_From_Container()
         {
             var container = new WindsorContainer();
 
             SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
             {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-
-                // not supported now
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
                 c.AllAspects().KeepInContainer();
             });
 
-            // do not register HandleErrorInterceptor in container
+            container.Register(Component.For(typeof(IOrderedCode)).ImplementedBy(typeof(OrderedCode)));
+            container.Register(Component.For<FirstInterceptor>().Instance(new FirstInterceptor("first_kept_in_container")));
+            container.Register(Component.For<SecondInterceptor>().Instance(new SecondInterceptor("second_kept_in_container")));
+
+            var orderedCode = container.Resolve<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "second_kept_in_container" });
+            
+        }
+
+        [Test]
+        public void CastleWindsor_Supports_Resolving_Only_Selected_Aspects_From_Container()
+        {
+            var container = new WindsorContainer();
+
+            SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            container.Register(Component.For(typeof(IOrderedCode)).ImplementedBy(typeof(OrderedCode)));
+            container.Register(Component.For<FirstInterceptor>().Instance(new FirstInterceptor("first_kept_in_container")));
+            container.Register(Component.For<SecondInterceptor>().Instance(new SecondInterceptor("second_kept_in_container")));
+
+            var orderedCode = container.Resolve<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // first interceptor is resolved from container, while second one is via new() 
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "Second" });
+        }
+
+        [Test]
+        public void CastleWindsor_Fails_When_Aspect_Is_Configured_To_Be_Resolved_From_Container_But_Was_Not_Registered_In_It()
+        {
+            var container = new WindsorContainer();
+
+            SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+                c.Aspects(typeof(HandleErrorInterceptor)).KeepInContainer();
+            });
+
+            // register only bad code, but do not register HandleErrorInterceptor in container
             container.Register(Component.For(typeof(IBadCode)).ImplementedBy(typeof(BadCode)));
 
-            // no failure, HandleErrorInterceptor is created via new() and intercepted
-            Assert.DoesNotThrow(container.Resolve<IBadCode>().GiddyUp);
+            var codeWithSingleAspect = container.Resolve<IBadCode>();
+            var failure = Assert.Throws<ActivationException>(codeWithSingleAspect.GiddyUp);
+            Assert.That(failure.InnerException, Is.InstanceOf<ComponentNotFoundException>());
         }
     }
 }

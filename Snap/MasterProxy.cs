@@ -32,6 +32,10 @@ namespace Snap {
         /// </summary>
         /// <value>The configuration.</value>
         public AspectConfiguration  Configuration { get; set;}
+
+        /// <summary>
+        /// Gets or sets the container.
+        /// </summary>
         public IServiceLocator      Container { get; set; }
 
         /// <summary>
