@@ -22,19 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using Fasterflect;
 
 namespace Snap {
     /// <summary>
     /// Intercepts method calls for configured types
     /// </summary>
     public abstract class MethodInterceptor: IAttributeInterceptor {
-        private static readonly Dictionary<string, Attribute> SignatureCache = new Dictionary<string, Attribute>();
-
         /// <summary>
         /// Gets or sets the target attribute.
         /// </summary>
@@ -58,32 +53,16 @@ namespace Snap {
         /// Determines whether a type shoulds be intercepted by this interceptor.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
+        /// <remarks>
+        /// Actually we do not need this method here anymore. 
+        /// The responsibility of checking which interceptors should be run is moved to <see cref="MasterProxy">MasterProxy</see> class.
+        /// The method is left to avoid breaking existing <see cref="IAttributeInterceptor">IAttributeInterceptor</see> contract.
+        /// </remarks>
         /// <returns></returns>
-        public bool ShouldIntercept(IInvocation invocation) {
-            // Gets the method's parameters (argument types).
-            var parameters = invocation.MethodInvocationTarget.GetParameters();
-
-            // Gets the concrete type's method by name and argument type.
-            var method = invocation
-                .InvocationTarget
-                .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
-
-            // If the method is generic, I need to check each parameter to find the correct method
-            if(method == null) {
-                foreach(var m in invocation.InvocationTarget.GetType().GetMethods().Where(x => x.Name == invocation.MethodInvocationTarget.Name)) {
-                    var exists = true;
-                    foreach(var p in parameters) {
-                        if(!m.Parameters().Any(x => x.Name == p.Name))
-                            exists = false;
-                    }
-
-                    if(exists)
-                        method = m;
-                }
-            }
-
-            // Searches for decoration on the method for a given interceptor.
-            return GetAttribute(invocation.TargetType, method) != null;
+        public bool ShouldIntercept(IInvocation invocation)
+        {
+            // just delegate it to Interception class
+            return Interception.DoesTargetMethodHaveAttribute(invocation, TargetAttribute);
         }
         /// <summary>
         /// Called immediately before interceptor invocation.
@@ -100,69 +79,12 @@ namespace Snap {
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         public void Intercept(IInvocation invocation) {
-            // Gets the method's parameters (argument types)
-            var parameters = invocation.MethodInvocationTarget.GetParameters();
 
-            // Gets the concrete type's method by name and argument type
-            var method = invocation
-                .InvocationTarget
-                .GetType().Method(invocation.MethodInvocationTarget.Name, parameters.Select(p => p.ParameterType).ToArray());
-
-            // If the method is generic, I need to check each parameter to find the correct method
-            if(method == null) {
-                foreach(var m in invocation.InvocationTarget.GetType().GetMethods().Where(x => x.Name == invocation.MethodInvocationTarget.Name)) {
-                    var exists = true;
-                    foreach(var p in parameters) {
-                        if(!m.Parameters().Any(x => x.Name == p.Name))
-                            exists = false;
-                    }
-
-                    if(exists)
-                        method = m;
-                }
-            }
-
-            // Searches for decoration on the method for a given interceptor
-            var attribute = GetAttribute(invocation.TargetType,method);
-
-            // Intercept the method.  It's safe to avoid checking the attribute for null
-            // since the ShouldIntercept method always preceeds this method call.
-            InterceptMethod(invocation, method, attribute);
-        }
-        /// <summary>
-        /// Gets a methods attribute.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <returns></returns>
-        private Attribute GetAttribute(Type type, MethodBase method) {
-            var key = GetMethodSignature(method);
-
-            if(SignatureCache.ContainsKey(key)) {
-                return SignatureCache[key];
-            }
-
-            var attributes = from attr in method.GetCustomAttributes(!type.IsInterface)
-                             where attr.GetType().Equals(TargetAttribute)
-                             select attr;
-
-            if(attributes.Any()) {
-                var attribute = (Attribute)attributes.First();
-                SignatureCache.Add(key, attribute);
-                return attribute;
-            }
-
-            return null;
-        }
-        /// <summary>
-        /// Gets the method signature in string format.
-        /// </summary>
-        /// <param name="method">The method signature.</param>
-        /// <returns></returns>
-        private string GetMethodSignature(MethodBase method) {
-            var parameters = from m in method.Parameters()
-                             select m.ParameterType.ToString();
-
-            return string.Format("{0}+{1}", TargetAttribute.FullName, MethodSignatureFormatter.Create(method, parameters.ToArray()));
+            var interception = Interception.GetCurrent(TargetAttribute, invocation);
+            InterceptMethod(
+                interception.Invocation,
+                interception.TargetMethod,
+                interception.AttributeInstance);
         }
     }
 }

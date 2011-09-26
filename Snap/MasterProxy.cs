@@ -39,15 +39,13 @@ namespace Snap {
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public void Intercept(IInvocation invocation) {
-            var interceptors = Configuration.Interceptors.ToList();
-
-            var sortOrder = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors);
-
-            var orderedInterceptors = sortOrder.Sort();
-
-            var validInterceptors = orderedInterceptors.Where(i => i.ShouldIntercept(invocation));
-
+        public void Intercept(IInvocation invocation)
+        {
+            var interceptors = Configuration.Interceptors;
+            var orderedInterceptors = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors).Sort();
+            var validInterceptors = (from interceptor in orderedInterceptors
+                                    where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttribute)
+                                    select interceptor).ToList();
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
             for(var i = 0; i < falseInvocations; i++) {
