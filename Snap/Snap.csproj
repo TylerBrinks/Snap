@@ -96,6 +96,7 @@
     <Compile Include="ConfigurationSyntax.cs" />
     <Compile Include="DefaultConventionScanner.cs" />
     <Compile Include="Interception.cs" />
+    <Compile Include="InterceptorRegistration.cs" />
     <Compile Include="Interfaces\IScanningConvention.cs" />
     <Compile Include="Interfaces\ISortOrderStrategy.cs" />
     <Compile Include="Interfaces\IOrderSyntax.cs" />

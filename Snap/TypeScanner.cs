@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Snap.Interfaces;
 
 namespace Snap
@@ -40,12 +39,7 @@ namespace Snap
         public void With(IScanningConvention scanner)
         {
             var pairs = scanner.Scan(_assembly);
-
-            pairs.ForEach(p =>
-            {
-                var interceptor = (IAttributeInterceptor)Activator.CreateInstance(p.InterceptorType);
-                _configuration.BindInterceptor(interceptor, p.AttributeType);
-            });
+            pairs.ForEach(p => _configuration.BindInterceptor(new InterceptorRegistration(p.InterceptorType), p.AttributeType));
         }
     }
 }

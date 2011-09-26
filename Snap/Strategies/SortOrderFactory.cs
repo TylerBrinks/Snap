@@ -36,7 +36,7 @@ namespace Snap {
         /// <param name="invocation">The invocation.</param>
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>Sort order strategy.</returns>
-        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<IAttributeInterceptor> interceptors) {
+        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<InterceptorRegistration> interceptors) {
             var attributes = invocation.MethodInvocationTarget.GetCustomAttributes(false)
                 .Where(a => a is IInterceptAttribute).Select(at => (IInterceptAttribute)at).ToList();
 

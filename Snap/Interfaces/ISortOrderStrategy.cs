@@ -34,6 +34,6 @@ namespace Snap
         /// Sorts the instance.
         /// </summary>
         /// <returns>Sorted list.</returns>
-        List<IAttributeInterceptor> Sort();
+        List<InterceptorRegistration> Sort();
     }
 }

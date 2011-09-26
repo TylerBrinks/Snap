@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using System;
 using System.Linq;
 using Castle.DynamicProxy;
 
@@ -44,8 +45,8 @@ namespace Snap {
             var interceptors = Configuration.Interceptors;
             var orderedInterceptors = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors).Sort();
             var validInterceptors = (from interceptor in orderedInterceptors
-                                    where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttribute)
-                                    select interceptor).ToList();
+                                    where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttributeType)
+                                    select ResolveInterceptorInstance(interceptor)).ToList();
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
             for(var i = 0; i < falseInvocations; i++) {
@@ -60,6 +61,20 @@ namespace Snap {
                 interceptor.Intercept(invocation);
                 interceptor.AfterInvocation();
             }
+        }
+
+        private static IAttributeInterceptor ResolveInterceptorInstance(InterceptorRegistration interceptorRegistration)
+        {
+            // Assume interceptor type implements IAttributeInterceptor contract. 
+            // This rule is enforced on aspect configuration build step
+            // Create new instance by means of constructor. Switch using service locator later.
+            var interceptor = (IAttributeInterceptor) Activator.CreateInstance(interceptorRegistration.InterceptorType);
+            
+            // reassign target attribute and order properties from interception registration to actual interceptor instance
+            interceptor.TargetAttribute = interceptorRegistration.TargetAttributeType;
+            interceptor.Order = interceptorRegistration.Order;
+
+            return interceptor;
         }
     }
 }

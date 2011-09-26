@@ -31,13 +31,13 @@ namespace Snap
     /// </summary>
     public class IndexSortOrderStrategy : ISortOrderStrategy
     {
-        private readonly List<IAttributeInterceptor> _interceptors;
+        private readonly List<InterceptorRegistration> _interceptors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IndexSortOrderStrategy"/> class.
         /// </summary>
         /// <param name="interceptors">The interceptors.</param>
-        public IndexSortOrderStrategy(List<IAttributeInterceptor> interceptors)
+        public IndexSortOrderStrategy(List<InterceptorRegistration> interceptors)
         {
             _interceptors = interceptors;
         }
@@ -46,9 +46,9 @@ namespace Snap
         /// Sorts interceptors by their configured order index, then by attribute name.
         /// </summary>
         /// <returns></returns>
-        public List<IAttributeInterceptor> Sort()
+        public List<InterceptorRegistration> Sort()
         {
-            return _interceptors.OrderBy(i => i.Order).ThenBy(i => i.TargetAttribute.Name).ToList();
+            return _interceptors.OrderBy(i => i.Order).ThenBy(i => i.TargetAttributeType.Name).ToList();
         }
     }
 }

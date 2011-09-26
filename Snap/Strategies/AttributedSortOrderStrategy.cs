@@ -31,7 +31,7 @@ namespace Snap
     /// </summary>
     public class AttributedSortOrderStrategy : ISortOrderStrategy
     {
-        private readonly List<IAttributeInterceptor> _interceptors;
+        private readonly List<InterceptorRegistration> _interceptors;
         private readonly List<IInterceptAttribute> _attributes;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Snap
         /// </summary>
         /// <param name="attributes">The attributes.</param>
         /// <param name="interceptors">The interceptors.</param>
-        public AttributedSortOrderStrategy(List<IInterceptAttribute> attributes, List<IAttributeInterceptor> interceptors)
+        public AttributedSortOrderStrategy(List<IInterceptAttribute> attributes, List<InterceptorRegistration> interceptors)
         {
             _interceptors = interceptors;
             _attributes = attributes;
@@ -49,12 +49,12 @@ namespace Snap
         /// Sorts interceptors by attribute order, then by name.
         /// </summary>
         /// <returns>Sorted interceptors</returns>
-        public List<IAttributeInterceptor> Sort()
+        public List<InterceptorRegistration> Sort()
         {
             return _attributes
                 .OrderBy(a => a.Order)
                 .ThenBy(a => a.GetType().Name).Select(attribute => attribute.GetType())
-                .Select(type => _interceptors.Where(i => i.TargetAttribute == type).First()).ToList();
+                .Select(type => _interceptors.Where(i => i.TargetAttributeType == type).First()).ToList();
         }
     }
 }
