@@ -53,7 +53,18 @@ namespace Snap.Autofac
             // Ignore AspectConfiguration and IInterceptor types since they're being referenced via the Autofac
             // registration context. Otherwise calling e.Context.Resolve<IInterceptor> will fail when
             // the code below executes.
-            if (e.Instance.GetType() == typeof (MasterProxy) || e.Instance is IInterceptor)
+
+            // for master proxy we need to assign reference to current container,
+            // Common service locator is used for MasterProxy to be container-agnostic
+            // Master proxy then uses the container to resolve interceptor instances from
+            if(e.Instance is MasterProxy)
+            {
+                ((MasterProxy) e.Instance).Container = new AutofacServiceLocatorAdapter(e.Context.Resolve<IComponentContext>());
+                return;
+            }
+
+            // inteceptors could not be intercepted too, thus skip the code below
+            if (e.Instance is IInterceptor)
             {
                 return;
             }

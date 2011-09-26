@@ -114,6 +114,25 @@ namespace Snap
         {
             scanAction(new TypeScanner(this));
         }
+
+        /// <summary>
+        /// Give ability to configure selected set of registered aspects in a single step
+        /// </summary>
+        /// <param name="aspectTypes"></param>
+        /// <returns></returns>
+        public IAspectBookSyntax Aspects(params Type[] aspectTypes)
+        {
+            return new AspectBookSyntax(_interceptorRegistrations.Where(aspect => aspectTypes.Contains(aspect.InterceptorType)));
+        }
+
+        /// <summary>
+        /// Give ability to configure all registered aspects in a single step
+        /// </summary>
+        public IAspectBookSyntax AllAspects()
+        {
+            return new AspectBookSyntax(_interceptorRegistrations);
+        }
+
         /// <summary>
         /// Binds an interceptor to an attribute.
         /// </summary>

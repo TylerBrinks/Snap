@@ -76,6 +76,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Fasterflect.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -95,6 +98,11 @@
     <Compile Include="BindingPair.cs" />
     <Compile Include="ConfigurationSyntax.cs" />
     <Compile Include="DefaultConventionScanner.cs" />
+    <Compile Include="AspectBookSyntax.cs" />
+    <Compile Include="Interfaces\IAspectBookSyntax.cs" />
+    <Compile Include="Strategies\ResolveInterceptorFromContainerCreationStrategy.cs" />
+    <Compile Include="Strategies\InstantiateInterceptorDirectlyCreationStrategy.cs" />
+    <Compile Include="Interfaces\IInterceptorCreationStrategy.cs" />
     <Compile Include="Interception.cs" />
     <Compile Include="InterceptorRegistration.cs" />
     <Compile Include="Interfaces\IScanningConvention.cs" />

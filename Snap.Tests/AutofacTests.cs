@@ -21,9 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System;
 using Autofac;
 using Autofac.Core;
+using Autofac.Core.Registration;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Snap.Autofac;
 using SnapTests.Fakes;
@@ -182,6 +183,86 @@ namespace Snap.Tests
                 var typeWithInterfaceInBaseClass = container.Resolve<TypeWithInterfaceInBaseClass>();
                 Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
                 Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
+            }
+        }
+
+        [Test]
+        public void Autofac_Supports_Resolving_All_Aspects_From_Container()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.AllAspects().KeepInContainer();
+            });
+
+            builder.Register(r => new OrderedCode()).As<IOrderedCode>();
+            builder.Register(r => new FirstInterceptor("first_kept_in_container"));
+            builder.Register(r => new SecondInterceptor("second_kept_in_container"));
+
+            using (var container = builder.Build())
+            {
+                var orderedCode = container.Resolve<IOrderedCode>();
+                orderedCode.RunInOrder();
+
+                CollectionAssert.AreEquivalent(
+                    OrderedCode.Actions,
+                    new[] { "first_kept_in_container", "second_kept_in_container" });
+            }
+        }
+
+        [Test]
+        public void Autofac_Supports_Resolving_Only_Selected_Aspects_From_Container()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            builder.Register(r => new OrderedCode()).As<IOrderedCode>();
+            builder.Register(r => new FirstInterceptor("first_kept_in_container"));
+            builder.Register(r => new SecondInterceptor("second_kept_in_container"));
+
+            using (var container = builder.Build())
+            {
+                var orderedCode = container.Resolve<IOrderedCode>();
+                orderedCode.RunInOrder();
+
+                // first interceptor is resolved from container, while second one is via new() 
+                CollectionAssert.AreEquivalent(
+                    OrderedCode.Actions,
+                    new[] { "first_kept_in_container", "Second" });
+            }
+        }
+
+        [Test]
+        public void Autofac_Fails_When_Aspect_Is_Configured_To_Be_Resolved_From_Container_But_Was_Not_Registered_In_It()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+                c.Aspects(typeof(HandleErrorInterceptor)).KeepInContainer();
+            });
+
+            // register only bad code, but do not register HandleErrorInterceptor in container
+            builder.Register(r => new BadCode()).As<IBadCode>();
+
+            using (var container = builder.Build())
+            {
+                var codeWithSingleAspect = container.Resolve<IBadCode>();
+                var failure = Assert.Throws<ActivationException>(codeWithSingleAspect.GiddyUp);
+                Assert.That(failure.InnerException, Is.InstanceOf<ComponentNotRegisteredException>());
             }
         }
     }

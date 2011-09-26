@@ -30,9 +30,20 @@ namespace Snap.Tests.Interceptors
 {
     public class FirstInterceptor : MethodInterceptor
     {
+        private readonly string _customAction;
+
+        public FirstInterceptor()
+            : this("First")
+        { }
+
+        public FirstInterceptor(string customAction)
+        {
+            _customAction = customAction;
+        }
+
         public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
-            OrderedCode.Actions.Add("First");
+            OrderedCode.Actions.Add(_customAction);
             invocation.Proceed();
         }
     }

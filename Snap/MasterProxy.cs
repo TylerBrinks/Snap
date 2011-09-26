@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-using System;
 using System.Linq;
 using Castle.DynamicProxy;
+using Microsoft.Practices.ServiceLocation;
 
 namespace Snap {
     public class MasterProxy: IMasterProxy {
@@ -31,10 +31,8 @@ namespace Snap {
         /// Gets or sets the configuration.
         /// </summary>
         /// <value>The configuration.</value>
-        public AspectConfiguration Configuration {
-            get;
-            set;
-        }
+        public AspectConfiguration  Configuration { get; set;}
+        public IServiceLocator      Container { get; set; }
 
         /// <summary>
         /// Intercepts the specified invocation.
@@ -46,7 +44,7 @@ namespace Snap {
             var orderedInterceptors = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors).Sort();
             var validInterceptors = (from interceptor in orderedInterceptors
                                     where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttributeType)
-                                    select ResolveInterceptorInstance(interceptor)).ToList();
+                                    select ResolveHowToCreateInterceptor(interceptor).Create(interceptor)).ToList();
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
             for(var i = 0; i < falseInvocations; i++) {
@@ -63,18 +61,24 @@ namespace Snap {
             }
         }
 
-        private static IAttributeInterceptor ResolveInterceptorInstance(InterceptorRegistration interceptorRegistration)
+        private IInterceptorCreationStrategy ResolveHowToCreateInterceptor(InterceptorRegistration interceptorRegistration)
         {
-            // Assume interceptor type implements IAttributeInterceptor contract. 
-            // This rule is enforced on aspect configuration build step
-            // Create new instance by means of constructor. Switch using service locator later.
-            var interceptor = (IAttributeInterceptor) Activator.CreateInstance(interceptorRegistration.InterceptorType);
-            
-            // reassign target attribute and order properties from interception registration to actual interceptor instance
-            interceptor.TargetAttribute = interceptorRegistration.TargetAttributeType;
-            interceptor.Order = interceptorRegistration.Order;
-
-            return interceptor;
+            IInterceptorCreationStrategy strategy;
+            if(Container == null)
+            {
+                // when container is not specified, always use InstantiateInterceptorDirectlyCreationStrategy 
+                // without considering KeptInContainer setting 
+                strategy = new InstantiateInterceptorDirectlyCreationStrategy();
+            }
+            else if (interceptorRegistration.KeptInContainer)
+            {
+                strategy = new ResolveInterceptorFromContainerCreationStrategy(Container);
+            }
+            else
+            {
+                strategy = new InstantiateInterceptorDirectlyCreationStrategy();
+            }
+            return strategy;
         }
     }
 }

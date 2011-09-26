@@ -71,5 +71,18 @@ namespace Snap
         /// </summary>
         /// <param name="scanAction">The scanning action.</param>
         void Scan(Action<ITypeScanner> scanAction);
+
+        /// <summary>
+        /// Give ability to configure selected set of registered aspects
+        /// </summary>
+        /// <param name="aspectTypes"></param>
+        /// <returns></returns>
+        IAspectBookSyntax Aspects(params Type[] aspectTypes);
+
+        /// <summary>
+        /// Give ability to configure all registered aspects
+        /// </summary>
+        /// <returns></returns>
+        IAspectBookSyntax AllAspects();
     }
 }

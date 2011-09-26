@@ -92,7 +92,26 @@ namespace Snap.Tests
             Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
             Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
         }
+
+        [Test]
+        public void CastleWindsor_Container_Does_Not_Support_Resolving_Aspects_From_Container()
+        {
+            var container = new WindsorContainer();
+
+            SnapConfiguration.For(new CastleAspectContainer(container.Kernel)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+
+                // not supported now
+                c.AllAspects().KeepInContainer();
+            });
+
+            // do not register HandleErrorInterceptor in container
+            container.Register(Component.For(typeof(IBadCode)).ImplementedBy(typeof(BadCode)));
+
+            // no failure, HandleErrorInterceptor is created via new() and intercepted
+            Assert.DoesNotThrow(container.Resolve<IBadCode>().GiddyUp);
+        }
     }
-
-
 }
