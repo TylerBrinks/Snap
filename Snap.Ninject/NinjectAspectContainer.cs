@@ -38,8 +38,9 @@ namespace Snap.Ninject
         /// </summary>
         public NinjectAspectContainer()
         {
-            Proxy = new MasterProxy();
             _kernel = new StandardKernel(_interceptor);
+            Proxy = new MasterProxy();
+            Proxy.Container = new NinjectServiceLocatorAdapter(_kernel);
         }
 
         /// <summary>
