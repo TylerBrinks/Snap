@@ -47,6 +47,12 @@ namespace Snap.LinFu
                 return;
             }
 
+            // inteceptors could not be intercepted too, thus skip the code below
+            if(instance is IInterceptor)
+            {
+                return;
+            }
+
             var proxy = result.Container.GetService<IMasterProxy>();
 
             if (!instance.IsDecorated(proxy.Configuration))
