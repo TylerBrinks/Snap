@@ -33,11 +33,22 @@ namespace Snap.LinFu
         public void PostProcess(IServiceRequestResult result)
         {
             var instance = result.ActualResult;
+            // instance cannot be resolved (e.g. not registered in container)
+            if (instance == null)
+            {
+                return;
+            }
             var instanceTypeName = instance.GetType().FullName;
            
             // Ignore any LinFu factories or Snap-specific instances.
             if (instanceTypeName.Contains("LinFu.") || instanceTypeName == "Snap.AspectConfiguration"
                 || instanceTypeName == "Snap.IMasterProxy" || instanceTypeName == "Snap.MasterProxy")
+            {
+                return;
+            }
+
+            // inteceptors could not be intercepted too, thus skip the code below
+            if(instance is IInterceptor)
             {
                 return;
             }
