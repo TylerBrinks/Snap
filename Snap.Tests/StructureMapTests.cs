@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 
 using System;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Snap.StructureMap;
 using SnapTests.Fakes;
@@ -171,5 +172,77 @@ namespace Snap.Tests
             Assert.DoesNotThrow(ObjectFactory.GetInstance<IBadCode>().GiddyUp);
         }
 
+        [Test]
+        public void StructureMap_Supports_Resolving_All_Aspects_From_Container()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.AllAspects().KeepInContainer();
+            });
+
+            // both aspects are registered in container
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            ObjectFactory.Configure(c => c.For<FirstInterceptor>().Use(new FirstInterceptor("first_kept_in_container")));
+            ObjectFactory.Configure(c => c.For<SecondInterceptor>().Use(new SecondInterceptor("second_kept_in_container")));
+
+            var orderedCode = ObjectFactory.GetInstance<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // both aspects are resolved from container
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "second_kept_in_container" });
+        }
+
+        [Test]
+        public void StructureMap_Supports_Resolving_Only_Selected_Aspects_From_Container()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            ObjectFactory.Configure(c => c.For<FirstInterceptor>().Use(new FirstInterceptor("first_kept_in_container")));
+            ObjectFactory.Configure(c => c.For<SecondInterceptor>().Use(new SecondInterceptor("second_kept_in_container")));
+
+            var orderedCode = ObjectFactory.GetInstance<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // first interceptor is resolved from container, while second one is via new() 
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "Second" });
+        }
+
+        [Test]
+        public void StructureMap_Fails_When_Aspect_Is_Configured_To_Be_Resolved_From_Container_But_Was_Not_Registered_In_It()
+        {
+            // NOTE: Cannot use scenario with IBadCode + HandleErrorInterceptor.
+            // HandleErrorInterceptor has the only parameterless constructor.
+            // StructureMap autowires the instance, even if it wasn't explicitly registered in container.
+            // see: http://structuremap.net/structuremap/AutoWiring.htm
+            // thus use FirstInterceptor, SecondInterceptor classes in the test case, which have non-default constructor
+
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            // register only ordered code, but register neither FirstInterceptor nor SecondInteceptor in container
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            
+            var failure = Assert.Throws<ActivationException>(ObjectFactory.GetInstance<IOrderedCode>().RunInOrder);
+            Assert.That(failure.InnerException, Is.InstanceOf<StructureMapException>());
+        }
     }
 }

@@ -18,6 +18,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using StructureMap;
+using StructureMap.ServiceLocatorAdapter;
 
 namespace Snap.StructureMap {
     /// <summary>
@@ -34,7 +35,9 @@ namespace Snap.StructureMap {
         /// Initializes a new instance of the <see cref="StructureMapAspectContainer"/> class.
         /// </summary>
         public StructureMapAspectContainer() {
+
             Proxy = new MasterProxy();
+            Proxy.Container = new StructureMapServiceLocator(ObjectFactory.Container);
 
             _interceptor = new StructureMapDefinedAspectInterceptor(ObjectFactory.Container);
             // Use "Configure", not "Initialize."  Initialize overwrites existing settings.
@@ -52,6 +55,7 @@ namespace Snap.StructureMap {
         public StructureMapAspectContainer(IContainer container)
         {
             Proxy = new MasterProxy();
+            Proxy.Container = new StructureMapServiceLocator(container);
 
             _interceptor = new StructureMapDefinedAspectInterceptor(container);
             // Use "Configure", not "Initialize."  Initialize overwrites existing settings
