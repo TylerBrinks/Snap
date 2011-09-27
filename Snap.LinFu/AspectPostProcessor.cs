@@ -33,6 +33,11 @@ namespace Snap.LinFu
         public void PostProcess(IServiceRequestResult result)
         {
             var instance = result.ActualResult;
+            // instance cannot be resolved (e.g. not registered in container)
+            if (instance == null)
+            {
+                return;
+            }
             var instanceTypeName = instance.GetType().FullName;
            
             // Ignore any LinFu factories or Snap-specific instances.

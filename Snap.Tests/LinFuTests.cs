@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 
 using System;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using LinFu.IoC;
 using Snap.LinFu;
@@ -158,24 +159,18 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void LinFu_Container_Does_Not_Support_Resolving_Aspects_From_Container()
+        public void LinFu_Should_Fail_To_Resolve_Component_Which_Is_Not_Registered_With_ServiceNotFoundException()
         {
             var container = new ServiceContainer();
 
             SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
             {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-
-                // not supported now
-                c.AllAspects().KeepInContainer();
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
 
-            // do not register HandleErrorInterceptor in container
-            container.AddService(typeof(IBadCode), typeof(BadCode));
-            
-            // no failure, HandleErrorInterceptor is created via new()
-            Assert.DoesNotThrow(container.GetService<IBadCode>().GiddyUp);
+            Assert.Throws<ServiceNotFoundException>(() => container.GetService<IOrderedCode>());
         }
     }
 }
