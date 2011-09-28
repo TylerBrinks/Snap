@@ -33,6 +33,7 @@ namespace Snap.LinFu
         public LinFuAspectContainer(ServiceContainer container)
         {
             Proxy = new MasterProxy();
+            Proxy.Container = new LinFuServiceLocatorAdapter(container);
             _container = container;
             _container.PostProcessors.Add(new AspectPostProcessor());
             _container.AddService(Proxy);

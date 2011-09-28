@@ -172,5 +172,78 @@ namespace Snap.Tests
 
             Assert.Throws<ServiceNotFoundException>(() => container.GetService<IOrderedCode>());
         }
+
+        [Test]
+        public void LinFu_Supports_Resolving_All_Aspects_From_Container()
+        {
+            var container = new ServiceContainer();
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.AllAspects().KeepInContainer();
+            });
+
+            // both aspects are registered in container
+            container.AddService(typeof(IOrderedCode), typeof(OrderedCode));
+            container.AddService(typeof(FirstInterceptor), new FirstInterceptor("first_kept_in_container"));
+            container.AddService(typeof(SecondInterceptor), new SecondInterceptor("second_kept_in_container"));
+
+            var orderedCode = container.GetService<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // both aspects are resolved from container
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "second_kept_in_container" });
+        }
+
+        [Test]
+        public void LinFu_Supports_Resolving_Only_Selected_Aspects_From_Container()
+        {
+            var container = new ServiceContainer();
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            container.AddService(typeof(IOrderedCode), typeof(OrderedCode));
+            container.AddService(typeof(FirstInterceptor), new FirstInterceptor("first_kept_in_container"));
+            container.AddService(typeof(SecondInterceptor), new SecondInterceptor("second_kept_in_container"));
+
+            var orderedCode = container.GetService<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // first interceptor is resolved from container, while second one is via new() 
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "Second" });
+        }
+
+        
+        [Test]
+        public void LinFu_Fails_When_Aspect_Is_Configured_To_Be_Resolved_From_Container_But_Was_Not_Registered_In_It()
+        {
+            var container = new ServiceContainer();
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+                c.Aspects(typeof(HandleErrorInterceptor)).KeepInContainer();
+            });
+
+            // register only ordered code, but register neither FirstInterceptor nor SecondInteceptor in container
+            container.AddService(typeof(IBadCode), typeof(BadCode));
+
+            var failure = Assert.Throws<ActivationException>(container.GetService<IBadCode>().GiddyUp);
+            Assert.That(failure.InnerException, Is.InstanceOf<ServiceNotFoundException >());
+        }
     }
 }
