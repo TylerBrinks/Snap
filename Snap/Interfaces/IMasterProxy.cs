@@ -33,8 +33,11 @@ namespace Snap {
         AspectConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// Gets or sets the container.
+        /// Gets or sets the IoC container.
         /// </summary>
+        /// <remarks>
+        /// To support several IoC container vendor-agnostic manner, common service locator is used.
+        /// </remarks>
         IServiceLocator Container { get; set; }
     }
 }

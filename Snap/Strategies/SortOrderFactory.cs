@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-/*
+﻿/*
 Snap v1.0
 
 Copyright (c) 2010 Tyler Brinks
@@ -24,6 +23,7 @@ THE SOFTWARE.
 */
 using System.Linq;
 using Castle.DynamicProxy;
+using System.Collections.Generic;
 
 namespace Snap {
     /// <summary>
@@ -36,7 +36,7 @@ namespace Snap {
         /// <param name="invocation">The invocation.</param>
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>Sort order strategy.</returns>
-        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<InterceptorRegistration> interceptors) {
+        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<AspectRegistration> interceptors) {
             var attributes = invocation.MethodInvocationTarget.GetCustomAttributes(false)
                 .Where(a => a is IInterceptAttribute).Select(at => (IInterceptAttribute)at).ToList();
 

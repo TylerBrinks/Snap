@@ -65,16 +65,16 @@ namespace Snap {
             }
         }
 
-        private IInterceptorCreationStrategy ResolveHowToCreateInterceptor(InterceptorRegistration interceptorRegistration)
+        private IInterceptorCreationStrategy ResolveHowToCreateInterceptor(AspectRegistration aspectRegistration)
         {
             IInterceptorCreationStrategy strategy;
             if(Container == null)
             {
                 // when container is not specified, always use InstantiateInterceptorDirectlyCreationStrategy 
-                // without considering KeptInContainer setting 
+                // without considering AspectRegistration.KeptInContainer setting 
                 strategy = new InstantiateInterceptorDirectlyCreationStrategy();
             }
-            else if (interceptorRegistration.KeptInContainer)
+            else if (aspectRegistration.KeptInContainer)
             {
                 strategy = new ResolveInterceptorFromContainerCreationStrategy(Container);
             }

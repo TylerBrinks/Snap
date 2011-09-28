@@ -104,7 +104,7 @@
     <Compile Include="Strategies\InstantiateInterceptorDirectlyCreationStrategy.cs" />
     <Compile Include="Interfaces\IInterceptorCreationStrategy.cs" />
     <Compile Include="Interception.cs" />
-    <Compile Include="InterceptorRegistration.cs" />
+    <Compile Include="AspectRegistration.cs" />
     <Compile Include="Interfaces\IScanningConvention.cs" />
     <Compile Include="Interfaces\ISortOrderStrategy.cs" />
     <Compile Include="Interfaces\IOrderSyntax.cs" />

@@ -80,7 +80,9 @@ namespace Snap {
         /// <param name="invocation">The invocation.</param>
         public void Intercept(IInvocation invocation) {
 
+            // get detailed infor about current interception
             var interception = Interception.GetCurrent(TargetAttribute, invocation);
+
             InterceptMethod(
                 interception.Invocation,
                 interception.TargetMethod,

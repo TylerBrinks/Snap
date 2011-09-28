@@ -26,14 +26,14 @@ using System.Collections.Generic;
 namespace Snap
 {
     /// <summary>
-    /// Defines a strategy for sorting attributes and interceptors.
+    /// Defines a strategy for sorting registered interceptors.
     /// </summary>
     public interface ISortOrderStrategy
     {
         /// <summary>
-        /// Sorts the instance.
+        /// Sorts the registered interceptors.
         /// </summary>
         /// <returns>Sorted list.</returns>
-        List<InterceptorRegistration> Sort();
+        List<AspectRegistration> Sort();
     }
 }

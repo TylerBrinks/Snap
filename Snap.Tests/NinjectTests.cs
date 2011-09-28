@@ -162,27 +162,6 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void NInject_Container_Does_Not_Support_Resolving_Aspects_From_Container()
-        {
-            var container = new NinjectAspectContainer();
-
-            SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-
-                // not supported now
-                c.AllAspects().KeepInContainer();
-            });
-
-            // do not register HandleErrorInterceptor in container
-            container.Kernel.Bind<IBadCode>().To<BadCode>();
-
-            // no failure, HandleErrorInterceptor is created via new() and intercepted
-            Assert.DoesNotThrow(container.Kernel.Get<IBadCode>().GiddyUp);
-        }
-
-        [Test]
         public void Ninject_Supports_Resolving_All_Aspects_From_Container()
         {
             var container = new NinjectAspectContainer();
@@ -202,6 +181,7 @@ namespace Snap.Tests
             var orderedCode = container.Kernel.Get<IOrderedCode>();
             orderedCode.RunInOrder();
 
+            // both interceptors are resolved from container
             CollectionAssert.AreEquivalent(
                 OrderedCode.Actions,
                 new[] { "first_kept_in_container", "second_kept_in_container" });

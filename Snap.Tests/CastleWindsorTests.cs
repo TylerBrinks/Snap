@@ -115,6 +115,7 @@ namespace Snap.Tests
             var orderedCode = container.Resolve<IOrderedCode>();
             orderedCode.RunInOrder();
 
+            // both interceptors are resolved from container
             CollectionAssert.AreEquivalent(
                 OrderedCode.Actions,
                 new[] { "first_kept_in_container", "second_kept_in_container" });

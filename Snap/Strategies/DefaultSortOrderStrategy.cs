@@ -30,22 +30,22 @@ namespace Snap
     /// </summary>
     public class DefaultSortOrderStrategy : ISortOrderStrategy
     {
-        private readonly List<InterceptorRegistration> _interceptors;
+        private readonly List<AspectRegistration> _interceptors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultSortOrderStrategy"/> class.
         /// </summary>
         /// <param name="interceptors">The interceptors.</param>
-        public DefaultSortOrderStrategy(List<InterceptorRegistration> interceptors)
+        public DefaultSortOrderStrategy(List<AspectRegistration> interceptors)
         {
             _interceptors = interceptors;
         }
 
         /// <summary>
-        /// Sorts interceptors in the configured order.
+        /// Sorts interceptor registrations in the configured order.
         /// </summary>
         /// <returns>Sorted interceptors</returns>
-        public List<InterceptorRegistration> Sort()
+        public List<AspectRegistration> Sort()
         {
             return _interceptors;
         }

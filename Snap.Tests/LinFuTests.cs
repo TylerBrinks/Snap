@@ -225,7 +225,6 @@ namespace Snap.Tests
                 OrderedCode.Actions,
                 new[] { "first_kept_in_container", "Second" });
         }
-
         
         [Test]
         public void LinFu_Fails_When_Aspect_Is_Configured_To_Be_Resolved_From_Container_But_Was_Not_Registered_In_It()

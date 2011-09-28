@@ -39,7 +39,7 @@ namespace Snap
         public void With(IScanningConvention scanner)
         {
             var pairs = scanner.Scan(_assembly);
-            pairs.ForEach(p => _configuration.BindInterceptor(new InterceptorRegistration(p.InterceptorType), p.AttributeType));
+            pairs.ForEach(p => _configuration.BindInterceptor(new AspectRegistration(p.InterceptorType), p.AttributeType));
         }
     }
 }

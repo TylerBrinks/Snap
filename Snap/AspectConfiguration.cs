@@ -33,7 +33,7 @@ namespace Snap
     public class AspectConfiguration : IAspectConfiguration
     {
         private readonly List<string> _namespaces = new List<string>();
-        private readonly List<InterceptorRegistration> _interceptorRegistrations = new List<InterceptorRegistration>();
+        private readonly List<AspectRegistration> _interceptorRegistrations = new List<AspectRegistration>();
 
         /// <summary>
         /// Registers a method interceptor.
@@ -41,7 +41,7 @@ namespace Snap
         /// <typeparam name="T"></typeparam>
         public IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new()
         {
-            _interceptorRegistrations.Add(new InterceptorRegistration(typeof(T)));
+            _interceptorRegistrations.Add(new AspectRegistration(typeof(T)));
             return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
@@ -95,7 +95,7 @@ namespace Snap
         /// Gets the interceptors.
         /// </summary>
         /// <value>The interceptors.</value>
-        public List<InterceptorRegistration> Interceptors
+        public List<AspectRegistration> Interceptors
         {
             get { return _interceptorRegistrations; }
         }
@@ -145,14 +145,14 @@ namespace Snap
         /// <summary>
         /// Adds a binding pair.
         /// </summary>
-        /// <param name="interceptorRegistration">The interceptor.</param>
+        /// <param name="aspectRegistration">The interceptor.</param>
         /// <param name="attributeType">Type of the attribute.</param>
-        internal void BindInterceptor(InterceptorRegistration interceptorRegistration, Type attributeType)
+        internal void BindInterceptor(AspectRegistration aspectRegistration, Type attributeType)
         {
-            interceptorRegistration.TargetAttributeType = attributeType;
-            if (!_interceptorRegistrations.Contains(interceptorRegistration))
+            aspectRegistration.TargetAttributeType = attributeType;
+            if (!_interceptorRegistrations.Contains(aspectRegistration))
             {
-                _interceptorRegistrations.Add(interceptorRegistration);
+                _interceptorRegistrations.Add(aspectRegistration);
             }
         }
         /// <summary>

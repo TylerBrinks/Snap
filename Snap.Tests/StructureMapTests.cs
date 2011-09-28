@@ -154,25 +154,6 @@ namespace Snap.Tests
         }
 
         [Test]
-        public void StructureMap_Container_Does_Not_Support_Resolving_Aspects_From_Container()
-        {
-            SnapConfiguration.For<StructureMapAspectContainer>(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-
-                // not supported now
-                c.AllAspects().KeepInContainer();
-            });
-
-            // do not register HandleErrorInterceptor in container
-            ObjectFactory.Configure(c => c.For<IBadCode>().Use<BadCode>());
-            
-            // no failure, HandleErrorInterceptor is created via new()
-            Assert.DoesNotThrow(ObjectFactory.GetInstance<IBadCode>().GiddyUp);
-        }
-
-        [Test]
         public void StructureMap_Supports_Resolving_All_Aspects_From_Container()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
@@ -228,7 +209,7 @@ namespace Snap.Tests
             // HandleErrorInterceptor has the only parameterless constructor.
             // StructureMap autowires the instance, even if it wasn't explicitly registered in container.
             // see: http://structuremap.net/structuremap/AutoWiring.htm
-            // thus use FirstInterceptor, SecondInterceptor classes in the test case, which have non-default constructor
+            // thus use FirstInterceptor, SecondInterceptor classes in the test case, which have at lease single non-default constructor
 
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
