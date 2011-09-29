@@ -117,14 +117,16 @@ namespace Snap
                 foreach (var m in invocation.InvocationTarget.GetType().GetMethods().Where(x => x.Name == invocation.MethodInvocationTarget.Name))
                 {
                     var exists = true;
-                    foreach (var p in parameters)
+
+                    foreach (var p in parameters.Where(p => !m.Parameters().Any(x => x.Name == p.Name)))
                     {
-                        if (!m.Parameters().Any(x => x.Name == p.Name))
-                            exists = false;
+                        exists = false;
                     }
 
                     if (exists)
+                    {
                         method = m;
+                    }
                 }
             }
 
@@ -146,9 +148,10 @@ namespace Snap
                 return SignatureCache[key];
             }
 
-            var attributes = from attr in method.GetCustomAttributes(!targetType.IsInterface)
+            var attributes = (from attr in method.GetCustomAttributes(!targetType.IsInterface)
                              where attr.GetType().Equals(attributeType)
-                             select attr;
+                             select attr).ToList();
+            
             if (attributes.Any())
             {
                 var attribute = (Attribute)attributes.First();
