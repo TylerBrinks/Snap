@@ -33,6 +33,7 @@ namespace Snap
         /// </summary>
         /// <param name="config">The config.</param>
         void SetConfiguration(AspectConfiguration config);
+        
         /// <summary>
         /// Gets or sets the master proxy.
         /// </summary>

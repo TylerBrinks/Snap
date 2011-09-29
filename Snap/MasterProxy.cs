@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 using System.Linq;
 using Castle.DynamicProxy;
+using Microsoft.Practices.ServiceLocation;
 
 namespace Snap {
     public class MasterProxy: IMasterProxy {
@@ -30,24 +31,24 @@ namespace Snap {
         /// Gets or sets the configuration.
         /// </summary>
         /// <value>The configuration.</value>
-        public AspectConfiguration Configuration {
-            get;
-            set;
-        }
+        public AspectConfiguration  Configuration { get; set;}
+
+        /// <summary>
+        /// Gets or sets the container.
+        /// </summary>
+        public IServiceLocator      Container { get; set; }
 
         /// <summary>
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public void Intercept(IInvocation invocation) {
-            var interceptors = Configuration.Interceptors.ToList();
-
-            var sortOrder = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors);
-
-            var orderedInterceptors = sortOrder.Sort();
-
-            var validInterceptors = orderedInterceptors.Where(i => i.ShouldIntercept(invocation));
-
+        public void Intercept(IInvocation invocation)
+        {
+            var interceptors = Configuration.Interceptors;
+            var orderedInterceptors = SortOrderFactory.GetSortOrderStrategy(invocation, interceptors).Sort();
+            var validInterceptors = (from interceptor in orderedInterceptors
+                                    where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttributeType)
+                                    select ResolveHowToCreateInterceptor(interceptor).Create(interceptor)).ToList();
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
             for(var i = 0; i < falseInvocations; i++) {
@@ -62,6 +63,26 @@ namespace Snap {
                 interceptor.Intercept(invocation);
                 interceptor.AfterInvocation();
             }
+        }
+
+        private IInterceptorCreationStrategy ResolveHowToCreateInterceptor(AspectRegistration aspectRegistration)
+        {
+            IInterceptorCreationStrategy strategy;
+            if(Container == null)
+            {
+                // when container is not specified, always use InstantiateInterceptorDirectlyCreationStrategy 
+                // without considering AspectRegistration.KeptInContainer setting 
+                strategy = new InstantiateInterceptorDirectlyCreationStrategy();
+            }
+            else if (aspectRegistration.KeptInContainer)
+            {
+                strategy = new ResolveInterceptorFromContainerCreationStrategy(Container);
+            }
+            else
+            {
+                strategy = new InstantiateInterceptorDirectlyCreationStrategy();
+            }
+            return strategy;
         }
     }
 }

@@ -30,9 +30,20 @@ namespace Snap.Tests.Interceptors
 {
     public class SecondInterceptor : MethodInterceptor
     {
+        private readonly string _customAction;
+
+        public SecondInterceptor()
+            : this("Second")
+        { }
+
+        public SecondInterceptor(string customAction)
+        {
+            _customAction = customAction;
+        }
+
         public override void InterceptMethod(IInvocation invocation, MethodBase method, Attribute attribute)
         {
-            OrderedCode.Actions.Add("Second");
+            OrderedCode.Actions.Add(_customAction);
             invocation.Proceed();
         }
     }

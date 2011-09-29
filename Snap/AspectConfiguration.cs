@@ -33,7 +33,7 @@ namespace Snap
     public class AspectConfiguration : IAspectConfiguration
     {
         private readonly List<string> _namespaces = new List<string>();
-        private readonly List<IAttributeInterceptor> _interceptors = new List<IAttributeInterceptor>();
+        private readonly List<AspectRegistration> _interceptorRegistrations = new List<AspectRegistration>();
 
         /// <summary>
         /// Registers a method interceptor.
@@ -41,7 +41,7 @@ namespace Snap
         /// <typeparam name="T"></typeparam>
         public IConfigurationSyntax Bind<T>() where T : IAttributeInterceptor, new()
         {
-            _interceptors.Add(new T());
+            _interceptorRegistrations.Add(new AspectRegistration(typeof(T)));
             return new ConfigurationSyntax<T>(this);
         }
         /// <summary>
@@ -95,10 +95,11 @@ namespace Snap
         /// Gets the interceptors.
         /// </summary>
         /// <value>The interceptors.</value>
-        public List<IAttributeInterceptor> Interceptors
+        public List<AspectRegistration> Interceptors
         {
-            get { return _interceptors; }
+            get { return _interceptorRegistrations; }
         }
+
         /// <summary>
         /// Gets or sets the container.
         /// </summary>
@@ -113,6 +114,25 @@ namespace Snap
         {
             scanAction(new TypeScanner(this));
         }
+
+        /// <summary>
+        /// Give ability to configure selected set of registered aspects in a single step
+        /// </summary>
+        /// <param name="aspectTypes"></param>
+        /// <returns></returns>
+        public IAspectBookSyntax Aspects(params Type[] aspectTypes)
+        {
+            return new AspectBookSyntax(_interceptorRegistrations.Where(aspect => aspectTypes.Contains(aspect.InterceptorType)));
+        }
+
+        /// <summary>
+        /// Give ability to configure all registered aspects in a single step
+        /// </summary>
+        public IAspectBookSyntax AllAspects()
+        {
+            return new AspectBookSyntax(_interceptorRegistrations);
+        }
+
         /// <summary>
         /// Binds an interceptor to an attribute.
         /// </summary>
@@ -120,23 +140,20 @@ namespace Snap
         /// <typeparam name="TAttribute">The type of attribute.</typeparam>
         internal void BindInterceptor<T, TAttribute>()
         {
-            BindInterceptor(_interceptors.Where(i => i.GetType() == typeof(T)).First(), typeof(TAttribute));
+            BindInterceptor(_interceptorRegistrations.Where(i => i.InterceptorType == typeof(T)).First(), typeof(TAttribute));
         }
         /// <summary>
         /// Adds a binding pair.
         /// </summary>
-        /// <param name="interceptor">The interceptor.</param>
+        /// <param name="aspectRegistration">The interceptor.</param>
         /// <param name="attributeType">Type of the attribute.</param>
-        internal void BindInterceptor(IAttributeInterceptor interceptor, Type attributeType)
+        internal void BindInterceptor(AspectRegistration aspectRegistration, Type attributeType)
         {
-            interceptor.TargetAttribute = attributeType;
-
-            if (_interceptors.Contains(interceptor))
+            aspectRegistration.TargetAttributeType = attributeType;
+            if (!_interceptorRegistrations.Contains(aspectRegistration))
             {
-                return;
+                _interceptorRegistrations.Add(aspectRegistration);
             }
-            
-            _interceptors.Add(interceptor);
         }
         /// <summary>
         /// Adds the binding order for an interceptor.
@@ -144,7 +161,7 @@ namespace Snap
         /// <param name="index">The order index.</param>
         internal void AddBindingOrder(int index)
         {
-            _interceptors.Last().Order = index;
+            _interceptorRegistrations.Last().Order = index;
         }
     }
 }

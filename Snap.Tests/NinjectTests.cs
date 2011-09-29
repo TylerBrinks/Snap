@@ -160,5 +160,57 @@ namespace Snap.Tests
             Assert.DoesNotThrow(typeWithInterfaceInBaseClass.Foo);
             Assert.IsTrue(typeWithInterfaceInBaseClass.GetType().Name.Equals("TypeWithInterfaceInBaseClassProxy"));
         }
+
+        [Test]
+        public void Ninject_Supports_Resolving_All_Aspects_From_Container()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.AllAspects().KeepInContainer();
+            });
+
+            container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
+            container.Kernel.Bind<FirstInterceptor>().ToConstant(new FirstInterceptor("first_kept_in_container"));
+            container.Kernel.Bind<SecondInterceptor>().ToConstant(new SecondInterceptor("second_kept_in_container"));
+
+            var orderedCode = container.Kernel.Get<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // both interceptors are resolved from container
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "second_kept_in_container" });
+        }
+
+        [Test]
+        public void Ninject_Supports_Resolving_Only_Selected_Aspects_From_Container()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests.*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
+            });
+
+            container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
+            container.Kernel.Bind<FirstInterceptor>().ToConstant(new FirstInterceptor("first_kept_in_container"));
+            container.Kernel.Bind<SecondInterceptor>().ToConstant(new SecondInterceptor("second_kept_in_container"));
+
+            var orderedCode = container.Kernel.Get<IOrderedCode>();
+            orderedCode.RunInOrder();
+
+            // first interceptor is resolved from container, while second one is via new() 
+            CollectionAssert.AreEquivalent(
+                OrderedCode.Actions,
+                new[] { "first_kept_in_container", "Second" });
+        }
     }
 }
