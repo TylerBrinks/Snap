@@ -106,7 +106,7 @@ namespace Snap
         /// <returns></returns>
         public static Type FirstMatch(this Type[] typeList, IList<string> namespaces)
         {
-            return typeList.FirstOrDefault(i => namespaces.Any(n => i.FullName.IsMatch(n)));
+            return typeList.FirstOrDefault(i => namespaces.Any(n => i.DoesTypeBelongToNamespace(n)));
         }
         /// <summary>
         /// Determines whether the specified value matche.
@@ -143,6 +143,16 @@ namespace Snap
             }
 
             return allInterfaces.FirstMatch(namespaces);
+        }
+
+        private static bool DoesTypeBelongToNamespace(this Type type, string givenNamespace)
+        {
+            // 1) compare type name for exact match
+            // 2) compare namespaces for exact match
+            // 3) compare type name to namespace for prefix match assuming given namespace ends with a wildcard
+            return type.FullName.Equals(givenNamespace)
+                || (type.Namespace != null && type.Namespace.Equals(givenNamespace))
+                || (givenNamespace.EndsWith("*") && type.FullName.StartsWith(givenNamespace.Replace("*", "")));
         }
     }
 }

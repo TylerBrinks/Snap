@@ -60,6 +60,21 @@ namespace Snap
         /// <param name="name">The namespace.</param>
         void IncludeNamespace(string name);
 
+        /// <summary>
+        /// Includes a namespace of a given type for AOP method interception type lookups. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        void IncludeNamespaceOf<T>();
+
+        /// <summary>
+        /// Includes a namespace of a given type for AOP method interception type lookups. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="includeNestedNamespaces">
+        /// When true, nested namespaces are included too, otherwise only given type's namespace is included
+        /// </param>
+        void IncludeNamespaceOf<T>(bool includeNestedNamespaces);
+
         ///// <summary>
         ///// Includes a namespace root for type interception.
         ///// </summary>
