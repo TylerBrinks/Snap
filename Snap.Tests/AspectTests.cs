@@ -22,15 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-using System;
-using System.Collections.Generic;
 using Ninject;
 using NUnit.Framework;
+using Snap;
 using Snap.Ninject;
 using Snap.StructureMap;
+using Snap.Tests;
 using Snap.Tests.Fakes;
-using SnapTests.Fakes;
 using Snap.Tests.Interceptors;
+using SnapTests.Fakes;
 using StructureMap;
 
 namespace Snap.Tests
@@ -189,6 +189,38 @@ namespace Snap.Tests
             var code = ObjectFactory.GetInstance<IBadCode>();
 
             Assert.DoesNotThrow(code.GiddyUp);
+        }
+
+        [Test]
+        public void Namespace_Inclusion_Adds_Namespace_Of_A_Given_Type()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                // have the same namespace as IBadCode
+                c.IncludeNamespaceOf<DummyDependency>();
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Kernel.Bind<IBadCode>().To<BadCode>();
+            Assert.DoesNotThrow(() => container.Kernel.Get<IBadCode>());
+        }
+
+        [Test]
+        public void Namespace_Inclusion_Adds_Namespace_and_Nested_Namespaces_Of_A_Given_Type()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                // AspectConfiguration have the same namespace prefix as IBadCode's namespace
+                c.IncludeNamespaceOf<AspectConfiguration>(true);
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Kernel.Bind<IBadCode>().To<BadCode>();
+            Assert.DoesNotThrow(() => container.Kernel.Get<IBadCode>());
         }
 
         //[Test]

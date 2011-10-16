@@ -83,6 +83,42 @@ namespace Snap
                 _namespaces.Add(name);
             }
         }
+
+        /// <summary>
+        /// Includes a namespace of a given type for AOP method interception type lookups. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void IncludeNamespaceOf<T>()
+        {
+            IncludeNamespaceOf<T>(false);
+        }
+
+        /// <summary>
+        /// Includes a namespace of a given type for AOP method interception type lookups. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="includeNestedNamespaces">
+        /// When true, nested namespaces are included too, otherwise only given type's namespace is included
+        /// </param>
+        public void IncludeNamespaceOf<T>(bool includeNestedNamespaces)
+        {
+            var name = typeof (T).Namespace;
+            if(name==null)
+            {
+                throw new ArgumentNullException(
+                    String.Format("Type {0} does not have namespace.", typeof(T)));
+            }
+            if (includeNestedNamespaces)
+            {
+                name += "*";
+            }
+            if (!_namespaces.Contains(name))
+            {
+                _namespaces.Add(name);
+            }
+        }
+
+
         /// <summary>
         /// Gets the list of configured namespaces.
         /// </summary>
