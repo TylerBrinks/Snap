@@ -33,7 +33,7 @@ using Snap.Tests.Interceptors;
 using SnapTests.Fakes;
 using StructureMap;
 
-namespace SnapTests
+namespace Snap.Tests
 {
     [TestFixture]
     public class AspectTests : TestBase
@@ -214,8 +214,8 @@ namespace SnapTests
 
             SnapConfiguration.For(container).Configure(c =>
             {
-                // have the same namespace prefix as IBadCode's namespace
-                c.IncludeNamespaceOf<AspectTests>(true);
+                // AspectConfiguration have the same namespace prefix as IBadCode's namespace
+                c.IncludeNamespaceOf<AspectConfiguration>(true);
                 c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
             });
 
