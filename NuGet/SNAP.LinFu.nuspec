@@ -2,18 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>SNAP.LinFu</id>
-    <version>1.7</version>
+    <version>1.7.1</version>
     <authors>Tyler Brinks</authors>
     <owners>Tyler Brinks</owners>
     <projectUrl>http://www.simpleaspects.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>LinFu provider for SNAP. SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .
       It uses your IoC container to create runtime-callable wrappers to intercept your method calls.  Source code for SNAP is hosted at http://github.com/Acoustic/Snap</description>
-    <releaseNotes>Updating to reflect the SNAP core 1.7 update.</releaseNotes>
+    <releaseNotes>Updating to reflect the SNAP core 1.7.1 update.</releaseNotes>
     <language>en-US</language>
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, LinFu</tags>
     <dependencies>
-      <dependency id="SNAP" version="1.7" />
+      <dependency id="SNAP" version="1.7.1" />
     </dependencies>
   </metadata>
   <files>

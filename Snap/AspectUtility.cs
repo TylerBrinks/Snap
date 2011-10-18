@@ -106,7 +106,7 @@ namespace Snap
         /// <returns></returns>
         public static Type FirstMatch(this Type[] typeList, IList<string> namespaces)
         {
-            return typeList.FirstOrDefault(i => namespaces.Any(n => i.DoesTypeBelongToNamespace(n)));
+            return typeList.FirstOrDefault(i => namespaces.Any(i.DoesTypeBelongToNamespace));
         }
         /// <summary>
         /// Determines whether the specified value matche.
