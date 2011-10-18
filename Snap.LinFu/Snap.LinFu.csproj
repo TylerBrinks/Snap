@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="Fasterflect, Version=2.0.1.0, Culture=neutral, PublicKeyToken=a64e1179c81b1e25, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\fasterflect.2.0.1\lib\net40\Fasterflect.dll</HintPath>
+      <HintPath>..\packages\fasterflect.2.0.1\lib\net35\Fasterflect.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.Core">
       <HintPath>..\Libraries\LinFu.Core.dll</HintPath>

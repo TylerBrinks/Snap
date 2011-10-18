@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>SNAP</id>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
     <authors>Tyler Brinks</authors>
     <owners>Tyler Brinks</owners>
     <projectUrl>http://www.simpleaspects.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>SNAP makes AOP easy by integrating with your favorite IoC container.  SNAP does not modify compiled code (unlike PostSharp) .  
     It uses your IoC container to create runtime-callable wrappers to intercept your method calls.  Source code for SNAP is hosted at http://github.com/Acoustic/Snap</description>
-    <releaseNotes>Version 1.7.1 adds package references missing in 1.7</releaseNotes>
+    <releaseNotes>Version 1.7.2 adds package references missing in 1.7</releaseNotes>
     <language>en-US</language>
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming</tags>
     <dependencies>
