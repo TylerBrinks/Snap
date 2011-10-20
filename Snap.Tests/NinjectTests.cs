@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
+using System.Linq;
 using Ninject;
 using NUnit.Framework;
 using Snap.Ninject;
@@ -212,5 +213,43 @@ namespace Snap.Tests
                 OrderedCode.Actions,
                 new[] { "first_kept_in_container", "Second" });
         }
+
+        [Test]
+        [Explicit("No way to unload given assembly from domain w/o destroying domain. Cannot make this test independent from others when all test suite is run.")]
+        public void When_resolving_services_from_container_SNAP_should_load_dynamicproxygenassebmly2_in_appdomain_only_once()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespaceOf<IBadCode>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
+            container.Kernel.Bind<IBadCode>().To<BadCode>();
+
+            var orderedCode = container.Kernel.Get<IOrderedCode>();
+            var badCode = container.Kernel.Get<IBadCode>();
+
+            orderedCode.RunInOrder();
+            Assert.AreEqual("First", OrderedCode.Actions[1]);
+            Assert.AreEqual("Second", OrderedCode.Actions[0]);
+
+            Assert.DoesNotThrow(badCode.GiddyUp);
+
+            var dynamicProxyGenerationAssemblies = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(assembly => assembly.GetName().Name == "DynamicProxyGenAssembly2")
+                .ToList();
+
+            Assert.That(dynamicProxyGenerationAssemblies.Count, Is.EqualTo(2));
+            // both signed and unsigned.
+            Assert.IsNotNull(dynamicProxyGenerationAssemblies.FirstOrDefault(a => a.GetName().GetPublicKey().Length > 0));
+            Assert.IsNotNull(dynamicProxyGenerationAssemblies.FirstOrDefault(a => a.GetName().GetPublicKey().Length == 0));
+        }
+
     }
 }

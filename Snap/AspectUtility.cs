@@ -24,7 +24,6 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.DynamicProxy;
 using Fasterflect;
 
 namespace Snap
@@ -34,54 +33,6 @@ namespace Snap
     /// </summary>
     public static class AspectUtility
     {
-        /// <summary>
-        /// Creates a proxy around an instance with type interceptors.
-        /// </summary>
-        /// <param name="interfaceType">Type of the interface.</param>
-        /// <param name="instanceToWrap">The instance to wrap.</param>
-        /// <param name="interceptors">The interceptors.</param>
-        /// <returns>Wrapped instance</returns>
-        public static object CreateProxy(Type interfaceType, object instanceToWrap, params IInterceptor[] interceptors)
-        {
-            if (interfaceType.IsInterface)
-                return new ProxyGenerator().CreateInterfaceProxyWithTargetInterface(interfaceType, instanceToWrap, interceptors.ToArray());
-
-            return CreateProxyForConcrete(interfaceType, instanceToWrap, interceptors);
-        }
-
-        private static object CreateProxyForConcrete(Type interfaceType, object instanceToWrap, IInterceptor[] interceptors)
-        {
-            object[] ctorArgs = GetDummyConstructorArgs(interfaceType);
-
-            return new ProxyGenerator().CreateClassProxyWithTarget(interfaceType, instanceToWrap, ctorArgs, interceptors);
-        }
-
-        private static object[] GetDummyConstructorArgs(Type type)
-        {
-            var greediestCtor = type.GetConstructors().OrderBy(x => x.Parameters().Count).LastOrDefault();
-
-            return greediestCtor == null ? new object[0] : new object[greediestCtor.Parameters().Count];
-        }
-
-        /// <summary>
-        /// Creates a proxy around an instance with pseudo (empty) interceptors.
-        /// </summary>
-        /// <param name="proxy">The proxy.</param>
-        /// <param name="interfaceType">Type of the interface.</param>
-        /// <param name="instanceToWrap">The instance to wrap.</param>
-        /// <returns></returns>
-        public static object CreatePseudoProxy(IMasterProxy proxy, Type interfaceType, object instanceToWrap)
-        {
-            var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
-            pseudoList[0] = proxy;
-
-            for (var i = 1; i < pseudoList.Length; i++)
-            {
-                pseudoList[i] = new PseudoInterceptor();
-            }
-
-            return CreateProxy(interfaceType, instanceToWrap, pseudoList);
-        }
         /// <summary>
         /// Determines whether the specified target object has methods decorated for interception.
         /// </summary>
@@ -121,28 +72,6 @@ namespace Snap
             return test.Contains("*")
                 ? value.StartsWith(test.Replace("*", "")) // Wildcard. Check that the string starts with.
                 : value.Equals(test); // Not a wild card. Must be an exact match.
-        }
-
-        /// <summary>
-        /// Determines the type of DynamicProxy that will be created over the given type.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="namespaces"></param>
-        /// <returns></returns>
-        public static Type GetTypeToDynamicProxy(this Type type, IList<string> namespaces )
-        {
-            var allInterfaces = type.GetInterfaces();
-
-            IEnumerable<Type> baseClassInterfaces = type.BaseType != null ? type.BaseType.GetInterfaces() : new Type[0];
-            IEnumerable<Type> topLevelInterfaces = allInterfaces.Except(baseClassInterfaces);
-
-            if (topLevelInterfaces.Count() == 0)
-            {
-                var types = new[] { type };
-                return types.FirstMatch(namespaces);
-            }
-
-            return allInterfaces.FirstMatch(namespaces);
         }
 
         private static bool DoesTypeBelongToNamespace(this Type type, string givenNamespace)
