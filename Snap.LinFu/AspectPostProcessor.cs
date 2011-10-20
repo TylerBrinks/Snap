@@ -30,6 +30,8 @@ namespace Snap.LinFu
 {
     public class AspectPostProcessor : IPostProcessor
     {
+    	private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
+
         public void PostProcess(IServiceRequestResult result)
         {
             var instance = result.ActualResult;
@@ -60,17 +62,7 @@ namespace Snap.LinFu
                 return;
             }
 
-            var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
-            pseudoList[0] = proxy;
-
-            for (var i = 1; i < pseudoList.Length; i++)
-            {
-                pseudoList[i] = new PseudoInterceptor();
-            }
-
-            var targetInterface = instance.GetType().GetTypeToDynamicProxy(proxy.Configuration.Namespaces);
-
-            result.ActualResult = AspectUtility.CreateProxy(targetInterface, instance, pseudoList);
+        	result.ActualResult = _proxyFactory.CreateProxy(instance, proxy);
         }
     }
 }

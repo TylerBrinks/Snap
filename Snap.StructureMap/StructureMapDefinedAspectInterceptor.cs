@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
+using Castle.DynamicProxy;
 using StructureMap;
 using StructureMap.Interceptors;
 
@@ -32,9 +33,8 @@ namespace Snap.StructureMap
     /// </summary>
     public class StructureMapDefinedAspectInterceptor : TypeInterceptor
     {
-        private Type _targetInterface;
-
         private readonly IContainer _container;
+        private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -86,11 +86,9 @@ namespace Snap.StructureMap
         {
             var proxy = GetMasterProxy();
 
-            QueryTargetType(target.GetType());
-
             if (target.IsDecorated(proxy.Configuration))
             {
-                return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
+                return _proxyFactory.CreateProxy(target, proxy);
             }
 
             var name = target.GetType().FullName;
@@ -101,6 +99,7 @@ namespace Snap.StructureMap
             }
             return target;
         }
+
         /// <summary>
         /// Matcheses types in the a namespace that implement IInterceptAspect.
         /// </summary>
@@ -108,18 +107,7 @@ namespace Snap.StructureMap
         /// <returns></returns>
         public bool MatchesType(Type type)
         {
-            QueryTargetType(type);
-
-            return _targetInterface != null;
-        }
-        /// <summary>
-        /// Queries the target type for implementation of a given interface
-        /// </summary>
-        /// <param name="type">The type to query.</param>
-        /// <returns>List of implemented interfaces.</returns>
-        private void QueryTargetType(Type type)
-        {
-            _targetInterface = type.GetTypeToDynamicProxy(Configuration.Namespaces);
+            return _proxyFactory.GetInterfaceToProxy(type, Configuration) != null;
         }
     }
 }

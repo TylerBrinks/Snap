@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 using System;
+using Castle.DynamicProxy;
 using StructureMap;
 using StructureMap.Interceptors;
 
@@ -29,9 +30,10 @@ namespace Snap.StructureMap {
     /// <summary>
     /// StructureMap type interceptor
     /// </summary>
-    public class StructureMapAspectInterceptor: TypeInterceptor {
+    public class StructureMapAspectInterceptor: TypeInterceptor 
+    {
         public IContainer Container { get; set; }
-        private Type _targetInterface;
+        private ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
 
         public StructureMapAspectInterceptor() {
             Container = ObjectFactory.Container;
@@ -49,13 +51,13 @@ namespace Snap.StructureMap {
         /// <param name="target">The target.</param>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public object Process(object target, IContext context) {
+        public object Process(object target, IContext context) 
+        {
             var proxy = (MasterProxy)Container.GetInstance<IMasterProxy>();
-
-            QueryTargetType(target.GetType());
-
-            if(target.IsDecorated(proxy.Configuration)) {
-                return AspectUtility.CreatePseudoProxy(proxy, _targetInterface, target);
+            
+            if(target.IsDecorated(proxy.Configuration))
+            {
+                return _proxyFactory.CreateProxy(target, proxy);
             }
 
             var name = target.GetType().FullName;
@@ -71,25 +73,9 @@ namespace Snap.StructureMap {
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public bool MatchesType(Type type) {
-            QueryTargetType(type);
-
-            return _targetInterface != null;
-        }
-        /// <summary>
-        /// Queries the target type for implementation of a given interface
-        /// </summary>
-        /// <param name="type">The type to query.</param>
-        /// <returns>List of implemented interfaces.</returns>
-        public Type[] QueryTargetType(Type type) {
-            var interfaceTypes = type.GetInterfaces();
-
-            var namespaces = Configuration.Namespaces;
-
-            // Filter the interfaces by given namespaces that implement IInterceptAspect
-            _targetInterface = interfaceTypes.FirstMatch(namespaces);
-
-            return interfaceTypes;
+        public bool MatchesType(Type type)
+        {
+            return _proxyFactory.GetInterfaceToProxy(type, Configuration) != null;
         }
     }
 }

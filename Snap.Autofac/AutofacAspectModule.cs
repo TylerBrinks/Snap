@@ -33,6 +33,8 @@ namespace Snap.Autofac
     /// </summary>
     public class AutofacAspectModule : Module
     {
+        private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
+
         /// <summary>
         /// Attaches to component registration.
         /// </summary>
@@ -48,7 +50,7 @@ namespace Snap.Autofac
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Autofac.Core.ActivatingEventArgs&lt;System.Object&gt;"/> instance containing the event data.</param>
-        private static void RegistrationActivating(object sender, ActivatingEventArgs<object> e)
+        private void RegistrationActivating(object sender, ActivatingEventArgs<object> e)
         {
             // Ignore AspectConfiguration and IInterceptor types since they're being referenced via the Autofac
             // registration context. Otherwise calling e.Context.Resolve<IInterceptor> will fail when
@@ -77,17 +79,7 @@ namespace Snap.Autofac
                 return;
             }
 
-            var pseudoList = new IInterceptor[proxy.Configuration.Interceptors.Count];
-            pseudoList[0] = proxy;
-
-            for (var i = 1; i < pseudoList.Length; i++)
-            {
-                pseudoList[i] = new PseudoInterceptor();
-            }
-
-            var targetInterface = e.Instance.GetType().GetTypeToDynamicProxy(proxy.Configuration.Namespaces);
-
-            e.Instance = AspectUtility.CreateProxy(targetInterface, e.Instance, pseudoList);
+            e.Instance = _proxyFactory.CreateProxy(e.Instance, proxy);
         }
     }
 }
