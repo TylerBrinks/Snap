@@ -33,6 +33,8 @@ namespace Snap.Ninject
     /// </summary>
     public class AspectProxyActivationStrategy : ActivationStrategy
     {
+        private ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
+
         /// <summary>
         /// Creates and wraps the reference type in a Castle proxy
         /// </summary>
@@ -48,12 +50,7 @@ namespace Snap.Ninject
                 // Only build a proxy for decorated types
                 if (reference.Instance.IsDecorated(proxy.Configuration))
                 {
-                    var type = reference.Instance.GetType();
-
-                    // Filter the interfaces by given namespaces that implement IInterceptAspect
-                    var targetInterface = type.GetTypeToDynamicProxy(proxy.Configuration.Namespaces);
-
-                    reference.Instance = AspectUtility.CreatePseudoProxy(proxy, targetInterface, reference.Instance);
+                    reference.Instance = _proxyFactory.CreateProxy(reference.Instance, proxy);
                 }
             }
 

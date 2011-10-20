@@ -99,6 +99,7 @@
     <Compile Include="DefaultConventionScanner.cs" />
     <Compile Include="AspectBookSyntax.cs" />
     <Compile Include="Interfaces\IAspectBookSyntax.cs" />
+    <Compile Include="ProxyFactory.cs" />
     <Compile Include="Strategies\ResolveInterceptorFromContainerCreationStrategy.cs" />
     <Compile Include="Strategies\InstantiateInterceptorDirectlyCreationStrategy.cs" />
     <Compile Include="Interfaces\IInterceptorCreationStrategy.cs" />

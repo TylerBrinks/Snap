@@ -21,6 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+using System;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Registration;
@@ -264,6 +267,46 @@ namespace Snap.Tests
                 var codeWithSingleAspect = container.Resolve<IBadCode>();
                 var failure = Assert.Throws<ActivationException>(codeWithSingleAspect.GiddyUp);
                 Assert.That(failure.InnerException, Is.InstanceOf<ComponentNotRegisteredException>());
+            }
+        }
+
+        [Test]
+        [Explicit("No way to unload given assembly from domain w/o destroying domain. Cannot make this test independent from others when all test suite is run.")]
+        public void When_resolving_services_from_container_SNAP_should_load_dynamicproxygenassebmly2_in_appdomain_only_once()
+        {
+            var builder = new ContainerBuilder();
+
+        	SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespaceOf<IBadCode>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            builder.Register(r => new BadCode()).As<IBadCode>();
+            builder.Register(r => new OrderedCode()).As<IOrderedCode>();
+
+            using (var container = builder.Build())
+            {
+                var orderedCode = container.Resolve<IOrderedCode>();
+                var badCode = container.Resolve<IBadCode>();
+
+                orderedCode.RunInOrder();
+                Assert.AreEqual("First", OrderedCode.Actions[1]);
+                Assert.AreEqual("Second", OrderedCode.Actions[0]);
+
+                Assert.DoesNotThrow(badCode.GiddyUp);
+
+                var dynamicProxyGenerationAssemblies = AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .Where(assembly => assembly.GetName().Name == "DynamicProxyGenAssembly2")
+                    .ToList();
+
+                Assert.That(dynamicProxyGenerationAssemblies.Count, Is.EqualTo(2));
+                // both signed and unsigned.
+                Assert.IsNotNull(dynamicProxyGenerationAssemblies.FirstOrDefault(a => a.GetName().GetPublicKey().Length > 0));
+                Assert.IsNotNull(dynamicProxyGenerationAssemblies.FirstOrDefault(a => a.GetName().GetPublicKey().Length == 0));
             }
         }
     }
