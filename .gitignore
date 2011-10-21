@@ -16,3 +16,6 @@ LastBuild.log
 .svn
 _ReSharper*
 .DS_Store
+*.dll
+# Include dlls external libraries and NuGet packages directory
+!/.nuget/NuGet.exe

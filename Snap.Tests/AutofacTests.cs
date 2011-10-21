@@ -23,7 +23,6 @@ THE SOFTWARE.
 */
 using System;
 using System.Linq;
-using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Registration;

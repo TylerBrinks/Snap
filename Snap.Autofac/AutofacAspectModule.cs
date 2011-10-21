@@ -22,6 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/*using Autofac;
+using Autofac.Core;*/
+
 using Autofac;
 using Autofac.Core;
 using Castle.DynamicProxy;
@@ -49,7 +52,7 @@ namespace Snap.Autofac
         /// Registrations the activating.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Autofac.Core.ActivatingEventArgs&lt;System.Object&gt;"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="object"/> instance containing the event data.</param>
         private void RegistrationActivating(object sender, ActivatingEventArgs<object> e)
         {
             // Ignore AspectConfiguration and IInterceptor types since they're being referenced via the Autofac

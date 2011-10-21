@@ -1,0 +1,1 @@
+..\.nuget\nuget.exe pack SNAP.nuspec -o archive
