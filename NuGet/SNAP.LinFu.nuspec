@@ -17,9 +17,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="content\LinFuAopSample.cs.pp" target="content\LinFuAopSample.cs.pp" />
-    <file src="lib\net35\Snap.LinFu.dll" target="lib\net35\Snap.LinFu.dll" />
-    <file src="lib\net40\Snap.LinFu.dll" target="lib\net40\Snap.LinFu.dll" />
-    <file src="lib\LinFu.Core.dll" target="lib\LinFu.Core.dll" />
+    <file src="..\Samples\LinFuAopSample.cs.pp" target="content\LinFuAopSample.cs.pp" />
+    <file src="..\Snap.LinFu\bin\NET35-Release\Snap.LinFu.dll" target="lib\net35\Snap.LinFu.dll" />
+    <file src="..\Snap.LinFu\bin\NET40-Release\Snap.LinFu.dll" target="lib\net40\Snap.LinFu.dll" />
+    <file src="..\Snap.LinFu\bin\NET35-Release\LinFu.Core.dll" target="lib\LinFu.Core.dll" />
   </files>
 </package>

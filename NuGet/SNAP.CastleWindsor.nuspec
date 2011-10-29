@@ -18,8 +18,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="content\CastleAopSample.cs.pp" target="content\CastleAopSample.cs.pp" />
-    <file src="lib\net35\Snap.CastleWindsor.dll" target="lib\net35\Snap.CastleWindsor.dll" />
-    <file src="lib\net40\Snap.CastleWindsor.dll" target="lib\net40\Snap.CastleWindsor.dll" />
+    <file src="..\Samples\CastleAopSample.cs.pp" target="content\CastleAopSample.cs.pp" />
+	<file src="..\Snap.CastleWindsor\bin\NET35-Release\Snap.CastleWindsor.dll" target="lib\net35\Snap.CastleWindsor.dll" />
+    <file src="..\Snap.CastleWindsor\bin\NET40-Release\Snap.CastleWindsor.dll" target="lib\net40\Snap.CastleWindsor.dll" />
   </files>
 </package>

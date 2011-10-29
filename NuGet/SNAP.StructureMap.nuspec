@@ -18,8 +18,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="content\StructureMapAopSample.cs.pp" target="content\StructureMapAopSample.cs.pp" />
-    <file src="lib\net35\Snap.StructureMap.dll" target="lib\net35\Snap.StructureMap.dll" />
-    <file src="lib\net40\Snap.StructureMap.dll" target="lib\net40\Snap.StructureMap.dll" />
+    <file src="..\Samples\StructureMapAopSample.cs.pp" target="content\StructureMapAopSample.cs.pp" />
+    <file src="..\Snap.StructureMap\bin\NET35-Release\Snap.StructureMap.dll" target="lib\net35\Snap.StructureMap.dll" />
+    <file src="..\Snap.StructureMap\bin\NET40-Release\Snap.StructureMap.dll" target="lib\net40\Snap.StructureMap.dll" />
   </files>
 </package>

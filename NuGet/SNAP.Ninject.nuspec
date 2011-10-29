@@ -18,8 +18,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="content\NinjectAopSample.cs.pp" target="content\NinjectAopSample.cs.pp" />
-    <file src="lib\net35\Snap.Ninject.dll" target="lib\net35\Snap.Ninject.dll" />
-    <file src="lib\net40\Snap.Ninject.dll" target="lib\net40\Snap.Ninject.dll" />
+    <file src="..\Samples\NinjectAopSample.cs.pp" target="content\NinjectAopSample.cs.pp" />
+    <file src="..\Snap.Ninject\bin\NET35-Release\Snap.Ninject.dll" target="lib\net35\Snap.Ninject.dll" />
+    <file src="..\Snap.Ninject\bin\NET40-Release\Snap.Ninject.dll" target="lib\net40\Snap.Ninject.dll" />
   </files>
 </package>
