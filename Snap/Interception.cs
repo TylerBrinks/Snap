@@ -155,19 +155,9 @@ namespace Snap
 
             if (classAttributes.Any())
             {
-                bool match = true;
                 var attribute = (ClassInterceptAttribute)classAttributes.First();
-                if (!String.IsNullOrEmpty(attribute.IncludePattern))
-                {
-                    match = Regex.IsMatch(method.Name, attribute.IncludePattern, RegexOptions.Singleline);
-                }
 
-                if (match && !String.IsNullOrEmpty(attribute.ExcludePattern))
-                {
-                    match = !Regex.IsMatch(method.Name, attribute.ExcludePattern, RegexOptions.Singleline);
-                }
-
-                if (match)
+                if (MatchesClassAttribute(attribute, method))
                 {
                     SignatureCache.Add(key, attribute);
                     return attribute;
@@ -190,6 +180,47 @@ namespace Snap
             }
 
             return null;
+        }
+
+        private static bool MatchesClassAttribute(ClassInterceptAttribute attribute, MethodBase method)
+        {
+            bool match = true;
+
+            if (attribute.MulticastOptions > 0)
+            {
+                var bindingFlags = Enum.GetValues(typeof(MulticastOptions)) as MulticastOptions[];
+
+                foreach (var flag in bindingFlags)
+                {
+                    if ((flag & attribute.MulticastOptions) == flag)
+                    {
+                        switch (attribute.MulticastOptions)
+                        {
+                            case MulticastOptions.Public:
+                                match = method.IsPublic;
+                                break;
+                            case MulticastOptions.Private:
+                                match = method.IsPrivate;
+                                break;
+                            case MulticastOptions.Protected:
+                                match = method.IsFamily;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            if (match && !String.IsNullOrEmpty(attribute.IncludePattern))
+            {
+                match = Regex.IsMatch(method.Name, attribute.IncludePattern, RegexOptions.Singleline);
+            }
+
+            if (match && !String.IsNullOrEmpty(attribute.ExcludePattern))
+            {
+                match = !Regex.IsMatch(method.Name, attribute.ExcludePattern, RegexOptions.Singleline);
+            }
+
+            return match;
         }
 
         /// <summary>

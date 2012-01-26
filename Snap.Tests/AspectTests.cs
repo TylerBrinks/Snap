@@ -237,6 +237,36 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void Class_Interceptors_Run_With_Multicast()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<PublicProtectedClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
+            var code = ObjectFactory.GetInstance<BaseAbstractClass>();
+
+            Assert.DoesNotThrow(() => code.CallFoo2());
+        }
+
+        [Test]
+        public void Class_Interceptors_Does_Not_Run_With_Multicast()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<PublicClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
+            var code = ObjectFactory.GetInstance<BaseAbstractClass>();
+
+            Assert.Throws<Exception>(() => code.CallFoo2());
+        }
+
+        [Test]
         public void Type_Inclusion_Adds_Type_By_Names()
         {
             var container = new NinjectAspectContainer();
