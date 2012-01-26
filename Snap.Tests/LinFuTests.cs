@@ -73,6 +73,24 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void LinFu_Container_Supports_Class_Aspects()
+        {
+            var container = new ServiceContainer();
+            container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+
+            SnapConfiguration.For(new LinFuAspectContainer(container)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            var code = container.GetService<IOrderedCode>();
+            code.RunInOrder();
+
+            Assert.AreEqual("Fourth", OrderedCode.Actions[0]);
+        }
+
+        [Test]
         public void LinFu_Container_Ignores_Types_Without_Decoration()
         {
             var container = new ServiceContainer();

@@ -32,9 +32,12 @@ namespace SnapTests.Fakes
         void RunInOrder();
         void RunInExplicitOrder();
         void RunInAttributedOrder();
+        void RunWithoutClassInterceptor();
+        void StopWithoutInterceptor();
     }
 
     [Implements(typeof(IOrderedCode))]  // Attribute for LinFu configuration
+    [FourthClass(IncludePattern="Run.*", ExcludePattern=".*WithoutClass.*")]
     public class OrderedCode : IOrderedCode
     {
         public static List<string> Actions = new List<string>();
@@ -57,6 +60,52 @@ namespace SnapTests.Fakes
         [Second(Order = 2)]
         [Third(Order = 0)]
         public void RunInAttributedOrder()
+        {
+        }
+
+        [First]
+        public void RunWithoutClassInterceptor()
+        {
+        }
+
+        public void StopWithoutInterceptor()
+        {
+        }
+    }
+
+    [Implements(typeof(IOrderedCode))]  // Attribute for LinFu configuration
+    [FourthClass(IncludePattern = "Run.*", ExcludePattern = ".*WithoutClass.*", Order=3)]
+    public class ClassOrderedCode : IOrderedCode
+    {
+        public static List<string> Actions = new List<string>();
+
+        [First]
+        [Second]
+        public void RunInOrder()
+        {
+
+        }
+
+        [First]
+        [Second]
+        [Third]
+        public void RunInExplicitOrder()
+        {
+        }
+
+        [First(Order = 1)]
+        [Second(Order = 2)]
+        [Third(Order = 0)]
+        public void RunInAttributedOrder()
+        {
+        }
+
+        [First]
+        public void RunWithoutClassInterceptor()
+        {
+        }
+
+        public void StopWithoutInterceptor()
         {
         }
     }

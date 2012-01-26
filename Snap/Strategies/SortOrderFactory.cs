@@ -38,7 +38,8 @@ namespace Snap {
         /// <returns>Sort order strategy.</returns>
         public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<AspectRegistration> interceptors) {
             var attributes = invocation.MethodInvocationTarget.GetCustomAttributes(false)
-                .Where(a => a is IInterceptAttribute).Select(at => (IInterceptAttribute)at).ToList();
+                .Union(invocation.InvocationTarget.GetType().GetCustomAttributes(true).Where(p => p is IInterceptAttribute))
+                .Where(a => a is IInterceptAttribute && interceptors.Any(p => p.TargetAttributeType == a.GetType())).Cast<IInterceptAttribute>().ToList();
 
             var attributesAreIndexed = attributes.Any(a => a.Order > 0);
             var interceptorsAreIndexed = interceptors.Any(a => a.Order > 0);

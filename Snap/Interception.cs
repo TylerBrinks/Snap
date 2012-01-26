@@ -27,6 +27,7 @@ using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Fasterflect;
+using System.Text.RegularExpressions;
 
 namespace Snap
 {
@@ -95,7 +96,7 @@ namespace Snap
             var attributeInstance = GetAttribute(invocation.TargetType, targetMethod, attributeType);
             return attributeInstance != null;
         }
-
+        
         /// <summary>
         /// Gets the method, which is represented by the invocation.
         /// </summary>
@@ -148,15 +149,44 @@ namespace Snap
                 return SignatureCache[key];
             }
 
+            var classAttributes = (from attr in targetType.GetCustomAttributes(!targetType.IsInterface)
+                                   where attr.GetType().Equals(attributeType)
+                                   select attr).ToList();
+
+            if (classAttributes.Any())
+            {
+                bool match = true;
+                var attribute = (ClassInterceptAttribute)classAttributes.First();
+                if (!String.IsNullOrEmpty(attribute.IncludePattern))
+                {
+                    match = Regex.IsMatch(method.Name, attribute.IncludePattern, RegexOptions.Singleline);
+                }
+
+                if (match && !String.IsNullOrEmpty(attribute.ExcludePattern))
+                {
+                    match = !Regex.IsMatch(method.Name, attribute.ExcludePattern, RegexOptions.Singleline);
+                }
+
+                if (match)
+                {
+                    SignatureCache.Add(key, attribute);
+                    return attribute;
+                }
+            }
+
             var attributes = (from attr in method.GetCustomAttributes(!targetType.IsInterface)
                              where attr.GetType().Equals(attributeType)
                              select attr).ToList();
-            
+
             if (attributes.Any())
             {
                 var attribute = (Attribute)attributes.First();
                 SignatureCache.Add(key, attribute);
                 return attribute;
+            }
+            else
+            {
+                SignatureCache.Add(key, null);
             }
 
             return null;

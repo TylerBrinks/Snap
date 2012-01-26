@@ -84,6 +84,28 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void CastleWindsor_Container_Supports_Class_Aspects()
+        {
+            var builder = new ContainerBuilder();
+
+            SnapConfiguration.For(new AutofacAspectContainer(builder)).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            builder.Register(r => new ClassOrderedCode()).As<IOrderedCode>();
+
+            using (var container = builder.Build())
+            {
+                var code = container.Resolve<IOrderedCode>();
+                code.RunInOrder();
+
+                Assert.AreEqual("Fourth", OrderedCode.Actions[0]);
+            }
+        }
+
+        [Test]
         public void Autofac_Container_Ignores_Types_Without_Decoration()
         {
             var builder = new ContainerBuilder();

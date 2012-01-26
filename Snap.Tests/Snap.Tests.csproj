@@ -137,6 +137,8 @@
     <Compile Include="Fakes\TypeWithoutInterface.cs" />
     <Compile Include="Interceptors\FirstAttribute.cs" />
     <Compile Include="Interceptors\FirstInterceptor.cs" />
+    <Compile Include="Interceptors\FourthClassAttribute.cs" />
+    <Compile Include="Interceptors\FourthClassInterceptor.cs" />
     <Compile Include="Interceptors\SampleInterceptor.cs" />
     <Compile Include="Interceptors\HandleErrorAttribute.cs" />
     <Compile Include="Interceptors\HandleErrorInterceptor.cs" />
