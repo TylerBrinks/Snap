@@ -86,12 +86,13 @@ namespace Snap.StructureMap
         {
             var proxy = GetMasterProxy();
 
-            if (target.IsDecorated(proxy.Configuration))
+            var name = target.GetType().FullName;
+
+            if (target.IsDecorated(proxy.Configuration) && !name.EndsWith("Proxy")) //Don't create proxies of proxies
             {
                 return _proxyFactory.CreateProxy(target, proxy);
             }
 
-            var name = target.GetType().FullName;
             // Don't build up any wrapped proxy types.
             if (!(name.StartsWith("Castle.Proxies.") && name.EndsWith("Proxy")))
             {
