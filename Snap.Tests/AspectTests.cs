@@ -32,6 +32,7 @@ using Snap.Tests.Fakes;
 using Snap.Tests.Interceptors;
 using SnapTests.Fakes;
 using StructureMap;
+using System;
 
 namespace Snap.Tests
 {
@@ -56,6 +57,25 @@ namespace Snap.Tests
             Assert.AreEqual("First", OrderedCode.Actions[1]);
             Assert.AreEqual("Second", OrderedCode.Actions[0]);
         }
+
+        [Test]
+        public void Method_Interceptors_Run_With_Extra_Attributes()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.RunInAttributedOrder();
+
+            Assert.AreEqual("First", OrderedCode.Actions[0]);
+            Assert.AreEqual("Second", OrderedCode.Actions[1]);
+        }
         [Test]
         public void Method_Interceptors_Run_In_Order_When_Set_Explicitly()
         {
@@ -72,6 +92,23 @@ namespace Snap.Tests
             code.RunInExplicitOrder();
 
             Assert.AreEqual("First", OrderedCode.Actions[2]);
+            Assert.AreEqual("Second", OrderedCode.Actions[1]);
+            Assert.AreEqual("Third", OrderedCode.Actions[0]);
+        }
+        [Test]
+        public void Method_Interceptors_Run_In_Order_When_Set_Explicitly_With_Extra_Attributes()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<SecondInterceptor>().To<SecondAttribute>().Order(1);
+                c.Bind<ThirdInterceptor>().To<ThirdAttribute>().Order(0);
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+            code.RunInExplicitOrder();
+
             Assert.AreEqual("Second", OrderedCode.Actions[1]);
             Assert.AreEqual("Third", OrderedCode.Actions[0]);
         }
@@ -94,6 +131,141 @@ namespace Snap.Tests
             Assert.AreEqual("Second", OrderedCode.Actions[2]);
             Assert.AreEqual("Third", OrderedCode.Actions[0]);
         }
+
+        [Test]
+        public void Class_Interceptors_Run_In_Order_Default()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.RunInOrder();
+
+            Assert.AreEqual("First", OrderedCode.Actions[1]);
+            Assert.AreEqual("Second", OrderedCode.Actions[0]);
+            Assert.AreEqual("Fourth", OrderedCode.Actions[2]);
+        }
+
+        [Test]
+        public void Class_Interceptors_Run_In_Order_Explicitly()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<SecondInterceptor>().To<SecondAttribute>().Order(1);
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>().Order(0);
+                c.Bind<FirstInterceptor>().To<FirstAttribute>().Order(2);
+                c.Bind<ThirdInterceptor>().To<ThirdAttribute>().Order(3);
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.RunInExplicitOrder();
+
+            Assert.AreEqual("First", OrderedCode.Actions[2]);
+            Assert.AreEqual("Second", OrderedCode.Actions[1]);
+            Assert.AreEqual("Third", OrderedCode.Actions[3]);
+            Assert.AreEqual("Fourth", OrderedCode.Actions[0]);
+        }
+
+        [Test]
+        public void Class_Interceptors_Run_In_Order_When_Attributed()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<ThirdInterceptor>().To<ThirdAttribute>();
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<ClassOrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.RunInAttributedOrder();
+
+            Assert.AreEqual("First", OrderedCode.Actions[1]);
+            Assert.AreEqual("Second", OrderedCode.Actions[2]);
+            Assert.AreEqual("Third", OrderedCode.Actions[0]);
+            Assert.AreEqual("Fourth", OrderedCode.Actions[3]);
+        }
+
+        [Test]
+        public void Class_Interceptors_Run_Without_Excluded()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<ClassOrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.RunWithoutClassInterceptor();
+
+            Assert.AreEqual("First", OrderedCode.Actions[0]);
+            Assert.AreEqual(1, OrderedCode.Actions.Count);
+        }
+
+        [Test]
+        public void Class_Interceptors_Run_With_Only_Included()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<ClassOrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+
+            code.StopWithoutInterceptor();
+
+            Assert.AreEqual(0, OrderedCode.Actions.Count);
+        }
+
+        [Test]
+        public void Class_Interceptors_Run_With_Multicast()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<PublicProtectedClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
+            var code = ObjectFactory.GetInstance<BaseAbstractClass>();
+
+            Assert.DoesNotThrow(() => code.CallFoo2());
+        }
+
+        [Test]
+        public void Class_Interceptors_Does_Not_Run_With_Multicast()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<PublicClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
+            var code = ObjectFactory.GetInstance<BaseAbstractClass>();
+
+            Assert.Throws<Exception>(() => code.CallFoo2());
+        }
+
         [Test]
         public void Type_Inclusion_Adds_Type_By_Names()
         {

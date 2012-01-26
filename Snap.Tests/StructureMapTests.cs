@@ -77,6 +77,22 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void StructureMap_Container_Supports_Class_Aspects()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<ClassOrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+            code.RunInOrder();
+
+            Assert.AreEqual("Fourth", OrderedCode.Actions[0]);
+        }
+
+        [Test]
         public void Structuremap_Container_Ignores_Types_Without_Decoration()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>

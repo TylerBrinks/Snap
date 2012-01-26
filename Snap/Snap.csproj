@@ -98,6 +98,7 @@
     <Compile Include="AspectContainer.cs" />
     <Compile Include="AspectUtility.cs" />
     <Compile Include="BindingPair.cs" />
+    <Compile Include="ClassInterceptAttribute.cs" />
     <Compile Include="ConfigurationSyntax.cs" />
     <Compile Include="DefaultConventionScanner.cs" />
     <Compile Include="AspectBookSyntax.cs" />

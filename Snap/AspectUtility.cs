@@ -43,9 +43,10 @@ namespace Snap
         /// </returns>
         public static bool IsDecorated(this object target, AspectConfiguration configuration)
         {
-            var methods = target.GetType().Methods();
+            var type = target.GetType();
+            var methods = type.Methods();
 
-            var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute));
+            var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute)) || type.Attributes().Any(p => p is ClassInterceptAttribute);
 
             return isDecorated;
         }
