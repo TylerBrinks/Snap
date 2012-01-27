@@ -27,6 +27,7 @@ using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Fasterflect;
+using System.Text.RegularExpressions;
 
 namespace Snap
 {
@@ -95,7 +96,7 @@ namespace Snap
             var attributeInstance = GetAttribute(invocation.TargetType, targetMethod, attributeType);
             return attributeInstance != null;
         }
-
+        
         /// <summary>
         /// Gets the method, which is represented by the invocation.
         /// </summary>
@@ -148,18 +149,78 @@ namespace Snap
                 return SignatureCache[key];
             }
 
+            var classAttributes = (from attr in targetType.GetCustomAttributes(!targetType.IsInterface)
+                                   where attr.GetType().Equals(attributeType)
+                                   select attr).ToList();
+
+            if (classAttributes.Any())
+            {
+                var attribute = (ClassInterceptAttribute)classAttributes.First();
+
+                if (MatchesClassAttribute(attribute, method))
+                {
+                    SignatureCache.Add(key, attribute);
+                    return attribute;
+                }
+            }
+
             var attributes = (from attr in method.GetCustomAttributes(!targetType.IsInterface)
                              where attr.GetType().Equals(attributeType)
                              select attr).ToList();
-            
+
             if (attributes.Any())
             {
                 var attribute = (Attribute)attributes.First();
                 SignatureCache.Add(key, attribute);
                 return attribute;
             }
+            else
+            {
+                SignatureCache.Add(key, null);
+            }
 
             return null;
+        }
+
+        private static bool MatchesClassAttribute(ClassInterceptAttribute attribute, MethodBase method)
+        {
+            bool match = true;
+
+            if (attribute.MulticastOptions > 0)
+            {
+                var bindingFlags = Enum.GetValues(typeof(MulticastOptions)) as MulticastOptions[];
+
+                foreach (var flag in bindingFlags)
+                {
+                    if ((flag & attribute.MulticastOptions) == flag)
+                    {
+                        switch (attribute.MulticastOptions)
+                        {
+                            case MulticastOptions.Public:
+                                match = method.IsPublic;
+                                break;
+                            case MulticastOptions.Private:
+                                match = method.IsPrivate;
+                                break;
+                            case MulticastOptions.Protected:
+                                match = method.IsFamily;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            if (match && !String.IsNullOrEmpty(attribute.IncludePattern))
+            {
+                match = Regex.IsMatch(method.Name, attribute.IncludePattern, RegexOptions.Singleline);
+            }
+
+            if (match && !String.IsNullOrEmpty(attribute.ExcludePattern))
+            {
+                match = !Regex.IsMatch(method.Name, attribute.ExcludePattern, RegexOptions.Singleline);
+            }
+
+            return match;
         }
 
         /// <summary>

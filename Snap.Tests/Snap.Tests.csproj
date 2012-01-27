@@ -135,8 +135,12 @@
     <Compile Include="Fakes\NotInterceptable.cs" />
     <Compile Include="Fakes\OrderedCode.cs" />
     <Compile Include="Fakes\TypeWithoutInterface.cs" />
+    <Compile Include="Interceptors\PublicClassAttribute.cs" />
+    <Compile Include="Interceptors\PublicProtectedClassAttribute.cs" />
     <Compile Include="Interceptors\FirstAttribute.cs" />
     <Compile Include="Interceptors\FirstInterceptor.cs" />
+    <Compile Include="Interceptors\FourthClassAttribute.cs" />
+    <Compile Include="Interceptors\FourthClassInterceptor.cs" />
     <Compile Include="Interceptors\SampleInterceptor.cs" />
     <Compile Include="Interceptors\HandleErrorAttribute.cs" />
     <Compile Include="Interceptors\HandleErrorInterceptor.cs" />

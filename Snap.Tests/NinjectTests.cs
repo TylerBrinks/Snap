@@ -72,6 +72,24 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void Ninject_Container_Supports_Class_Aspects()
+        {
+            var container = new NinjectAspectContainer();
+
+            SnapConfiguration.For(container).Configure(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
+            });
+
+            container.Kernel.Bind<IOrderedCode>().To<ClassOrderedCode>();
+            var code = container.Kernel.Get<IOrderedCode>();
+            code.RunInOrder();
+
+            Assert.AreEqual("Fourth", OrderedCode.Actions[0]);
+        }
+
+        [Test]
         public void Ninject_Container_Ignores_Types_Without_Decoration()
         {
             var container = new NinjectAspectContainer();
