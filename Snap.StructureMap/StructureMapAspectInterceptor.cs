@@ -33,7 +33,7 @@ namespace Snap.StructureMap {
     public class StructureMapAspectInterceptor: TypeInterceptor 
     {
         public IContainer Container { get; set; }
-        private ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
+        private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
 
         public StructureMapAspectInterceptor() {
             Container = ObjectFactory.Container;

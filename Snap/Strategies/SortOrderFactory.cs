@@ -25,18 +25,21 @@ using System.Linq;
 using Castle.DynamicProxy;
 using System.Collections.Generic;
 
-namespace Snap {
+namespace Snap 
+{
     /// <summary>
     /// Creates sorting strategies.
     /// </summary>
-    public static class SortOrderFactory {
+    public static class SortOrderFactory 
+    {
         /// <summary>
         /// Gets the sort order strategy.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>Sort order strategy.</returns>
-        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<AspectRegistration> interceptors) {
+        public static ISortOrderStrategy GetSortOrderStrategy(IInvocation invocation, List<AspectRegistration> interceptors) 
+        {
             var attributes = invocation.MethodInvocationTarget.GetCustomAttributes(false)
                 .Union(invocation.InvocationTarget.GetType().GetCustomAttributes(true).Where(p => p is IInterceptAttribute))
                 .Where(a => a is IInterceptAttribute && interceptors.Any(p => p.TargetAttributeType == a.GetType())).Cast<IInterceptAttribute>().ToList();
@@ -44,11 +47,13 @@ namespace Snap {
             var attributesAreIndexed = attributes.Any(a => a.Order > 0);
             var interceptorsAreIndexed = interceptors.Any(a => a.Order > 0);
 
-            if(attributesAreIndexed) {
+            if(attributesAreIndexed)
+            {
                 return new AttributedSortOrderStrategy(attributes, interceptors);
             }
 
-            if(interceptorsAreIndexed) {
+            if(interceptorsAreIndexed)
+            {
                 return new IndexSortOrderStrategy(interceptors);
             }
 

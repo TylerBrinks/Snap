@@ -36,7 +36,7 @@ namespace Snap {
         /// <summary>
         /// Gets or sets the container.
         /// </summary>
-        public IServiceLocator      Container { get; set; }
+        public IServiceLocator Container { get; set; }
 
         /// <summary>
         /// Intercepts the specified invocation.

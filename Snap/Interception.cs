@@ -119,7 +119,8 @@ namespace Snap
                 {
                     var exists = true;
 
-                    foreach (var p in parameters.Where(p => !m.Parameters().Any(x => x.Name == p.Name)))
+                    var methodInfo = m;
+                    foreach (var p in parameters.Where(p => !methodInfo.Parameters().Any(x => x.Name == p.Name)))
                     {
                         exists = false;
                     }
@@ -150,7 +151,7 @@ namespace Snap
             }
 
             var classAttributes = (from attr in targetType.GetCustomAttributes(!targetType.IsInterface)
-                                   where attr.GetType().Equals(attributeType)
+                                   where attr.GetType() == attributeType
                                    select attr).ToList();
 
             if (classAttributes.Any())
@@ -165,7 +166,7 @@ namespace Snap
             }
 
             var attributes = (from attr in method.GetCustomAttributes(!targetType.IsInterface)
-                             where attr.GetType().Equals(attributeType)
+                             where attr.GetType() == attributeType
                              select attr).ToList();
 
             if (attributes.Any())
@@ -174,10 +175,8 @@ namespace Snap
                 SignatureCache.Add(key, attribute);
                 return attribute;
             }
-            else
-            {
-                SignatureCache.Add(key, null);
-            }
+           
+            SignatureCache.Add(key, null);
 
             return null;
         }

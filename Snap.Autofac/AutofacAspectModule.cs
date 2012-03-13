@@ -59,13 +59,14 @@ namespace Snap.Autofac
             // registration context. Otherwise calling e.Context.Resolve<IInterceptor> will fail when
             // the code below executes.
 
-            if(e.Instance is MasterProxy)
+            var masterProxy = e.Instance as MasterProxy;
+            if (masterProxy != null)
             {
                 // for master proxy we need to assign reference to current container, which is used to resolve aspects from
                 // AutofacServiceLocatorAdapter cannot be built just with e.Context despite fact that e.Context is of IComponentContext
                 // e.Context is valid only in scope of current instance activation
                 // To get valid IComponentContext we need to resolve it in the following way
-                ((MasterProxy) e.Instance).Container = new AutofacServiceLocatorAdapter(e.Context.Resolve<IComponentContext>());
+                (masterProxy).Container = new AutofacServiceLocatorAdapter(e.Context.Resolve<IComponentContext>());
                 return;
             }
 

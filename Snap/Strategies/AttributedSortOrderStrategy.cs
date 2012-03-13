@@ -54,7 +54,7 @@ namespace Snap
             return _attributes
                 .OrderBy(a => a.Order)
                 .ThenBy(a => a.GetType().Name).Select(attribute => attribute.GetType())
-                .Select(type => _interceptors.Where(i => i.TargetAttributeType == type).First()).ToList();
+                .Select(type => _interceptors.First(i => i.TargetAttributeType == type)).ToList();
         }
     }
 }

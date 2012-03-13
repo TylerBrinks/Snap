@@ -56,13 +56,13 @@ namespace Snap
             IEnumerable<Type> baseClassInterfaces = type.BaseType != null ? type.BaseType.GetInterfaces() : new Type[0];
             IEnumerable<Type> topLevelInterfaces = allInterfaces.Except(baseClassInterfaces);
 
-            if (topLevelInterfaces.Count() == 0)
+            if (!topLevelInterfaces.Any())
             {
                 var types = new[] { type };
                 return types.FirstMatch(configuration.Namespaces);
             }
 
-            return allInterfaces.FirstMatch(configuration.Namespaces);
+            return topLevelInterfaces.ToArray().FirstMatch(configuration.Namespaces);
         }
 
         private IInterceptor[] GetInterceptors(IMasterProxy masterProxy)

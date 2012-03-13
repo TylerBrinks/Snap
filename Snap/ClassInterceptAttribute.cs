@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 
 namespace Snap
 {
@@ -30,11 +26,6 @@ namespace Snap
         public string ExcludePattern { get; set; }
 
         public MulticastOptions MulticastOptions { get; set; }
-
-        /// <summary>
-        /// The type of methods to bind to. Due to dynamic proxy limitations, certain field types are not specified,
-        /// i.e. static.
-        /// </summary>
     }
 
     [Flags]

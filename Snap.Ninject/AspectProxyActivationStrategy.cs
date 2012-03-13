@@ -33,7 +33,7 @@ namespace Snap.Ninject
     /// </summary>
     public class AspectProxyActivationStrategy : ActivationStrategy
     {
-        private ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
+        private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
 
         /// <summary>
         /// Creates and wraps the reference type in a Castle proxy

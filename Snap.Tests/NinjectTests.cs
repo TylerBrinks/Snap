@@ -40,14 +40,15 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests*");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IBadCode>().To<BadCode>();
             var badCode = container.Kernel.Get<IBadCode>();
-            
+
             Assert.DoesNotThrow(badCode.GiddyUp);
             Assert.IsTrue(badCode.GetType().Name.Equals("IBadCodeProxy"));
         }
@@ -58,11 +59,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<FirstInterceptor>().To<FirstAttribute>();
-                c.Bind<SecondInterceptor>().To<SecondAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests*");
+                                                               c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                                                               c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                                                           });
 
             container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
             var badCode = container.Kernel.Get<IOrderedCode>();
@@ -77,10 +78,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests*");
+                                                               c.Bind<FourthClassInterceptor>().To<FourthClassAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IOrderedCode>().To<ClassOrderedCode>();
             var code = container.Kernel.Get<IOrderedCode>();
@@ -95,10 +97,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests*");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<INotInterceptable>().To<NotInterceptable>();
             var code = container.Kernel.Get<INotInterceptable>();
@@ -112,10 +115,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests*");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IBadCode>().To<BadCode>();
             var badCode = container.Kernel.Get<IBadCode>();
@@ -130,10 +134,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests.Fakes.IBadCode");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests.Fakes.IBadCode");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IBadCode>().To<BadCode>();
             Assert.DoesNotThrow(() => container.Kernel.Get<IBadCode>());
@@ -145,10 +150,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("Does.Not.Work");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("Does.Not.Work");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IBadCode>().To<BadCode>();
             Assert.Throws<NullReferenceException>(() => container.Kernel.Get<IBadCode>());
@@ -160,10 +166,11 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests.Fakes*");
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests.Fakes*");
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IDependency>().To<DummyDependency>();
 
@@ -186,12 +193,12 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests.*");
-                c.Bind<FirstInterceptor>().To<FirstAttribute>();
-                c.Bind<SecondInterceptor>().To<SecondAttribute>();
-                c.AllAspects().KeepInContainer();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests.*");
+                                                               c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                                                               c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                                                               c.AllAspects().KeepInContainer();
+                                                           });
 
             container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
             container.Kernel.Bind<FirstInterceptor>().ToConstant(new FirstInterceptor("first_kept_in_container"));
@@ -203,7 +210,7 @@ namespace Snap.Tests
             // both interceptors are resolved from container
             CollectionAssert.AreEquivalent(
                 OrderedCode.Actions,
-                new[] { "first_kept_in_container", "second_kept_in_container" });
+                new[] {"first_kept_in_container", "second_kept_in_container"});
         }
 
         [Test]
@@ -212,12 +219,12 @@ namespace Snap.Tests
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespace("SnapTests.*");
-                c.Bind<FirstInterceptor>().To<FirstAttribute>();
-                c.Bind<SecondInterceptor>().To<SecondAttribute>();
-                c.Aspects(typeof(FirstInterceptor)).KeepInContainer();
-            });
+                                                           {
+                                                               c.IncludeNamespace("SnapTests.*");
+                                                               c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                                                               c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                                                               c.Aspects(typeof (FirstInterceptor)).KeepInContainer();
+                                                           });
 
             container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
             container.Kernel.Bind<FirstInterceptor>().ToConstant(new FirstInterceptor("first_kept_in_container"));
@@ -229,22 +236,26 @@ namespace Snap.Tests
             // first interceptor is resolved from container, while second one is via new() 
             CollectionAssert.AreEquivalent(
                 OrderedCode.Actions,
-                new[] { "first_kept_in_container", "Second" });
+                new[] {"first_kept_in_container", "Second"});
         }
 
         [Test]
-        [Explicit("No way to unload given assembly from domain w/o destroying domain. Cannot make this test independent from others when all test suite is run.")]
-        public void When_resolving_services_from_container_SNAP_should_load_dynamicproxygenassebmly2_in_appdomain_only_once()
+        [Explicit(
+            "No way to unload given assembly from domain w/o destroying domain. Cannot make this test independent from others when all test suite is run."
+            )]
+        public void
+            When_resolving_services_from_container_SNAP_should_load_dynamicproxygenassebmly2_in_appdomain_only_once()
         {
             var container = new NinjectAspectContainer();
 
             SnapConfiguration.For(container).Configure(c =>
-            {
-                c.IncludeNamespaceOf<IBadCode>();
-                c.Bind<SecondInterceptor>().To<SecondAttribute>();
-                c.Bind<FirstInterceptor>().To<FirstAttribute>();
-                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
-            });
+                                                           {
+                                                               c.IncludeNamespaceOf<IBadCode>();
+                                                               c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                                                               c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                                                               c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>
+                                                                   ();
+                                                           });
 
             container.Kernel.Bind<IOrderedCode>().To<OrderedCode>();
             container.Kernel.Bind<IBadCode>().To<BadCode>();

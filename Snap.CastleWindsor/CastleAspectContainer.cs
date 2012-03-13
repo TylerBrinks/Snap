@@ -39,11 +39,10 @@ namespace Snap.CastleWindsor
         /// <param name="container">The container.</param>
         public CastleAspectContainer(IKernel container)
         {
-            Proxy = new MasterProxy();
-            Proxy.Container = new WindsorServiceLocatorAdapter(container);
+            Proxy = new MasterProxy {Container = new WindsorServiceLocatorAdapter(container)};
             _kernel = container;
-            _kernel.Register(Component.For(this.GetType()).Named("CastleAspectContainer").Instance(this));
-            _kernel.Register(Component.For(Proxy.GetType()).Named("MasterProxy").Instance(Proxy));
+            _kernel.Register(Component.For(GetType()).Named("CastleAspectContainer").Instance(this));
+            _kernel.Register(Component.For(Proxy.GetType())/*.Named("MasterProxy")*/.Instance(Proxy));
             _kernel.AddFacility<CastleAspectFacility>();
             _kernel.Register(Component.For<PseudoInterceptor>());
         }

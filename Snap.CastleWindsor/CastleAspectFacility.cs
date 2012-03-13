@@ -48,13 +48,13 @@ namespace Snap.CastleWindsor
         private void KernelComponentRegistered(string key, IHandler handler)
         {
             // Ignore any types implementing IAttributeInterceptor or IInterceptor
-            if(handler.Service.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")
+
+            if (handler.ComponentModel.Implementation.GetInterfaces().Any(i => i.FullName.Contains("Snap.IAttributeInterceptor")
                 || i.FullName.Contains("IInterceptor")))
             {
                 return;
             }
 
-            //var proxy = (MasterProxy)Kernel[typeof (MasterProxy)];
             var proxy = Kernel.Resolve<MasterProxy>();
             handler.ComponentModel.Interceptors.AddIfNotInCollection(new InterceptorReference(typeof(MasterProxy)));
 

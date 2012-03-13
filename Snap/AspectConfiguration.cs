@@ -176,7 +176,7 @@ namespace Snap
         /// <typeparam name="TAttribute">The type of attribute.</typeparam>
         internal void BindInterceptor<T, TAttribute>()
         {
-            BindInterceptor(_interceptorRegistrations.Where(i => i.InterceptorType == typeof(T)).First(), typeof(TAttribute));
+            BindInterceptor(_interceptorRegistrations.First(i => i.InterceptorType == typeof(T)), typeof(TAttribute));
         }
         /// <summary>
         /// Adds a binding pair.
