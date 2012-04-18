@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming, Ninject</tags>
     <dependencies>
-      <dependency id="Ninject" version="2.2.1.4" />
+      <dependency id="Ninject" version="3.0.0.0" />
       <dependency id="SNAP" version="1.7.1" />
     </dependencies>
   </metadata>

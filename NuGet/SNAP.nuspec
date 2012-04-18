@@ -14,7 +14,7 @@
     <tags>SNAP, Simple Aspects, AOP, Aspect Oriented Programming</tags>
     <dependencies>
       <dependency id="Castle.Core" version="2.5.2" />
-      <dependency id="fasterflect" version="2.0.1" />
+      <dependency id="fasterflect" version="2.1.0" />
       <dependency id="CommonServiceLocator" version="1.0" />
     </dependencies>
   </metadata>
