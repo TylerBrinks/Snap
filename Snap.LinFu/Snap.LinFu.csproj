@@ -67,9 +67,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Core.3.0.0.4001\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Fasterflect, Version=2.0.4429.39723, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\fasterflect.2.0.2\lib\net40\Fasterflect.dll</HintPath>
+    <Reference Include="Fasterflect">
+      <HintPath>..\packages\fasterflect.2.1.0\lib\net40\Fasterflect.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.Core">
       <HintPath>..\Libraries\LinFu.Core.dll</HintPath>

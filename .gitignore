@@ -8,6 +8,7 @@ Tests.VisualState.xml
 *.manifest
 *.exe
 *.pdb
+*.pidb
 *.cache
 *.suo
 *.orig
@@ -16,6 +17,6 @@ LastBuild.log
 .svn
 _ReSharper*
 .DS_Store
-*.dll
+#*.dll
 # Include dlls external libraries and NuGet packages directory
 !/.nuget/NuGet.exe

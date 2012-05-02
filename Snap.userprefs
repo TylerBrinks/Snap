@@ -1,0 +1,39 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="NET40-Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Snap/PseudoInterceptor.cs">
+    <Files>
+      <File FileName="Snap/PseudoInterceptor.cs" Line="20" Column="7" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True" selected="True">
+          <Node name="Snap" expanded="True">
+            <Node name="References" expanded="True">
+              <Node name="Castle.Core" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Snap.Autofac" expanded="True" />
+          <Node name="Snap.CastleWindsor" expanded="True" />
+          <Node name="Snap.LinFu" expanded="True" />
+          <Node name="Snap.Ninject" expanded="True" />
+          <Node name="Snap.StructureMap" expanded="True" />
+          <Node name="Snap.Tests" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="Fakes" expanded="True" />
+            <Node name="Interceptors" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
