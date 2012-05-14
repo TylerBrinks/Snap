@@ -26,8 +26,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using Fasterflect;
 using System.Text.RegularExpressions;
+using Fasterflect;
 
 namespace Snap
 {

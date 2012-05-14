@@ -248,7 +248,7 @@ namespace Snap.Tests
             ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
             var code = ObjectFactory.GetInstance<BaseAbstractClass>();
 
-            Assert.DoesNotThrow(() => code.CallFoo2());
+            Assert.DoesNotThrow(code.CallFoo2);
         }
 
         [Test]

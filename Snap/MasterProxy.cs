@@ -49,13 +49,20 @@ namespace Snap {
             var validInterceptors = (from interceptor in orderedInterceptors
                                     where Interception.DoesTargetMethodHaveAttribute(invocation, interceptor.TargetAttributeType)
                                     select ResolveHowToCreateInterceptor(interceptor).Create(interceptor)).ToList();
+
+            // 2012.05.14 -tyler brinks - Apparently it is no longer necessary with the new version of Castle to do
+            // the "false" interceptions unless they exist without a valid interceptor.
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
-            for(var i = 0; i < falseInvocations; i++) {
-                // Not all interceptors run for each type, but all interceptors are interrogated.
-                // If there are 5 interceptors, but only 1 attribute, this handles the other 4
-                // necessary invocations.
-                invocation.Proceed();
+            if (falseInvocations > 0 && validInterceptors.Count == 0)
+            {
+                for (var i = 0; i < falseInvocations; i++)
+                {
+                    // Not all interceptors run for each type, but all interceptors are interrogated.
+                    // If there are 5 interceptors, but only 1 attribute, this handles the other 4
+                    // necessary invocations.
+                    invocation.Proceed();
+                }
             }
 
             foreach(var interceptor in validInterceptors) {

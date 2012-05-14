@@ -29,8 +29,10 @@ namespace Snap {
     /// invoked, so an empty placeholder is necessary in order to augment the
     /// "Invocation.Proceed" count.
     /// </summary>
-    public class PseudoInterceptor: IInterceptor {
-        public void Intercept(IInvocation invocation) {
+    public class PseudoInterceptor : IInterceptor {
+        public void Intercept(IInvocation invocation)
+        {
+            invocation.Proceed();
         }
     }
 }
