@@ -33,7 +33,12 @@ namespace Snap
             else
             {
                 var greediestCtor = interfaceToProxy.GetConstructors().OrderBy(x => x.Parameters().Count).LastOrDefault();
-                var ctorDummyArgs =  greediestCtor == null ? new object[0] : new object[greediestCtor.Parameters().Count];
+                var ctorDummyArgs =  greediestCtor == null 
+                                     ? new object[0]
+                                     : greediestCtor.Parameters()
+                                       .Select(p => masterProxy.Container.GetInstance(p.ParameterType))
+                                       .ToArray();
+
                 proxy = _proxyGenerator.CreateClassProxyWithTarget(
                     interfaceToProxy,
                     instanceToProxy,

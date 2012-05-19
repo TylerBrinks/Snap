@@ -1,4 +1,6 @@
-﻿namespace SnapTests.Fakes
+﻿using Snap.Tests.Interceptors;
+
+namespace SnapTests.Fakes
 {
     public interface IDependency
     {
@@ -7,6 +9,7 @@
 
     public class DummyDependency : IDependency
     {
+        [HandleError]
         public void Bar()
         {
             
