@@ -171,6 +171,25 @@ namespace Snap.Tests
         }
 
         [Test]
+        public void StructureMap_Supports_Types_Without_Interfaces_Satisfying_Proxied_Dependencies()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests.Fakes*");
+                c.Bind<HandleErrorInterceptor>().To<HandleErrorAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IDependency>().Use<DummyDependency>());
+            ObjectFactory.Configure(c => c.For<TypeWithInterfaceInBaseClass>().Use<TypeWithInterfaceInBaseClass>());
+
+            var typeWithInterfaceInBaseClass = ObjectFactory.GetInstance<TypeWithInterfaceInBaseClass>();
+
+            Assert.That(typeWithInterfaceInBaseClass.Dependency, Is.Not.Null);
+            Assert.That(typeWithInterfaceInBaseClass.Dependency.GetType().Name, Is.EqualTo("IDependencyProxy"));
+            Assert.That(typeWithInterfaceInBaseClass.GetType().Name, Is.EqualTo("TypeWithInterfaceInBaseClassProxy"));
+        }
+
+        [Test]
         public void StructureMap_Supports_Resolving_All_Aspects_From_Container()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
