@@ -347,6 +347,21 @@ namespace Snap.Tests
             Assert.DoesNotThrow(code.GiddyUp);
         }
         [Test]
+        public void Snap_Scans_Assemblies_For_Default_Conventions_Including_Class_Interceptors()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Scan(s => s.ThisAssembly().WithDefaults());
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<ClassOrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+            code.RunInOrder();
+
+            Assert.AreEqual("Fourth", OrderedCode.Actions[2]);
+        }
+        [Test]
         public void Snap_Allows_Custom_Scanning_Conventions()
         {
             var scanner = new CustomPrefixScanner();

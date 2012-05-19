@@ -27,6 +27,11 @@ namespace SnapTests.Fakes
     {
         private readonly IDependency _dependency;
 
+        public IDependency Dependency 
+        { 
+            get { return _dependency; } 
+        }
+
         public TypeWithInterfaceInBaseClass(IDependency dependency)
         {
             _dependency = dependency;
