@@ -263,7 +263,7 @@ namespace Snap.Tests
             ObjectFactory.Configure(c => c.For<BaseAbstractClass>().Use<TypeWithAbstractClass>());
             var code = ObjectFactory.GetInstance<BaseAbstractClass>();
 
-            Assert.Throws<Exception>(() => code.CallFoo2());
+            Assert.Throws<Exception>(code.CallFoo2);
         }
 
         [Test]

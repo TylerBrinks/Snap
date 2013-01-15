@@ -83,7 +83,6 @@ namespace SnapTests.Fakes
         [Second]
         public void RunInOrder()
         {
-
         }
 
         [First]

@@ -5,8 +5,12 @@ using Castle.DynamicProxy;
 using Snap;
 using Snap.Autofac;
 
-namespace $rootnamespace$
+namespace ConsoleApplication1
 {
+    //
+    // NOTE: Use this sample as follows: SampleAutofacAopConfig.Intercept()
+    //
+    
     public static class SampleAutofacAopConfig
     {
         private readonly static ContainerBuilder _builder;
@@ -17,7 +21,7 @@ namespace $rootnamespace$
 
             SnapConfiguration.For(new AutofacAspectContainer(_builder)).Configure(c =>
             {
-                c.IncludeNamespaceRoot("$rootnamespace$");
+                c.IncludeNamespace("ConsoleApplication1");
                 c.Bind<SampleInterceptor>().To<SampleAttribute>();
             });
 

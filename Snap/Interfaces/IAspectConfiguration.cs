@@ -75,12 +75,6 @@ namespace Snap
         /// </param>
         void IncludeNamespaceOf<T>(bool includeNestedNamespaces);
 
-        ///// <summary>
-        ///// Includes a namespace root for type interception.
-        ///// </summary>
-        ///// <param name="namePrefix">The name prefix.</param>
-        //void IncludeNamespaceRoot(string namePrefix);
-
         /// <summary>
         /// Scans assemblies for type registration.
         /// </summary>

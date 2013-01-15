@@ -6,8 +6,12 @@ using LinFu.IoC.Configuration;
 using Snap;
 using Snap.LinFu;
 
-namespace $rootnamespace$
-{
+namespace ConsoleApplication1
+{   
+    //
+    // NOTE: Use this sample as follows: SampleLinFuAopConfig.Intercept()
+    //
+    
     public static class SampleLinFuAopConfig
     {
         public readonly static ServiceContainer _container;
@@ -15,10 +19,11 @@ namespace $rootnamespace$
         {
             _container = new ServiceContainer();
             _container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            _container.LoadFrom(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
 
             SnapConfiguration.For(new LinFuAspectContainer(_container)).Configure(c =>
             {
-                c.IncludeNamespace("$rootnamespace$");
+                c.IncludeNamespace("ConsoleApplication1");
                 c.Bind<SampleInterceptor>().To<SampleAttribute>();
             });
         }

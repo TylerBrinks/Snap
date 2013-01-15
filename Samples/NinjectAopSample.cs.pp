@@ -5,8 +5,12 @@ using Ninject;
 using Snap.Ninject;
 using Snap;
 
-namespace $rootnamespace$
-{
+namespace ConsoleApplication1
+{   
+    //
+    // NOTE: Use this sample as follows: SampleNinjectAopConfiguration.Intercept()
+    //
+    
     public static class SampleNinjectAopConfiguration
     {
         public readonly static NinjectAspectContainer _container;
@@ -17,7 +21,7 @@ namespace $rootnamespace$
 
             SnapConfiguration.For(_container).Configure(c =>
             {
-                c.IncludeNamespace("$rootnamespace$*");
+                c.IncludeNamespace("ConsoleApplication1*");
                 c.Bind<SampleInterceptor>().To<SampleAttribute>();
             });
 

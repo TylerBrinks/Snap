@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Reflection;
 using Castle.DynamicProxy;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Snap;
 
 namespace Snap.CastleWindsor
-{
+{ 
+    //
+    // NOTE: Use this sample as follows: SampleCastleAopConfig.Intercept()
+    //
+    
     public static class SampleCastleAopConfig
     {
         private readonly static WindsorContainer _container;
@@ -16,11 +21,11 @@ namespace Snap.CastleWindsor
 
             SnapConfiguration.For(new CastleAspectContainer(_container.Kernel)).Configure(c =>
             {
-                c.IncludeNamespaceRoot("$rootnamespace$");
+                c.IncludeNamespace("ConsoleApplication1");
                 c.Bind<SampleInterceptor>().To<SampleAttribute>();
             });
 
-            _container.AddComponent("SampleClass", typeof(ISampleClass), typeof(SampleClass));
+            _container.Register(Component.For(typeof (ISampleClass)).ImplementedBy(typeof (SampleClass)).Named("SampleClass"));
         }
 
         public static void Intercept()

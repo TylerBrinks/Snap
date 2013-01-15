@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>LinFu.Core</id>
+    <version>2.3.0.41559</version>
+    <title>LinFu.Core</title>
+    <authors>philiplaureano</authors>
+    <owners>philiplaureano</owners>
+    <licenseUrl>http://www.opensource.org/licenses/lgpl-3.0.html</licenseUrl>
+    <projectUrl>https://github.com/philiplaureano/LinFu</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A framework that adds mixins, inversion of control, DbC, and other language features to the Common Language Runtime.
+http://www.codeproject.com/KB/cs/LinFuPart1.aspx</description>
+    <releaseNotes />
+    <tags>IOC DI mixin</tags>
+    <references>
+      <reference file="LinFu.Core.dll" />
+    </references>
+  </metadata>
+</package>

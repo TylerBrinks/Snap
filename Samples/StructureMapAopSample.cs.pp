@@ -6,16 +6,19 @@ using Snap.StructureMap;
 using StructureMap;
 using Snap;
 
-namespace $rootnamespace$
+namespace ConsoleApplication1
 {
+    //
+    // NOTE: Use this sample as follows: SampleStructureMapAopConfig.Intercept()
+    //
+    
     public static class SampleStructureMapAopConfig
     {
-        //public readonly static NinjectAspectContainer _container;
         static SampleStructureMapAopConfig()
         {
             SnapConfiguration.For<StructureMapAspectContainer>(c =>
             {
-                c.IncludeNamespace("$rootnamespace$*");
+                c.IncludeNamespace("ConsoleApplication1*");
                 c.Bind<SampleInterceptor>().To<SampleAttribute>();
             });
 
