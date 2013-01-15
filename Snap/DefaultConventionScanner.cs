@@ -50,7 +50,7 @@ namespace Snap
                 .ToDictionary(type => type.Name.Replace(interceptorConvention, string.Empty));
 
             var attributes = (from type in types
-                              where type.BaseType == typeof(MethodInterceptAttribute)
+                              where type.GetInterface(typeof(IInterceptAttribute).Name) != null
                               let typeName = type.Name.Replace(attributeConvention, string.Empty)
                               where interceptors.Any(i => i.Key == typeName)
                               select type).ToDictionary(type => type.Name.Replace(attributeConvention, string.Empty));
