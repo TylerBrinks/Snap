@@ -21,11 +21,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+using System;
 using Castle.DynamicProxy;
 using Microsoft.Practices.ServiceLocation;
 
-namespace Snap {
-    public interface IMasterProxy: IInterceptor, IHideBaseTypes {
+namespace Snap
+{
+    public interface IMasterProxy: IInterceptor, IHideBaseTypes
+    {
         /// <summary>
         /// Gets or sets the configuration.
         /// </summary>
@@ -39,5 +43,10 @@ namespace Snap {
         /// To support several IoC container vendor-agnostic manner, common service locator is used.
         /// </remarks>
         IServiceLocator Container { get; set; }
+        
+        /// <summary>
+        /// Allows the master proxy to reset a list of pseudo interceptor instances after method invocation.
+        /// </summary>
+        Action ResetPseudoInterceptors { get; set; }
     }
 }

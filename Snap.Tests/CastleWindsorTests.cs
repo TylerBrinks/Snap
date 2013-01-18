@@ -65,8 +65,7 @@ namespace Snap.Tests
                 c.Bind<SecondInterceptor>().To<SecondAttribute>();
             });
 
-            container.Register(
-                Component.For(typeof (IOrderedCode)).ImplementedBy(typeof (OrderedCode)).Named("OrderedCode"));
+            container.Register(Component.For(typeof (IOrderedCode)).ImplementedBy(typeof (OrderedCode)).Named("OrderedCode"));
             var orderedCode = container.Resolve<IOrderedCode>();
             orderedCode.RunInOrder();
             Assert.AreEqual("First", OrderedCode.Actions[0]);

@@ -19,7 +19,8 @@ THE SOFTWARE.
 */
 using Castle.DynamicProxy;
 
-namespace Snap {
+namespace Snap
+{
     /// <summary>
     /// A class for fooling the ProxyGenerator that there are a given number of interceptors
     /// when there's really only one master proxy class.  The generated Castle instance checks for
@@ -29,10 +30,25 @@ namespace Snap {
     /// invoked, so an empty placeholder is necessary in order to augment the
     /// "Invocation.Proceed" count.
     /// </summary>
-    public class PseudoInterceptor : IInterceptor {
+    public class PseudoInterceptor : IInterceptor
+    {
+        public PseudoInterceptor()
+        {
+            ShouldProceed = false;
+        }
+
         public void Intercept(IInvocation invocation)
         {
-            invocation.Proceed();
+            if (ShouldProceed)
+            {
+                invocation.Proceed();
+            }
+            else
+            {
+                ShouldProceed = true;
+            }
         }
+
+        public bool ShouldProceed { get; set; }
     }
 }

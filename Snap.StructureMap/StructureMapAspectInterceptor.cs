@@ -35,7 +35,8 @@ namespace Snap.StructureMap {
         public IContainer Container { get; set; }
         private readonly ProxyFactory _proxyFactory = new ProxyFactory(new ProxyGenerator());
 
-        public StructureMapAspectInterceptor() {
+        public StructureMapAspectInterceptor() 
+        {
             Container = ObjectFactory.Container;
         }
 

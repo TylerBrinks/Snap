@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+using System;
 using System.Collections.Generic;
 using LinFu.IoC.Configuration;
 using Snap.Tests.Interceptors;
@@ -34,6 +36,7 @@ namespace SnapTests.Fakes
         void RunInAttributedOrder();
         void RunWithoutClassInterceptor();
         void StopWithoutInterceptor();
+        int TotalInvocations { get; }
     }
 
     [Implements(typeof(IOrderedCode))]  // Attribute for LinFu configuration
@@ -41,12 +44,13 @@ namespace SnapTests.Fakes
     public class OrderedCode : IOrderedCode
     {
         public static List<string> Actions = new List<string>();
-   
+        public int TotalInvocations { get; private set; }
+
         [First]
         [Second]
         public void RunInOrder()
         {
-
+            TotalInvocations++;
         }
 
         [First]
@@ -54,6 +58,7 @@ namespace SnapTests.Fakes
         [Third]
         public void RunInExplicitOrder()
         {
+            TotalInvocations++;
         }
 
         [First(Order = 1)]
@@ -61,15 +66,18 @@ namespace SnapTests.Fakes
         [Third(Order = 0)]
         public void RunInAttributedOrder()
         {
+            TotalInvocations++;
         }
 
         [First]
         public void RunWithoutClassInterceptor()
         {
+            TotalInvocations++;
         }
 
         public void StopWithoutInterceptor()
         {
+            TotalInvocations++;
         }
     }
 
@@ -78,6 +86,7 @@ namespace SnapTests.Fakes
     public class ClassOrderedCode : IOrderedCode
     {
         public static List<string> Actions = new List<string>();
+        public int TotalInvocations { get; private set; }
 
         [First]
         [Second]

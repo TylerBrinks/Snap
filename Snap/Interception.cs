@@ -54,22 +54,22 @@ namespace Snap
         /// <summary>
         /// Gets the method invocation.
         /// </summary>
-        public IInvocation  Invocation { get; private set; }
+        public IInvocation Invocation { get; private set; }
 
         /// <summary>
         /// Gets the target method of the invocation.
         /// </summary>
-        public MethodBase   TargetMethod { get; private set; }
+        public MethodBase TargetMethod { get; private set; }
 
         /// <summary>
         /// Gets the type of the interceptor.
         /// </summary>
-        public Type         InterceptorType { get; private set; }
+        public Type InterceptorType { get; private set; }
 
         /// <summary>
         /// Gets the instance of the attribute, which applies interceptor to a method.
         /// </summary>
-        public Attribute    AttributeInstance { get; private set; }
+        public Attribute AttributeInstance { get; private set; }
         
         /// <summary>
         /// Gets detailed info about current interception
@@ -120,7 +120,7 @@ namespace Snap
                     var exists = true;
 
                     var methodInfo = m;
-                    foreach (var p in parameters.Where(p => !methodInfo.Parameters().Any(x => x.Name == p.Name)))
+                    foreach (var p in parameters.Where(p => methodInfo.Parameters().All(x => x.Name != p.Name)))
                     {
                         exists = false;
                     }
@@ -183,30 +183,46 @@ namespace Snap
 
         private static bool MatchesClassAttribute(ClassInterceptAttribute attribute, MethodBase method)
         {
-            bool match = true;
+            var match = true;
 
             if (attribute.MulticastOptions > 0)
             {
                 var bindingFlags = Enum.GetValues(typeof(MulticastOptions)) as MulticastOptions[];
 
-                foreach (var flag in bindingFlags)
+                foreach (var flag in bindingFlags.Where(flag => (flag & attribute.MulticastOptions) == flag))
                 {
-                    if ((flag & attribute.MulticastOptions) == flag)
+                    switch (attribute.MulticastOptions)
                     {
-                        switch (attribute.MulticastOptions)
-                        {
-                            case MulticastOptions.Public:
-                                match = method.IsPublic;
-                                break;
-                            case MulticastOptions.Private:
-                                match = method.IsPrivate;
-                                break;
-                            case MulticastOptions.Protected:
-                                match = method.IsFamily;
-                                break;
-                        }
+                        case MulticastOptions.Public:
+                            match = method.IsPublic;
+                            break;
+                        case MulticastOptions.Private:
+                            match = method.IsPrivate;
+                            break;
+                        case MulticastOptions.Protected:
+                            match = method.IsFamily;
+                            break;
                     }
                 }
+
+                //foreach (var flag in bindingFlags)
+                //{
+                //    if ((flag & attribute.MulticastOptions) == flag)
+                //    {
+                //        switch (attribute.MulticastOptions)
+                //        {
+                //            case MulticastOptions.Public:
+                //                match = method.IsPublic;
+                //                break;
+                //            case MulticastOptions.Private:
+                //                match = method.IsPrivate;
+                //                break;
+                //            case MulticastOptions.Protected:
+                //                match = method.IsFamily;
+                //                break;
+                //        }
+                //    }
+                //}
             }
 
             if (match && !String.IsNullOrEmpty(attribute.IncludePattern))

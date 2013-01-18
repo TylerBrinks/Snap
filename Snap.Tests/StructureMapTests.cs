@@ -74,6 +74,28 @@ namespace Snap.Tests
 
             Assert.AreEqual("First", OrderedCode.Actions[0]);
             Assert.AreEqual("Second", OrderedCode.Actions[1]);
+            Assert.AreEqual(1, code.TotalInvocations);
+        }
+
+        [Test]
+        public void StructureMap_Container_Supports_Multiple_Proxy_Calls_For_Multiple_Methods()
+        {
+            SnapConfiguration.For<StructureMapAspectContainer>(c =>
+            {
+                c.IncludeNamespace("SnapTests*");
+                c.Bind<FirstInterceptor>().To<FirstAttribute>();
+                c.Bind<SecondInterceptor>().To<SecondAttribute>();
+                c.Bind<ThirdInterceptor>().To<ThirdAttribute>();
+            });
+
+            ObjectFactory.Configure(c => c.For<IOrderedCode>().Use<OrderedCode>());
+            var code = ObjectFactory.GetInstance<IOrderedCode>();
+            code.RunInOrder();
+            code.RunInAttributedOrder();
+
+            Assert.AreEqual("First", OrderedCode.Actions[0]);
+            Assert.AreEqual("Second", OrderedCode.Actions[1]);
+            Assert.AreEqual(2, code.TotalInvocations);
         }
 
         [Test]

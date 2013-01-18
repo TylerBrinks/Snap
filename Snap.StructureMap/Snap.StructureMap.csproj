@@ -122,7 +122,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SampleStructureMapAopConfig.cs" />
     <Compile Include="StructureMapAspectInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructureMapAspectContainer.cs" />

@@ -31,8 +31,7 @@ namespace Snap
     /// </summary>
     public class AspectRegistration
     {
-        public AspectRegistration(Type interceptorType)
-            : this(interceptorType, null, 0)
+        public AspectRegistration(Type interceptorType) : this(interceptorType, null, 0)
         {}
 
         public AspectRegistration(Type interceptorType, Type targetAttributeType, int order)

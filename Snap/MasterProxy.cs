@@ -21,12 +21,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+using System;
 using System.Linq;
 using Castle.DynamicProxy;
 using Microsoft.Practices.ServiceLocation;
 
-namespace Snap {
-    public class MasterProxy: IMasterProxy {
+namespace Snap 
+{
+    public class MasterProxy : IMasterProxy
+    {
+        public Action ResetPseudoInterceptors { get; set; }
+
         /// <summary>
         /// Gets or sets the configuration.
         /// </summary>
@@ -54,7 +60,7 @@ namespace Snap {
             // the "false" interceptions unless they exist without a valid interceptor.
             var falseInvocations = orderedInterceptors.Count() - validInterceptors.Count();
 
-            if (falseInvocations > 0 && validInterceptors.Count == 0)
+            if (falseInvocations > 0 /*&& validInterceptors.Count == 0*/)
             {
                 for (var i = 0; i < falseInvocations; i++)
                 {
@@ -65,10 +71,16 @@ namespace Snap {
                 }
             }
 
-            foreach(var interceptor in validInterceptors) {
+            foreach (var interceptor in validInterceptors)
+            {
                 interceptor.BeforeInvocation();
                 interceptor.Intercept(invocation);
                 interceptor.AfterInvocation();
+            }
+
+            if (ResetPseudoInterceptors != null)
+            {
+                ResetPseudoInterceptors();
             }
         }
 

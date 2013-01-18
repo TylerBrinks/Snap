@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Castle.DynamicProxy;
 using Fasterflect;
@@ -58,26 +57,47 @@ namespace Snap
         {
             var allInterfaces = type.GetInterfaces();
 
-            IEnumerable<Type> baseClassInterfaces = type.BaseType != null ? type.BaseType.GetInterfaces() : new Type[0];
-            IEnumerable<Type> topLevelInterfaces = allInterfaces.Except(baseClassInterfaces);
+            var baseClassInterfaces = type.BaseType != null ? type.BaseType.GetInterfaces() : new Type[0];
+            var topLevelInterfaces = allInterfaces.Except(baseClassInterfaces);
 
-            if (!topLevelInterfaces.Any())
+            var levelInterfaces = topLevelInterfaces as Type[] ?? topLevelInterfaces.ToArray();
+            if (!levelInterfaces.Any())
             {
                 var types = new[] { type };
                 return types.FirstMatch(configuration.Namespaces);
             }
 
-            return topLevelInterfaces.ToArray().FirstMatch(configuration.Namespaces);
+            return levelInterfaces.ToArray().FirstMatch(configuration.Namespaces);
         }
 
-        private IInterceptor[] GetInterceptors(IMasterProxy masterProxy)
+        private static IInterceptor[] GetInterceptors(IMasterProxy masterProxy)
         {
-            return new[] { masterProxy }.Concat(Enumerable
-                .Range(1, masterProxy.Configuration.Interceptors.Count - 1)
-                .Select(i => new PseudoInterceptor())
-                .Cast<IInterceptor>())
+            var pseudoInterceptors = Enumerable.Range(1, masterProxy.Configuration.Interceptors.Count)
+                .Select(i => new PseudoInterceptor()).ToList();
+            var lastInterceptor = pseudoInterceptors.LastOrDefault();
+
+            var interceptors = new IInterceptor[] { masterProxy }
+                .Concat(pseudoInterceptors)
+                //.Cast<IInterceptor>()
                 .ToArray();
+
+            FlagLastInterceptor(lastInterceptor);
+
+            masterProxy.ResetPseudoInterceptors = () =>
+                                                      {
+                                                          pseudoInterceptors.ForEach(pi => pi.ShouldProceed = false);
+                                                          FlagLastInterceptor(lastInterceptor);
+                                                      };
+
+            return interceptors;
         }
 
+        private static void FlagLastInterceptor(PseudoInterceptor lastInterceptor)
+        {
+            if (lastInterceptor != null)
+            {
+                lastInterceptor.ShouldProceed = true;
+            }
+        }
     }
 }
