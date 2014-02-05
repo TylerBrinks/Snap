@@ -55,7 +55,7 @@ We'll use StructureMap for this example.
 	}
 	
 ##Is this a Magic Black Box?##
-Unlinke tools that use IL weaving, SNAP's runtime approach means 100% of your code is unchanged.  The differene is that 
+Unlinke tools that use IL weaving, SNAP's runtime approach means 100% of your code is unchanged.  The difference is that 
 SNAP creates a proxy object at runtime that wraps your class instances.  This is similar to how the Entity Framework
 issues proxies of your POCOs to assis with state and navigation properties.  It's still 100% your code.
 
