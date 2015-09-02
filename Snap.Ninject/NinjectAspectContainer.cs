@@ -31,7 +31,7 @@ namespace Snap.Ninject
     public class NinjectAspectContainer : AspectContainer
     {
         private readonly NinjectAspectInterceptor _interceptor = new NinjectAspectInterceptor();
-        private readonly StandardKernel _kernel;
+        private readonly IKernel _kernel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NinjectAspectContainer"/> class.
@@ -43,10 +43,22 @@ namespace Snap.Ninject
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="NinjectAspectContainer"/> class, using
+        /// an existing IKernel instead of instantiating a new one.
+        /// </summary>
+        /// <param name="kernel">The kernel to use for this container</param>
+        public NinjectAspectContainer(IKernel kernel)
+        {
+            kernel.Load(_interceptor);
+            _kernel = kernel;
+            Proxy = new MasterProxy {Container = new NinjectServiceLocatorAdapter(_kernel)};
+        }
+
+        /// <summary>
         /// Gets the kernel.
         /// </summary>
         /// <value>The kernel.</value>
-        public StandardKernel Kernel
+        public IKernel Kernel
         {
             get { return _kernel; }
         }
