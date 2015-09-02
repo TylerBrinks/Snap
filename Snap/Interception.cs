@@ -38,6 +38,8 @@ namespace Snap
     public class Interception
     {
         private static readonly Dictionary<string, Attribute> SignatureCache = new Dictionary<string, Attribute>();
+       
+        private static readonly object CacheLock = new object();
 
         private Interception(
             IInvocation invocation, 
@@ -70,6 +72,18 @@ namespace Snap
         /// Gets the instance of the attribute, which applies interceptor to a method.
         /// </summary>
         public Attribute AttributeInstance { get; private set; }
+
+        /// <summary>
+        /// Add a key/attribute pair to the SignatureCache in a thread-safe manner.
+        /// </summary>
+        private static void AddToSignatureCache(string key, Attribute attribute)
+        {
+            lock (CacheLock)
+            {
+                if (!SignatureCache.ContainsKey(key))
+                    SignatureCache.Add(key, attribute);
+            }
+        }
         
         /// <summary>
         /// Gets detailed info about current interception
@@ -160,7 +174,7 @@ namespace Snap
 
                 if (MatchesClassAttribute(attribute, method))
                 {
-                    SignatureCache.Add(key, attribute);
+                    AddToSignatureCache(key, attribute);
                     return attribute;
                 }
             }
@@ -172,11 +186,11 @@ namespace Snap
             if (attributes.Any())
             {
                 var attribute = (Attribute)attributes.First();
-                SignatureCache.Add(key, attribute);
+                AddToSignatureCache(key, attribute);
                 return attribute;
             }
-           
-            SignatureCache.Add(key, null);
+
+            AddToSignatureCache(key, null);
 
             return null;
         }
