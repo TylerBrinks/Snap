@@ -1,15 +1,15 @@
-#SNAP is a Aspect Oriented Programming (AoP) utility for .NET
+# SNAP is a Aspect Oriented Programming (AoP) utility for .NET
 
 SNAP works at runtime unlike PostSharp which modifies IL at compile time.  SNAP works in 
 tandem with your favorite IoC container.
 
-#How it Works
+# How it Works
 
 SNAP is simple.  You decorate methods with your own custom attributes.  Your attributes derive from SNAP's base attribute. 
 SNAP uses your IoC of choice to intercept method calls based on the attribute.  Methods are intercepted with *YOUR* 
 own code either before and/or after a method call
 
-#IoC Providers
+# IoC Providers
 
  - StructureMap
  - Autofac
@@ -17,14 +17,16 @@ own code either before and/or after a method call
  - LinFu
  - Castle Windsor
 
-#Quick Start#
+# Quick Start
+
 Install any of the SNAP provider pagckages from the NuGet Package Manager or via command line.  
 We'll use StructureMap for this example.
 
 	Install-Package SNAP.StructureMap
 
-##A Basic C# Example:##
+## A Basic C# Example:
 
+```cs
 	// Configure SNAP to look at all assemblies starting with the "ConsoleApplication1" namespace.
 	// Next, tell SNAP to intercept any code decorated with a DemoLoggingAttribute by running
 	// an instance of the DemoLoggingInterceptor class.
@@ -53,13 +55,14 @@ We'll use StructureMap for this example.
 		invocation.Proceed();
 	    }
 	}
+```
 	
-##Is this a Magic Black Box?##
+## Is this a Magic Black Box?
 Unlinke tools that use IL weaving, SNAP's runtime approach means 100% of your code is unchanged.  The difference is that 
 SNAP creates a proxy object at runtime that wraps your class instances.  This is similar to how the Entity Framework
 issues proxies of your POCOs to assis with state and navigation properties.  It's still 100% your code.
 
-##FAQ##
+## FAQ
 
  - *Do I have to use an DI (IoC) tool to make SNAP work?*
 	Yes.  SNAP works by creating a transparent runtime proxy around classes.  It does so by working in tandem with IoC containers 
@@ -72,5 +75,5 @@ issues proxies of your POCOs to assis with state and navigation properties.  It'
  - *Pull Requests
  - 	Yes please!  I'd love help with MEF, Unity, or other IoC providers to make this project well rounded.
 
-##Is it Tested?##
+## Is it Tested?
 The project has a comprehensive suite of tests.  Currently the tests exercise scenarios for each of the IoC providers.
