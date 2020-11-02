@@ -1,5 +1,7 @@
 # SNAP is a Aspect Oriented Programming (AoP) utility for .NET
 
+!! This project is no longer maintained due to the component/middleware extensibility models .NET core 2+ make use of.
+
 SNAP works at runtime unlike PostSharp which modifies IL at compile time.  SNAP works in 
 tandem with your favorite IoC container.
 
