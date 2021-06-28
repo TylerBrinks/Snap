@@ -113,6 +113,12 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleInjector">
+      <HintPath>..\packages\SimpleInjector.2.6.1\lib\net40-client\SimpleInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector.Diagnostics">
+      <HintPath>..\packages\SimpleInjector.2.6.1\lib\net40-client\SimpleInjector.Diagnostics.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
@@ -158,6 +164,7 @@
     <Compile Include="Interceptors\ThirdInterceptor.cs" />
     <Compile Include="LinFuTests.cs" />
     <Compile Include="NinjectTests.cs" />
+    <Compile Include="SimpleInjectorTests.cs" />
     <Compile Include="StructureMapTests.cs" />
     <Compile Include="MethodFormatterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -179,6 +186,10 @@
     <ProjectReference Include="..\Snap.Ninject\Snap.Ninject.csproj">
       <Project>{C8C529ED-68D6-4877-9D1A-78E34AA1465F}</Project>
       <Name>Snap.Ninject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Snap.SimpleInjector\Snap.SimpleInjector.csproj">
+      <Project>{8ade2fd7-93b9-4936-8b7b-34db14443c9a}</Project>
+      <Name>Snap.SimpleInjector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Snap.StructureMap\Snap.StructureMap.csproj">
       <Project>{9B28439F-F207-4669-8C89-E5CD86098FCC}</Project>

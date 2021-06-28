@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommonServiceLocator.SimpleInjectorAdapter</name>
+    </assembly>
+    <members>
+        <member name="T:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter">
+            <summary>
+            Translates calls from <see cref="T:Microsoft.Practices.ServiceLocation.IServiceLocator"/> to Simple Injector's container.
+            </summary>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.#ctor(SimpleInjector.Container)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter"/> class.
+            </summary>
+            <param name="container">The <see cref="T:SimpleInjector.Container"/> to adapt.</param>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetAllInstances``1">
+            <summary>
+            Get all instances of the given <typeparamref name="TService" /> currently
+            registered in the container.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <typeparamref name="TService" />.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetAllInstances(System.Type)">
+            <summary>
+            Get all instances of the given <paramref name="serviceType" /> currently
+            registered in the container.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <paramref name="serviceType" />.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetInstance``1(System.String)">
+            <summary>
+            Get an instance of the given named <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is are errors resolving
+            the service instance.</exception>
+            <exception cref="T:System.NotSupportedException">Thrown when a non-null key is requested. Keyed 
+            registration is not supported by the Simple Injector.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetInstance``1">
+            <summary>
+            Get an instance of the given <typeparamref name="TService" />.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is are errors resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetInstance(System.Type,System.String)">
+            <summary>
+            Get an instance of the given named <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is an error resolving
+            the service instance.</exception>
+            <exception cref="T:System.NotSupportedException">Thrown when a non-null key is requested. Keyed 
+            registration is not supported by the Simple Injector.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetInstance(System.Type)">
+            <summary>
+            Get an instance of the given <paramref name="serviceType" />.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">Thrown when there is an error resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:CommonServiceLocator.SimpleInjectorAdapter.SimpleInjectorServiceLocatorAdapter.GetService(System.Type)">
+            <summary>Gets the service object of the specified type.</summary>
+            <returns>A service object of type serviceType.-or- null if there is no service object of type serviceType.</returns>
+            <param name="serviceType">An object that specifies the type of service object to get. </param>
+        </member>
+    </members>
+</doc>

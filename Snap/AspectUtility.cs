@@ -43,13 +43,27 @@ namespace Snap
         /// </returns>
         public static bool IsDecorated(this object target, AspectConfiguration configuration)
         {
-            var type = target.GetType();
-            var methods = type.Methods();
+            return IsDecorated(target.GetType(), configuration);
+        }
 
-            var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute)) || type.Attributes().Any(p => p is ClassInterceptAttribute);
+        /// <summary>
+        /// Determines whether the specified target type has methods decorated for interception.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified target is decorated; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDecorated(Type targetType, AspectConfiguration configuration)
+        {
+            var methods = targetType.Methods();
+
+            var isDecorated = methods.Any(m => m.Attributes().Any(a => a is MethodInterceptAttribute)) || targetType.Attributes().Any(p => p is ClassInterceptAttribute);
 
             return isDecorated;
         }
+
+
         /// <summary>
         /// Gets the first type that matches the target namespace.
         /// </summary>
